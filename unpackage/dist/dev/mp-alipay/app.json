@@ -1,0 +1,44 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/news/news",
+    "pages/paper/paper",
+    "pages/home/home"
+  ],
+  "window": {
+    "defaultTitle": "仿糗事百科",
+    "titleBarColor": "#FFFFFF",
+    "backgroundColor": "#FFFFFF"
+  },
+  "tabBar": {
+    "textColor": "#B5B5B5",
+    "selectedColor": "#FEE42B",
+    "backgroundColor": "#FFFFFF",
+    "items": [
+      {
+        "pagePath": "pages/index/index",
+        "name": "糗事",
+        "icon": "/static/tabbar/index.png",
+        "activeIcon": "/static/tabbar/indexed.png"
+      },
+      {
+        "pagePath": "pages/news/news",
+        "name": "动态",
+        "icon": "/static/tabbar/news.png",
+        "activeIcon": "/static/tabbar/newsed.png"
+      },
+      {
+        "pagePath": "pages/paper/paper",
+        "name": "小纸条",
+        "icon": "/static/tabbar/paper.png",
+        "activeIcon": "/static/tabbar/papered.png"
+      },
+      {
+        "pagePath": "pages/home/home",
+        "name": "我的",
+        "icon": "/static/tabbar/home.png",
+        "activeIcon": "/static/tabbar/homeed.png"
+      }
+    ]
+  }
+}

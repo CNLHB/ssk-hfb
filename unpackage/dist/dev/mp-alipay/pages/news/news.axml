@@ -1,0 +1,2 @@
+<template name="5779a4d7"><view class="_view {{ h[ 0 ].rcl }}">动态页</view></template>
+<template is="5779a4d7" data="{{ ...$root['0'], $root }}"/>

@@ -1,0 +1,14 @@
+
+.user-space-margin{
+	margin: 15rpx 0;
+}
+.user-space-data{
+	background: #FFFFFF;
+	position: relative;
+	z-index: 10;
+	border-top-left-radius: 20rpx;
+	border-top-right-radius: 20rpx;
+	margin-top: -15rpx;
+}
+
+

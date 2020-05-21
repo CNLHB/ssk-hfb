@@ -1,0 +1,139 @@
+.body {
+	border-top: solid 1px #DBDBDA;
+	padding: 0 40rpx;
+}
+
+/* 头像 start */
+.face-wapper {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: row;
+	        flex-direction: row;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	        justify-content: center;
+	
+	margin-top: 120rpx;
+	margin-bottom: 120rpx;
+}
+.face {
+	width: 160rpx;
+	height: 160rpx;
+}
+
+/* 头像 end */
+
+/* 注册登录 start */
+.info-wapper {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: row;
+	        flex-direction: row;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	        justify-content: center;
+	
+	border-bottom: solid 1px #DBDBDA;
+	
+	padding-bottom: 20rpx;
+}
+.words-lbl {
+	color: #808080;
+}
+.input {
+	width: 500rpx;
+	margin-left: 40rpx;
+}
+.graywords {
+	color: #EAEAEA;
+}
+
+/* 注册登录 end */
+
+/* 第三方登录 start */
+.third-wapper {
+	width: 100%;
+	/* 固定底部 */
+	/* bottom: 0;
+	position: fixed; */
+	
+	margin-top: 60rpx;
+}
+.third-line {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: row;
+	        flex-direction: row;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	        justify-content: center
+}
+.third-words {
+	color: #A9A9A9;
+	font-size: 13px;
+	
+	display: -webkit-box;
+	
+	display: -webkit-flex;
+	
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: column;
+	        flex-direction: column;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	        justify-content: center;
+}
+.single-line {
+	padding: 15rpx 20rpx;
+	width: 25%;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+}
+.third-icos-wapper {
+	margin-top: 30rpx;
+	
+	display: -webkit-box;
+	
+	display: -webkit-flex;
+	
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: row;
+	        flex-direction: row;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	        justify-content: center
+}
+.third-ico {
+	width: 60rpx;
+	height: 60rpx;
+}
+.third-btn-ico {
+	background-image:url(http://122.152.205.72:88/group1/M00/00/05/CpoxxFxFO-yAOjTaAAATCIZEzRU503.png);
+	width: 60rpx;
+	height: 60rpx;
+	background-color: white;
+	background-size: 60rpx 60rpx;
+	background-repeat:no-repeat;
+	border:none;
+	padding: 0;
+}
+button::after{
+	border: none;
+}
+
+/* 第三方登录 end */
+

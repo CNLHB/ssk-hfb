@@ -1,0 +1,12 @@
+{
+  "navigationBarTitleText": "个人空间",
+  "usingComponents": {
+    "user-space-head": "/components/user-space/user-space-head",
+    "home-data": "/components/home/home-data",
+    "swiper-tab-head": "/components/index/swiper-tab-head",
+    "user-space-userinfo": "/components/user-space/user-space-userinfo",
+    "common-list": "/components/common/common-list",
+    "load-more": "/components/common/load-more",
+    "user-space-popup": "/components/user-space/user-space-popup"
+  }
+}

@@ -1,0 +1,1 @@
+<view class="other-login u-f-ac"><block wx:for="{{providerList}}" wx:for-item="item" wx:for-index="index" wx:key="index"><block><view data-event-opts="{{[['tap',[['tologin',['$0'],[[['providerList','',index]]]]]]]}}" class="u-f-ajc u-f1" bindtap="__e"><view class="{{['icon iconfont u-f-ajc','icon-'+item.icon]}}"></view></view></block></block></view>

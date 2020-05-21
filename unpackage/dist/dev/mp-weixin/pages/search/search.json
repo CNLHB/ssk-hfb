@@ -1,0 +1,8 @@
+{
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "index-list": "/components/index/index-list",
+    "no-thing": "/components/common/no-thing",
+    "load-more": "/components/common/load-more"
+  }
+}

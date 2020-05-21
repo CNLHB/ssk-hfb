@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "swiper-tab-head": "/components/index/swiper-tab-head",
+    "user-list": "/components/user-list/user-list",
+    "load-more": "/components/common/load-more",
+    "no-thing": "/components/common/no-thing"
+  }
+}

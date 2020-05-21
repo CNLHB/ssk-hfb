@@ -1,0 +1,2 @@
+<template name="69692591"><view class="_view {{ h[ 0 ].rcl }}">小纸条</view></template>
+<template is="69692591" data="{{ ...$root['0'], $root }}"/>

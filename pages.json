@@ -1,0 +1,369 @@
+{
+	"pages": [
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText":"韩府帮",
+				 "app-plus":{
+					 "scrollIndicator":"none",//隐藏滚动条
+					 "bounce":"none",//关闭反弹效果
+					 "titleNView":{
+						 // 搜索框配置
+						 "searchInput":{
+							 "align":"center",
+							 "backgroundColor":"#F7F7F7",
+							 "borderRadius":"4px",
+							 "placeholder":"韩府帮",
+							 "placeholderColor":"#CCCCCC",
+							 "disabled":true
+						 },
+						 //配置按钮
+						 "buttons":[
+							 // 左边
+							 {
+								 "color":"#FF9619",
+								 "colorPressed":"#BBBBBB",
+								 "float":"left",
+								 "fontSize":"22px",
+								 "fontSrc":"/static/font/icon.ttf",
+								 "text":"\ue609"
+							 },
+							 // 右边
+							 {
+								 "color":"#000000",
+								 "colorPressed":"#BBBBBB",
+								 "float":"right",
+								 "fontSize":"22px",
+								 "fontSrc":"/static/font/icon.ttf",
+								 "text":"\ue653"
+							 }
+						 ]
+					 }
+				 }
+			}
+		}
+        ,{
+            "path" : "pages/news/news",
+            "style" : {
+				"navigationBarTitleText":"最近动态",
+				"app-plus":{
+					"titleNView":false,
+					"bounce":"none"//关闭反弹效果
+				}
+			}
+        }
+        ,{
+            "path" : "pages/paper/paper",
+            "style" : {
+				"enablePullDownRefresh":true,//开启下拉刷新功能
+				"navigationBarTitleText":"小纸条",
+				"app-plus":{
+					"titleNView":{
+						"buttons":[
+							 // 左边
+							{
+								 "color":"#000000",
+								 "colorPressed":"#BBBBBB",
+								 "float":"left",
+								 "fontSize":"22px",
+								 "fontSrc":"/static/font/icon.ttf",
+								 "text":"\ue845"
+							},
+							// 右边
+							{
+								 "color":"#000000",								 
+								 "colorPressed":"#BBBBBB",
+								 "float":"right",
+								 "fontSize":"22px",
+								 "fontSrc":"/static/font/icon.ttf",
+								 "text":"\ue684"
+							}
+						]
+					}
+				}
+			}
+        }
+        ,{
+            "path" : "pages/home/home",
+            "style" : {
+				"navigationBarTitleText":"我的",
+				"app-plus":{
+					"scrollIndicator":"none",
+					"bounce":"none",
+					"titleNView":{
+						"buttons":[
+							{
+								"type":"menu"
+							}
+						]
+					}
+				}
+			}
+        }
+        ,{
+            "path" : "pages/search/search",
+            "style" : {
+				"enablePullDownRefresh":true,
+				"app-plus":{
+					 "scrollIndicator":"none",//隐藏滚动条
+					 "bounce":"none",//关闭反弹效果
+					 "titleNView":{
+						 "autoBackButton":false,
+						 // 搜索框配置
+						 "searchInput":{
+							 "align":"center",
+							 "backgroundColor":"#F7F7F7",
+							 "borderRadius":"4px",
+							 "placeholder":"搜索韩府",
+							 "placeholderColor":"#CCCCCC",
+							 "disabled":false
+						 },
+						 //配置按钮
+						 "buttons":[
+							 // 右边
+							 {
+								 "color":"#000000",								 
+								 "colorPressed":"#BBBBBB",
+								 "float":"right",
+								 "fontSize":"16px",
+								 "text":"取消"
+							 }
+						 ]
+					 }
+				}
+			}
+        }
+        ,{
+            "path" : "pages/add-input/add-input",
+            "style" : {
+				"app-plus":{
+					"animationType": "slide-in-bottom",
+					"animationDuration": 200,
+					// 禁止原生导航
+					"titleNView":false
+				}
+			}
+        }
+        ,{
+            "path" : "pages/topic-nav/topic-nav",
+            "style" : {
+				"navigationBarTitleText":"话题分类",
+				"app-plus":{
+					"bounce":"none"
+				}
+			}
+        }
+        ,{
+            "path" : "pages/topic-detail/topic-detail",
+            "style" : {
+				"enablePullDownRefresh":true,//开启下拉刷新
+				"app-plus":{
+					"animationType": "slide-in-bottom",
+					"animationDuration": 200,
+					"scrollIndicator":"none",//隐藏滚动条
+					"titleNView":{
+						"type":"transparent",//渐变
+						"buttons":[
+							{
+								"type":"menu"
+							}
+						]
+					}
+				}
+			}
+        }
+        ,{
+            "path" : "pages/user-list/user-list",
+            "style" : {
+            	"app-plus":{
+					 "animationType":"slide-in-left",//进场动画
+            		 "scrollIndicator":"none",//隐藏滚动条
+            		 "bounce":"none",//关闭反弹效果
+            		 "titleNView":{
+            			 "autoBackButton":false,
+            			 // 搜索框配置
+            			 "searchInput":{
+            				 "align":"left",
+            				 "backgroundColor":"#F7F7F7",
+            				 "borderRadius":"4px",
+            				 "placeholder":"搜索韩府",
+            				 "placeholderColor":"#CCCCCC",
+            				 "disabled":false
+            			 },
+            			 //配置按钮
+            			 "buttons":[
+            				 // 右边
+            				 {
+            					 "color":"#000000",								 
+            					 "colorPressed":"#BBBBBB",
+            					 "float":"right",
+            					 "fontSize":"16px",
+            					 "text":"取消"
+            				 }
+            			 ]
+            		 }
+            	}
+            }
+        }
+        ,{
+            "path" : "pages/user-chat/user-chat",
+            "style" : {
+				"navigationBarTitleText":"聊天页",
+				"app-plus":{
+					"titleNView":{
+						"buttons":[
+							// 右边
+							{
+								 "color":"#000000",								 
+								 "colorPressed":"#BBBBBB",
+								 "float":"right",
+								 "fontSize":"22px",
+								 "fontSrc":"/static/font/icon.ttf",
+								 "text":"\ue628"
+							}
+						]
+					}
+				}
+			}
+        }
+        ,{
+            "path" : "pages/detail/detail",
+            "style" : {
+				"navigationBarTitleText":"详情",
+				"app-plus":{
+					"scrollIndicator":"none",
+					"bounce":"none",
+					"titleNView":{
+						"buttons":[
+							{
+								"type":"menu"
+							}
+						]
+					}
+				}
+			}
+        }
+        ,{
+            "path" : "pages/user-set/user-set",
+            "style" : {
+				"navigationBarTitleText":"设置"
+			}
+        }
+        ,{
+            "path" : "pages/user-set-repassword/user-set-repassword",
+            "style" : {
+				"navigationBarTitleText":"修改密码",
+				"app-plus":{
+					"scrollIndicator":"none"
+				}
+			}
+        }
+        ,{
+            "path" : "pages/user-set-email/user-set-email",
+            "style" : {
+            	"navigationBarTitleText":"修改邮箱",
+            	"app-plus":{
+            		"scrollIndicator":"none"
+            	}
+            }
+        }
+        
+        ,{
+            "path" : "pages/user-set-userinfo/user-set-userinfo",
+            "style" : {
+            	"navigationBarTitleText":"修改资料",
+            	"app-plus":{
+            		"scrollIndicator":"none"
+            	}
+            }
+        }
+        ,{
+            "path" : "pages/user-set-help/user-set-help",
+            "style" : {
+            	"navigationBarTitleText":"意见反馈",
+            	"app-plus":{
+            		"scrollIndicator":"none"
+            	}
+            }
+        }
+        ,{
+            "path" : "pages/user-set-about/user-set-about",
+            "style" : {
+            	"navigationBarTitleText":"关于韩府",
+            	"app-plus":{
+            		"scrollIndicator":"none"
+            	}
+            }
+        }
+        ,{
+            "path" : "pages/login/login",
+            "style" : {
+				"app-plus":{
+					"titleNView":false,
+					"bounce":"none",
+					"scrollIndicator":"none"
+				}
+			}
+        }
+        ,{
+            "path" : "pages/user-space/user-space",
+            "style" : {
+				"navigationBarTitleText":"个人空间",
+				"app-plus":{
+					"scrollIndicator":"none",
+					"titleNView":{
+						"type":"transparent",
+						"buttons":[
+							{
+								"type":"menu"
+							}
+						]
+					}
+				}
+			}
+        }
+        ,{
+            "path" : "pages/register/register",
+            "style" : {}
+        }
+
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "韩府帮",
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"backgroundColor": "#FFFFFF"
+	},
+	"tabBar" : {
+	    "color" : "#B5B5B5",
+	    "selectedColor" : "#FEE42B",
+	    "borderStyle" : "black",
+	    "backgroundColor" : "#FFFFFF",
+	    "list" : [
+	        {
+				"pagePath":"pages/index/index",
+				"text":"韩府",
+				"iconPath":"/static/tabbar/index.png",
+				"selectedIconPath":"/static/tabbar/indexed.png"
+	        },
+			{
+				"pagePath":"pages/news/news",
+				"text":"动态",
+				"iconPath":"/static/tabbar/news.png",
+				"selectedIconPath":"/static/tabbar/newsed.png"
+			},
+			{
+				"pagePath":"pages/paper/paper",
+				"text":"消息",
+				"iconPath":"/static/tabbar/hxiaoxi.png",
+				"selectedIconPath":"/static/tabbar/xiaoxi.png"
+			},
+			{
+				"pagePath":"pages/home/home",
+				"text":"我的",
+				"iconPath":"/static/tabbar/home.png",
+				"selectedIconPath":"/static/tabbar/homeed.png"
+			}
+	    ]
+	}
+}

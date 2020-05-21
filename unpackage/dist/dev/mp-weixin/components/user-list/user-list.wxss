@@ -1,0 +1,30 @@
+
+.user-list.data-v-64d5f59c{
+	margin: 0 20rpx; 
+	padding: 20rpx 0;
+	border-bottom: 1rpx solid #EEEEEE;
+}
+.user-list>image.data-v-64d5f59c{
+	width: 100rpx;
+	height: 100rpx;
+	border-radius: 100%;
+	margin-right: 20rpx;
+	-webkit-flex-shrink: 0;
+	        flex-shrink: 0;
+}
+.user-list>view.data-v-64d5f59c:first-of-type{
+	-webkit-box-flex: 1;
+	-webkit-flex: 1;
+	        flex: 1;
+}
+.user-list>view:first-of-type>view.data-v-64d5f59c:first-child{
+	font-size: 35rpx;
+}
+.user-list>view.data-v-64d5f59c:last-of-type{
+	width: 80rpx;
+	color:#CCCCCC;
+}
+.icon-zengjia1.data-v-64d5f59c{
+	color: #F8791B!important;
+}
+

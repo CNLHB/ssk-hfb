@@ -1,0 +1,84 @@
+/* 公共按钮 */
+.user-set-btn{
+	width: 100%;
+	margin: 20rpx 0;
+	background: #FFE933!important;
+	border: 0!important;
+	color: #333333!important;
+}
+.user-set-btn-disable{
+	background: #F4F4F4!important;
+	border: 1rpx solid #EEEEEE!important;
+	color: #909090!important;
+}
+.body{
+	padding: 0 20rpx!important;
+}
+.common-input{
+	font-size: 30rpx;
+	border-bottom: 1rpx solid #F4F4F4;
+}
+.login-font-color{ color: #BBBBBB;
+}
+.login-padding{ padding: 20rpx 0;
+}
+.icon-guanbi{
+	position: fixed;
+	top: 60rpx;
+	left: 30rpx;
+	font-size: 40rpx;
+	font-weight: bold;
+	color: #332F0A;
+	z-index: 100;
+}
+.loginhead{ width: 100%;
+}
+.other-login-title{
+	position: relative;
+}
+.other-login-title:before,.other-login-title:after{
+	content: "";
+	position: absolute;
+	background: #BBBBBB;
+	height: 1rpx;
+	width: 100rpx;
+	top: 50%;
+}
+.other-login-title:before{
+	left: 25%;
+}
+.other-login-title:after{
+	right: 25%;
+}
+.login-input-box{
+	position: relative;
+}
+.login-input-box .forget-input{
+	padding-right: 150rpx;
+}
+.login-input-box .forget,.login-input-box .phone{
+	position: absolute;
+	top: 0;
+	height: 100%;
+	z-index: 100;
+}
+.login-input-box .forget{
+	width: 150rpx;
+	right: 0;
+}
+.login-input-box .phone{
+	width:100rpx;
+	left: 0;
+	font-weight: bold;
+}
+.login-input-box .phone-input{
+	padding-left: 100rpx;
+}
+.yanzhengma view{
+	background: #EEEEEE;
+	border-radius: 10rpx;
+	font-size: 25rpx;
+	width: 150rpx;
+	padding: 10rpx 0;
+}
+

@@ -1,0 +1,2 @@
+<template name="08b6479d"><view class="_view {{ h[ 0 ].rcl }}"><navigator class="_navigator" url="../ceshi/ceshi"><view class="_view">跳转到测试页</view></navigator></view></template>
+<template is="08b6479d" data="{{ ...$root['0'], $root }}"/>

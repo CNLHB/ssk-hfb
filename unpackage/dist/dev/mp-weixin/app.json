@@ -1,0 +1,67 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/news/news",
+    "pages/paper/paper",
+    "pages/home/home",
+    "pages/search/search",
+    "pages/add-input/add-input",
+    "pages/topic-nav/topic-nav",
+    "pages/topic-detail/topic-detail",
+    "pages/user-list/user-list",
+    "pages/user-chat/user-chat",
+    "pages/detail/detail",
+    "pages/user-set/user-set",
+    "pages/user-set-repassword/user-set-repassword",
+    "pages/user-set-email/user-set-email",
+    "pages/user-set-userinfo/user-set-userinfo",
+    "pages/user-set-help/user-set-help",
+    "pages/user-set-about/user-set-about",
+    "pages/login/login",
+    "pages/user-space/user-space",
+    "pages/register/register"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "韩府帮",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#FFFFFF"
+  },
+  "tabBar": {
+    "color": "#B5B5B5",
+    "selectedColor": "#FEE42B",
+    "borderStyle": "black",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "韩府",
+        "iconPath": "/static/tabbar/index.png",
+        "selectedIconPath": "/static/tabbar/indexed.png"
+      },
+      {
+        "pagePath": "pages/news/news",
+        "text": "动态",
+        "iconPath": "/static/tabbar/news.png",
+        "selectedIconPath": "/static/tabbar/newsed.png"
+      },
+      {
+        "pagePath": "pages/paper/paper",
+        "text": "消息",
+        "iconPath": "/static/tabbar/hxiaoxi.png",
+        "selectedIconPath": "/static/tabbar/xiaoxi.png"
+      },
+      {
+        "pagePath": "pages/home/home",
+        "text": "我的",
+        "iconPath": "/static/tabbar/home.png",
+        "selectedIconPath": "/static/tabbar/homeed.png"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 6000
+  },
+  "usingComponents": {}
+}

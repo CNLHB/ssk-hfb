@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "关于韩府",
+  "scrollIndicator": "none",
+  "usingComponents": {
+    "home-list-item": "/components/home/home-list-item"
+  }
+}

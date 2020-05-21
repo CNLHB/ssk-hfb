@@ -1,0 +1,2 @@
+<template name="7873e752"><view class="_view {{ h[ 0 ].rcl }}">我的</view></template>
+<template is="7873e752" data="{{ ...$root['0'], $root }}"/>

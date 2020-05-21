@@ -1,0 +1,73 @@
+.common-list{
+	padding: 20upx;
+}
+.common-list-l{
+	flex-shrink: 0;
+}
+.common-list-l image{
+	width: 90upx;
+	height: 90upx;
+	border-radius:100%;
+}
+.common-list-r{
+	flex: 1;
+	/* margin-left: 15upx; */
+	border-bottom: 1upx solid #EEEEEE;
+	padding-bottom: 10upx;
+}
+.common-list-r>view:nth-child(3)>image{
+/* 	width: 100%;
+	border-radius:10upx; */
+}
+.common-list-r>view:nth-child(1)>view:first-child{
+	color: #999999;
+	font-size: 32upx;
+}
+
+.common-list-r>view:nth-child(1)>view:last-child{
+	background: #EEEEEE;
+	padding: 0 10upx;
+	font-size: 26upx;
+}
+.common-list-r>view:nth-child(2){
+	font-size: 32upx;
+	padding: 12upx 0;
+}
+.common-list-r>view:nth-child(3){
+	position: relative;
+	margin-bottom: 10upx;
+}
+.common-list-play,.common-list-playinfo{
+	position: absolute;
+	color: #FFFFFF;
+}
+.common-list-play{
+	font-size: 130upx;
+}
+.common-list-playinfo{
+	right: 10upx;
+	bottom: 10upx;
+	background: rgba(51, 51, 51, 0.73);
+	border-radius: 20upx;
+	padding: 0 20upx;
+	font-size: 26upx;
+}
+.common-list-r>view:nth-child(4)>view{
+	color: #AAAAAA;
+}
+.common-list-r>view:nth-child(4)>view:nth-child(2)>view{
+	margin-left: 10upx;
+	padding-left: 5upx;
+	font-size: 28upx;
+}
+.common-list-share{
+	background: #EEEEEE;
+	width: 100%;
+	padding: 10upx;
+	border-radius: 10upx;
+}
+.common-list-share>image{
+	width: 200upx;
+	height: 150upx;
+	margin-right: 10upx;
+}

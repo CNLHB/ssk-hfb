@@ -1,0 +1,20 @@
+{
+  "enablePullDownRefresh": true,
+  "animationType": "slide-in-bottom",
+  "animationDuration": 200,
+  "scrollIndicator": "none",
+  "titleNView": {
+    "type": "transparent",
+    "buttons": [
+      {
+        "type": "menu"
+      }
+    ]
+  },
+  "usingComponents": {
+    "topic-info": "/components/topic/topic-info",
+    "swiper-tab-head": "/components/index/swiper-tab-head",
+    "common-list": "/components/common/common-list",
+    "load-more": "/components/common/load-more"
+  }
+}

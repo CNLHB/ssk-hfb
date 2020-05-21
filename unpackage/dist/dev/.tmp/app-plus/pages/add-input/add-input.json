@@ -1,0 +1,10 @@
+{
+  "animationType": "slide-in-bottom",
+  "animationDuration": 200,
+  "titleNView": false,
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "uploud-images": "/components/common/uploud-images",
+    "uni-popup": "/components/uni-popup/uni-popup"
+  }
+}
