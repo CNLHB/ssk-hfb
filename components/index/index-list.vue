@@ -80,20 +80,60 @@
 			caozuo(type){
 				switch (type){
 					case "ding":
-					if(this.infoNum.index==1){ return; }
-					this.infoNum.likeNum++;
-					if(this.infoNum.index==2){
-						this.infoNum.treadNum--;
+					if(this.infoNum.index==1){ 
+						this.$http.post('/topic/active',{
+							tid:this.item.id,
+							uid:2,
+							tactive: 0
+						}).then((data)=>{
+							this.infoNum.likeNum--;
+							this.infoNum.index=0;
+						})
+						return 
+						
 					}
-					this.infoNum.index=1;
+
+					this.$http.post('/topic/active',{
+						tid:this.item.id,
+						uid:2,
+						tactive: 1
+					}).then((data)=>{
+						this.infoNum.likeNum++;
+						if(this.infoNum.index==2){
+							this.infoNum.treadNum--;
+						}
+						this.infoNum.index=1;
+					})
+					
 						break;
 					case "cai":
-					if(this.infoNum.index==2){ return; }
-					this.infoNum.treadNum++;
-					if(this.infoNum.index==1){
-						this.infoNum.likeNum--;
+					
+					if(this.infoNum.index==2){
+
+						this.$http.post('/topic/active',{
+							tid:this.item.id,
+							uid:2,
+							tactive: 0
+						}).then((data)=>{
+						this.infoNum.treadNum--;
+						this.infoNum.index=0;
+						})
+						
+						return  
 					}
-					this.infoNum.index=2;
+
+					
+					this.$http.post('/topic/active',{
+						tid:this.item.id,
+						uid:2,
+						tactive: 2
+					}).then((data)=>{
+						this.infoNum.treadNum++;
+						if(this.infoNum.index==1){
+							this.infoNum.likeNum--;
+						}
+						this.infoNum.index=2;
+					})
 						break;
 				}
 			},

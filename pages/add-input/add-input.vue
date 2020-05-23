@@ -100,11 +100,14 @@
 				}
 
 				await this.$http.post("/topic",{
+					uid:1,
 					cid:this.cid,
 					title:this.text,
 					urlType:"img",
 					images: images.join(',')
 				})
+
+				
 				uni.showToast({
 					title: '发表成功',
 					icon:"success",

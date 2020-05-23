@@ -11,10 +11,12 @@
 						</view>
 					</view>
 
-					<view v-show="!isguanzhu" @tap="guanzhu" 
+					<view v-if="!isguanzhu" @tap="guanzhu" 
 					class="icon iconfont icon-zengjia">关注</view>
+				<view v-else @tap="guanzhu"
+				class="icon iconfont ">取消关注</view>
 				</view>
-				<!-- <view class="common-list-r-time">26天前</view> -->
+				<view class="common-list-r-time">{{createDate}}</view>
 			</view>
 			<view>{{item.title}}</view>
 			<view class="u-f-ajc" :class="[ list =='list3'?'list3': 'list4']">
@@ -63,6 +65,7 @@
 </template>
 
 <script>
+	import time from "../../common/time.js";
 	import tagSexAge from "../common/tag-sex-age.vue"
 	export default {
 		components:{
@@ -78,12 +81,27 @@
 
 			}
 		},
+		computed:{
+			createDate(){
+				let data = new Date(this.item.createTime).getTime();
+				
+				return time.gettime.sumAge(data)
+			}
+		},
 		methods:{
 			guanzhu(){
-				this.isguanzhu=true;
-				uni.showToast({
-					title: '关注成功',
-				});
+				if(this.isguanzhu){
+					this.isguanzhu=false;
+					uni.showToast({
+						title: '取消关注',
+					});
+				}else{
+					this.isguanzhu=true;
+					uni.showToast({
+						title: '关注成功',
+					});
+				}
+
 			},
 			imgdetail(index){
 				uni.previewImage({
@@ -113,6 +131,7 @@
 }
 .common-list-r{
 	border-bottom: 0;
+	
 }
 .common-list{
 	border-bottom: 1upx solid #EEEEEE;
@@ -129,6 +148,7 @@
 }
 
 .common-list-r>view:nth-child(1)>view:nth-child(1)>view:last-child{
+	background-color: #FFFFFF;
 	padding: 0 10upx;
 	font-size: 26upx;
 }

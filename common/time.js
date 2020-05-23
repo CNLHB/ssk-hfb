@@ -10,10 +10,12 @@ const gettime = {
 	},
 	// 计算指定时间与当前的时间差
 	sumAge(data){
-		let dateBegin = new Date(data.replace(/-/g, "/"));
+		let dateBegin = new Date(data);
 		let dateEnd = new Date();//获取当前时间
 		let dateDiff = dateEnd.getTime() - dateBegin.getTime();//时间差的毫秒数
+		
 		let dayDiff = Math.floor(dateDiff / (24 * 3600 * 1000));//计算出相差天数
+		console.log(dateBegin)
 		let leave1=dateDiff%(24*3600*1000)    //计算天数后剩余的毫秒数
 		let hours=Math.floor(leave1/(3600*1000))//计算出小时数
 		//计算相差分钟数

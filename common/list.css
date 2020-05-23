@@ -25,7 +25,6 @@
 }
 
 .common-list-r>view:nth-child(1)>view:last-child{
-	background: #EEEEEE;
 	padding: 0 10upx;
 	font-size: 26upx;
 }
