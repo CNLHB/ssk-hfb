@@ -22,7 +22,7 @@
 			return {
 				list:[
 					{ icon:"",name:"新版本检测",clicktype:"",url:"" },
-					{ icon:"",name:"仿糗事百科用户协议",clicktype:"",url:"" },
+					{ icon:"",name:"韩府帮用户协议",clicktype:"",url:"" },
 				]
 			}
 		},

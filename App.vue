@@ -1,8 +1,26 @@
 <script>
+    import {mapMutations} from 'vuex'
 	export default {
-		onLaunch: function () {
+		async onLaunch() {
 			// 网路监听（用户目前断网，切换wifi）
 			this.lib.NetWork.On();
+			let data;
+			try{
+				 data =JSON.parse(uni.getStorageSync('userInfo'))
+			}catch(e){
+			
+			}
+			
+			let res = await this.$http.post("auth/verify")
+			console.log(res)
+			if(res&& res.status==404){
+				uni.clearStorageSync('userInfo')
+				uni.clearStorageSync('token')
+			}else{
+				uni.setStorageSync('token',res.data.token)
+				this.setUserInfo(data||{})
+			}
+
 			// 更新检测
 		},
 		onShow: function () {
@@ -10,6 +28,9 @@
 		},
 		onHide: function () {
 			console.log('App Hide')
+		},
+		methods:{
+			...mapMutations(['setUserInfo'])
 		}
 	}
 </script>
@@ -21,7 +42,7 @@
 	@import './common/uni.css';
 	/* 引入自定义图标库 */
 	@import './common/icon.css';
-	@import './common/ssk.css';
+	
 	/* 引入动画库 */
 	@import './common/animate.css';
 	/* 公共样式 */

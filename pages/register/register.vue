@@ -7,17 +7,23 @@
 			
 			<view class="info-wapper">
 				<label class="words-lbl">账号</label>
-				<input name="username" type="text" value="" class="input" placeholder="请输入用户名" placeholder-class="graywords"/>
+				<input name="username" type="text" value="" class="input" placeholder="手机" placeholder-class="graywords"/>
 			</view>
 			
 			<view class="info-wapper" style="margin-top: 40upx;">
 				<label class="words-lbl">密码</label>
 				<input name="password" type="text" value="" password="true" class="input" placeholder="请输入密码" placeholder-class="graywords"/>
 			</view>
-			
-			<button type="primary" form-type="submit" style="margin-top: 60upx;width: 90%;">注册/登录</button>
+			<view class="info-wapper" style="margin-top: 40upx;">
+				<label class="words-lbl">确认密码</label>
+				<input name="confirmPassword" type="text" value="" password="true" class="input" placeholder="请输入密码" placeholder-class="graywords"/>
+			</view>
+			<button type="primary" form-type="submit" style="margin-top: 60upx;width: 90%;">注册</button>
 		</form>
-		
+		<!-- 协议 -->
+		<view class="login-rule u-f-ajc login-padding login-font-color">
+			注册即代表您同意<view>《韩府帮协议》</view>
+		</view>
 		
 		<!-- 第三方登录H5不支持，所以隐藏掉 -->
 		<!-- #ifndef H5 -->
@@ -61,6 +67,11 @@
 			};
 		},
 		methods: {
+			// 验证手机号码
+			isPhone(phone){
+				let mPattern = /^1[34578]\d{9}$/; 
+				return mPattern.test(phone);
+			},
 			appOAuthLogin(e) {
 				var me = this;
 				// 获取用户的登录类型
@@ -163,43 +174,47 @@
 					}
 				})
 			},
-			formSubmit (e) {
+			async formSubmit (e) {
 				var me = this;
 				var username = e.detail.value.username;
+				if(!this.isPhone(username)){
+					uni.showToast({
+						title: '请输入正确的手机号码',
+						icon:"none"
+					});
+					return;
+				}
 				var password = e.detail.value.password;
-// 				console.log(username);
-// 				console.log(password);
-
-				// 发起注册/登录的请求
-				var serverUrl = me.serverUrl;
-				uni.request({
-					url: serverUrl + '/user/registOrLogin',
-					data: {
-						"username": username,
-						"password": password
-					},
-					method: "POST",
-					success: (res) => {
-						
-						// 获取真实数据之前，务必判断状态是否为200
-						if (res.data.status == 200) {
-							var userInfo = res.data.data;
-							// console.log(userInfo);
-							// 保存用户信息到全局的缓存中
-							uni.setStorageSync("globalUser", userInfo);
-							// 切换页面跳转，使用tab切换的api
-							uni.switchTab({
-								url: "../me/me"
-							});
-						} else if (res.data.status == 500) {
-							uni.showToast({
-								title: res.data.msg,
-								duration: 2000,
-								image: "../../static/icos/error.png"
-							})
-						}
+				var confirmPassword = e.detail.value.confirmPassword;
+				if(password != '' && password === confirmPassword){
+					let data = await this.$http.post('user/register',{
+						userName:username,
+						phoneNumber:username,
+						confirmPassword:confirmPassword,
+						password:password
+					})
+					if(data.status>=400){
+						console.log(data)
+						uni.showToast({
+							title: data.massage,
+							icon:"none"
+						});
+					}else{
+						uni.navigateTo({
+							url:'../login/login'
+						})
 					}
-				});
+
+				}else{
+					uni.showToast({
+						title: '两次密码不一致',
+						icon:"none"
+					});
+				}
+				console.log(username);
+				console.log(password);
+				console.log(confirmPassword);
+
 			}
 		}
 	}
@@ -207,4 +222,11 @@
 
 <style>
 	@import url("./registLogin.css");
+	.login-font-color{ color: #BBBBBB; }
+	.login-padding{ padding: 20upx 0; }
+
+
+
+
+
 </style>

@@ -25,15 +25,15 @@
 				list:[
 					{
 						title:"客服什么时候上线？",
-						content:"123"
+						content:"敬请期待"
 					},
 					{
 						title:"忘记账号/昵称/密码怎么办？",
-						content:"111111111"
+						content:"敬请期待"
 					},
 					{
 						title:"怎么搜索/查找/关注/取关用户？",
-						content:"222222"
+						content:"敬请期待"
 					}
 				]
 			}

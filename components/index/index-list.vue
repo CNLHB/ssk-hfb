@@ -60,12 +60,18 @@
 	export default {
 		props:{
 			item:Object,
-			index:Number
+			index:Number,
+			userInfo:Object
 		},
 		data() {
 			return {
 				isguanzhu: this.item.isguanzhu,
-				infoNum:this.item.infoNum
+				infoNum:this.item.infoNum,
+				topicActive:{
+					uid:this.userInfo.id,
+					tid:this.item.id
+					
+				}
 			}
 		},
 		methods:{
@@ -77,34 +83,29 @@
 				});
 			},
 			// 顶踩
-			caozuo(type){
+			async caozuo(type){
 				switch (type){
 					case "ding":
 					if(this.infoNum.index==1){ 
-						this.$http.post('/topic/active',{
-							tid:this.item.id,
-							uid:2,
+					
+					await this.$emit("likeOrTread",{
+							...this.topicActive,
 							tactive: 0
-						}).then((data)=>{
-							this.infoNum.likeNum--;
-							this.infoNum.index=0;
 						})
+						this.infoNum.likeNum--;
+						this.infoNum.index=0;
 						return 
 						
 					}
-
-					this.$http.post('/topic/active',{
-						tid:this.item.id,
-						uid:2,
-						tactive: 1
-					}).then((data)=>{
-						this.infoNum.likeNum++;
-						if(this.infoNum.index==2){
-							this.infoNum.treadNum--;
-						}
-						this.infoNum.index=1;
-					})
-					
+					await this.$emit("likeOrTread",{
+							...this.topicActive,
+							tactive: 1
+						})
+					this.infoNum.likeNum++;
+					if(this.infoNum.index==2){
+						this.infoNum.treadNum--;
+					}
+					this.infoNum.index=1;
 						break;
 					case "cai":
 					

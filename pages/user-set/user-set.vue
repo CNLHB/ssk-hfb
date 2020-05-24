@@ -4,12 +4,13 @@
 			<home-list-item :item="item"
 			:index="index"></home-list-item>
 		</block>
-		<button class="user-set-btn" type="primary">退出登陆</button>
+		<button class="user-set-btn" type="primary" @tap="loginOut">退出登陆</button>
 	</view>
 </template>
 
 <script>
 	import homeListItem from "../../components/home/home-list-item.vue";
+	import {mapMutations} from 'vuex'
 	export default {
 		components:{
 			homeListItem
@@ -28,7 +29,14 @@
 			}
 		},
 		methods: {
-			
+			...mapMutations(['setUserInfo']),
+			loginOut(){
+				this.setUserInfo({});
+				uni.clearStorageSync('userInfo')
+				uni.switchTab({
+					url:'../home/home'
+				})
+			}
 		}
 	}
 </script>

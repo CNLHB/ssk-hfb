@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<template v-if="!islogin">
+		<template v-if="userInfo&&!userInfo.id">
 			<!-- 未登录 -->
 			<view class="u-f-ajc">登陆韩府帮，体验更多功能</view>
 			<!-- 第三方登陆 -->
@@ -35,6 +35,7 @@
 	import otherLogin from "../../components/home/other-login.vue";
 	import homeData from "../../components/home/home-data.vue";
 	import {webUrl} from '../../common/config.js'
+	import {mapState} from 'vuex'
 	export default {
 		components:{
 			homeListItem,
@@ -42,23 +43,31 @@
 			otherLogin,
 			homeData
 		},
+		computed:{
+			...mapState(['userInfo'])
+		},
+		onLoad() {
+			// this.homeinfo = this.userInfo
+				
+
+
+			
+		},
 		created() {
-			console.log(webUrl)
-			let url = webUrl + "users/login"
-			// uni.request({
-			// 	url: url ,
-			// 	// url:"http://localhost:3000/users/login",
-			// 	success: (res) => {
-			// 		console.log(res.data)
-			// 	}
-			// })
+			if(this.userInfo){
+				console.log(this.userInfo)
+				this.homeinfo.totalnum = 0
+				this.homeinfo.todaynum = 0
+				this.homeinfo.userpic = this.userInfo.authorUrl
+				this.homeinfo.username =this.userInfo.userName
+			}
 		},
 		data() {
 			return {
 				islogin:false,
 				homeinfo:{
-					userpic:"../../static/demo/userpic/11.jpg",
-					username:"昵称",
+					userpic:"",
+					username:"",
 					totalnum:0,
 					todaynum:0,
 				},
@@ -76,11 +85,19 @@
 			};
 		},
 		onNavigationBarButtonTap(e) {
-			if(e.index==0){
-				uni.navigateTo({
-					url: '../user-set/user-set',
-				});
+			if(this.userInfo.id){
+				if(e.index==0){
+					uni.navigateTo({
+						url: '../user-set/user-set',
+					});
+				}
+			}else{
+				uni.showToast({
+					title:"你还未登录呢",
+					icon:'none'
+				})
 			}
+
 		},
 		methods:{
 			openLogin(){

@@ -324,7 +324,9 @@
         }
         ,{
             "path" : "pages/register/register",
-            "style" : {}
+            "style" : {
+				"navigationBarTitleText":"注册"
+			}
         }
 
     ],

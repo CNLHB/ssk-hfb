@@ -73,6 +73,8 @@
 		},
 		props:{
 			item:Object,
+			userInfo:Object,
+			detail:Object
 		},
 		data() {
 			return {
@@ -90,18 +92,27 @@
 		},
 		methods:{
 			guanzhu(){
+					console.log(this.userInfo.id,this.detail.uid)
 				if(this.isguanzhu){
+					this.$http.delete('/user/active',{
+						fromId:this.userInfo.id,
+						toId:this.detail.uid
+					})
 					this.isguanzhu=false;
 					uni.showToast({
 						title: '取消关注',
 					});
 				}else{
+					this.$http.post('/user/active',{
+						fromId:this.userInfo.id,
+						toId:this.detail.uid
+					})
 					this.isguanzhu=true;
 					uni.showToast({
 						title: '关注成功',
 					});
 				}
-
+				
 			},
 			imgdetail(index){
 				uni.previewImage({

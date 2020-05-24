@@ -13,7 +13,7 @@
 			<template v-if="!status">
 				<input type="text" v-model="username"
 				class="uni-input common-input"
-				placeholder="昵称/手机号/邮箱" />
+				placeholder="手机号" />
 				
 				<view class="login-input-box">
 					<input type="text" v-model="password"
@@ -61,9 +61,10 @@
 		
 		<!-- 协议 -->
 		<view class="login-rule u-f-ajc login-padding login-font-color">
-			注册即代表您同意<view>《韩府帮协议》</view>
+			<!-- 注册即代表您同意<view>《韩府帮协议》</view> -->
+			<navigator url="../register/register">还没账号去注册></navigator>
 		</view>
-		<!-- <navigator url="../register/register">zhuce</navigator> -->
+		
 	</view>
 </template>
 
@@ -71,6 +72,7 @@
 	import uniStatusBar from "../../components/uni-status-bar/uni-status-bar.vue";
 	import otherLogin from "../../components/home/other-login.vue";
 	import {webUrl} from '../../common/config.js'
+	import {mapMutations} from 'vuex'
 	export default {
 		components:{
 			uniStatusBar,
@@ -103,13 +105,14 @@
 			}
 		},
 		methods: {
+			...mapMutations(['setUserInfo']),
 			// 验证手机号码
 			isPhone(){
 				let mPattern = /^1[34578]\d{9}$/; 
 				return mPattern.test(this.phone);
 			},
 			// 获取验证码
-			getCheckNum(){
+			async getCheckNum(){
 				if(this.codetime > 0){ return; }
 				// 验证手机号合法性
 				if(!this.isPhone()){
@@ -120,8 +123,10 @@
 					return;
 				}
 				// 请求服务器，发送验证码
+				let {code} =await this.$http.post('user/login/'+this.phone,)
+				console.log(code)
 				// 发送成功，开启倒计时
-				this.codetime=10;
+				this.codetime=60;
 				let timer=setInterval(()=>{
 					this.codetime--;
 					if(this.codetime < 1){
@@ -155,21 +160,25 @@
 				console.log("返回上一步")
 			},
 			// 提交登录
-			submit(){
+			async submit(){
 				// 账号密码登录
 				if(!this.status){
 					console.log("提交登录")
-					uni.request({
-						url: webUrl + 'users/login',
-						method: "POST",
-						data:{
-							username: this.username,
-							password: this.password
-						},
-						success: (res) => {
-							console.log(res.data)
-						}
+				 let data =await this.$http.post('user/login',{
+						phoneNumber: this.username,
+						password: this.password
 					})
+					console.log(data.data)
+					try{
+						uni.setStorageSync('userInfo',JSON.stringify(data.data.userInfo));
+						uni.setStorageSync('token',data.data.token);
+					}catch(e){
+						
+					}
+					this.setUserInfo(data.data.userInfo);
+					uni.switchTab({
+						url: '/pages/home/home'
+					});
 					return;
 				}
 				// 验证码登录
@@ -181,6 +190,10 @@
 					});
 					return;
 				}
+				this.$http.post('user/login',{
+					phone: this.phone,
+					code: this.checknum
+				})
 				console.log("提交登录")
 			}
 		}

@@ -21,7 +21,11 @@
 						<!-- 图文列表 -->
 						<template v-if="items.list.length>0">
 							<block v-for="(item,index1) in items.list" :key="index1">
-									<index-list :item="item" :index="index1"></index-list>
+									<index-list 
+									@likeOrTread="likeOrTread" 
+									:item="item" 
+									:userInfo="userInfo"
+									:index="index1"></index-list>
 								</block>
 							 <load-more :loadtext="items.loadtext"></load-more>
 						</template>
@@ -43,6 +47,7 @@
 	import swiperTabHead from "../../components/index/swiper-tab-head.vue";
 	import loadMore from "../../components/common/load-more.vue";
 	import noThing from "../../components/common/no-thing.vue";
+	import {mapState, mapMutations} from "vuex"
 	export default {
 		components: {
 			indexList,
@@ -147,6 +152,9 @@
 					break;
 			}
 		},
+		computed:{
+		...mapState(['userInfo'])
+		},
 		methods: {
 			async requestData(GoPage,Gotype){
 				let currentPage = GoPage || this.tabBars[this.tabIndex].page;
@@ -154,14 +162,14 @@
 				let data;
 				try{
 
-					data = await this.$http.get(`/topic/page?page=${currentPage}&type=${type}&rows=10&user=1`)
+					data = await this.$http.get(`/topic/page?page=${currentPage}&type=${type}&rows=10`)
 				}catch(e){
 					console.log(e)
 					return 
 				}
 				
 				let {page,items} = data
-				if(items.length ===0){
+				if(items&&items.length ===0){
 					this.newslist[this.tabIndex].loadtext="没有更多数据了";
 					return 
 				}
@@ -178,6 +186,9 @@
 				
 				this.newslist[this.tabIndex].list=this.newslist[this.tabIndex].list.concat(items)
 				
+			},
+			async likeOrTread(data){
+				await this.$http.post('/topic/active',data);
 			},
 			checkIn() {
 				console.log("checkIn")

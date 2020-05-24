@@ -24,9 +24,13 @@ export default class request {
 	}
 	uploudFile(url, file){
 		return new Promise((resolve, reject) =>{
+			let  Authorization=uni.getStorageSync('token');
 			uni.uploadFile({
 				url:  this.baseUrl + url, //仅为示例，非真实的接口地址
 				filePath: file.path,
+				header:{
+					Authorization
+				},
 				file:file,
 				name: 'file',
 				success: (res) => {
@@ -40,11 +44,12 @@ export default class request {
 		})
 
 	}
-	ajax(method, url = '', data = {}, options = {}){
+	ajax(method="GET", url = '', data = {}, options = {}){
 		return new Promise((resolve, reject) => {
 				uni.showLoading({
 					title: '加载中'
 				});
+				this.headers.Authorization=uni.getStorageSync('token');
 		        uni.request({
 		            url: this.baseUrl + url,
 					data: data,

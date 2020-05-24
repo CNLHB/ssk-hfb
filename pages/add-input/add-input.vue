@@ -33,6 +33,7 @@
 	import uniNavBar from "../../components/uni-nav-bar/uni-nav-bar.vue";
 	import uploudImages from "../../components/common/uploud-images.vue";
 	import uniPopup from "../../components/uni-popup/uni-popup.vue";
+	import {mapState} from 'vuex'
 	export default {
 		components:{
 			uniNavBar,
@@ -61,6 +62,9 @@
 		async onLoad() {
 			let data = await this.$http.get('/category/list')
 			changelook = data
+		},
+		computed:{
+			...mapState(['userInfo'])
 		},
 		methods:{
 			// 保存为草稿
@@ -100,7 +104,7 @@
 				}
 
 				await this.$http.post("/topic",{
-					uid:1,
+					uid:this.userInfo.id,
 					cid:this.cid,
 					title:this.text,
 					urlType:"img",
