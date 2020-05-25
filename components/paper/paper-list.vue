@@ -1,5 +1,5 @@
 <template>
-	<view class="paper-list u-f-ac animated fadeIn fast" @tap="opendetail">
+	<view class="paper-list u-f-ac animated fadeIn fast" @tap="opendetail(index)">
 		<image :src="item.userpic" mode="widthFix" lazy-load></image>
 		<view>
 			<view class="u-f-ac u-f-jsb">{{item.username}} <view>{{item.time}}</view></view>
@@ -23,9 +23,10 @@
 			index:Number
 		},
 		methods:{
-			opendetail(){
+			opendetail(index){
+				this.$emit("readMsg", index)
 				uni.navigateTo({
-					url: '../../pages/user-chat/user-chat',
+					url: '../../pages/user-chat/user-chat?index='+index
 				});
 			}
 		}

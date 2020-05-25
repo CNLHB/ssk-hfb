@@ -5,32 +5,42 @@
 			// 网路监听（用户目前断网，切换wifi）
 			this.lib.NetWork.On();
 			let data;
+			let chatList;
+			
 			try{
 				 data =JSON.parse(uni.getStorageSync('userInfo'))
+				 chatList =JSON.parse(uni.getStorageSync('chatList'))
+				 
 			}catch(e){
 			
 			}
-			
-			let res = await this.$http.post("auth/verify")
-			console.log(res)
-			if(res&& res.status==404){
+			let res ={};
+			if(uni.getStorageSync('token')){
+				res = await this.$http.post("auth/verify")
+			}
+			if(res && res.status==404){
 				uni.clearStorageSync('userInfo')
 				uni.clearStorageSync('token')
 			}else{
-				uni.setStorageSync('token',res.data.token)
+				if(res.data&&res.data.token){
+					uni.setStorageSync('token',res.data.token)
+					
+				}
 				this.setUserInfo(data||{})
+				this.setChatList(chatList||[])
 			}
 
 			// 更新检测
 		},
-		onShow: function () {
+		async onShow () {
 			console.log('App Show')
+
 		},
 		onHide: function () {
 			console.log('App Hide')
 		},
 		methods:{
-			...mapMutations(['setUserInfo'])
+			...mapMutations(['setUserInfo','setChatList'])
 		}
 	}
 </script>

@@ -46,20 +46,27 @@
 		computed:{
 			...mapState(['userInfo'])
 		},
-		onLoad() {
-			// this.homeinfo = this.userInfo
-				
-
-
-			
-		},
-		created() {
+		onShow(){
 			if(this.userInfo){
 				console.log(this.userInfo)
 				this.homeinfo.totalnum = 0
 				this.homeinfo.todaynum = 0
 				this.homeinfo.userpic = this.userInfo.authorUrl
 				this.homeinfo.username =this.userInfo.userName
+			}
+		},
+		created() {
+
+		},
+		async mounted() {
+			console.log(this.userInfo)
+			if(this.userInfo&&this.userInfo.id){
+				let topicCount = await this.$http.get('topic/count')
+				let commCount = await this.$http.get('comment/count')
+				this.homedata[0].num = topicCount.data.count
+				this.homedata[1].num = commCount.data.count
+				console.log(topicCount)
+				console.log(commCount)
 			}
 		},
 		data() {
@@ -72,7 +79,7 @@
 					todaynum:0,
 				},
 				homedata:[
-					{ name:"帖子", num:0 },
+					// { name:"帖子", num:0 },
 					{ name:"动态", num:0 },
 					{ name:"评论", num:0 },
 					{ name:"收藏", num:0 },

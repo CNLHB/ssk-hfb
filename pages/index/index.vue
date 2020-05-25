@@ -130,6 +130,9 @@
 			 this.requestData()
 			
 		},
+		onShow() {
+			// this.requestData()
+		},
 		// 监听搜索框点击事件
 		onNavigationBarSearchInputClicked() {
 			uni.navigateTo({
@@ -167,9 +170,9 @@
 					console.log(e)
 					return 
 				}
-				
 				let {page,items} = data
 				if(items&&items.length ===0){
+					this.tabBars[this.tabIndex].page=page
 					this.newslist[this.tabIndex].loadtext="没有更多数据了";
 					return 
 				}
@@ -181,14 +184,21 @@
 					}
 					
 				})
-				console.log(items);
 				this.tabBars[this.tabIndex].page=page
-				
 				this.newslist[this.tabIndex].list=this.newslist[this.tabIndex].list.concat(items)
-				
+				if(items&&items.length <10){
+					this.newslist[this.tabIndex].loadtext="没有更多数据了";
+				}
 			},
 			async likeOrTread(data){
-				await this.$http.post('/topic/active',data);
+				if(!this.userInfo || !this.userInfo.id){
+					uni.showToast({
+						title:"你还未登录！或登录过有效期!",
+						icon:'none'
+					})
+					return
+				}
+				await this.$http.post('topic/active',data);
 			},
 			checkIn() {
 				console.log("checkIn")
@@ -219,7 +229,7 @@
 				this.newslist[index].loadtext = "加载中...";
 				// 获取数据
 				this.requestData(this.tabBars[this.tabIndex].page+1)
-				
+				// this.newslist[index].loadtext = "";
 				
 				
 			},

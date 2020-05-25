@@ -129,7 +129,7 @@
 			},
 			// 获取评论
 			async getcomment(){
-				let arr = await this.$http.get('/comment/'+this.detail.id)
+				let arr = await this.$http.get('comment/'+this.detail.id)
 				this.comment.list=arr.items;
 				this.comment.count = arr.total;
 				this.detail.commentNum = arr.total

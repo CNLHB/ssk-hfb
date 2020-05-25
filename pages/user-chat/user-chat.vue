@@ -21,26 +21,45 @@
 	import userChatBottom from "../../components/user-chat/user-chat-bottom.vue";
 	import time from "../../common/time.js";
 	import userChatList from "../../components/user-chat/user-chat-list.vue";
+	import {mapState} from 'vuex'
+	import $http from '../../config/requestConfig.js';
 	export default {
 		components:{
 			userChatBottom,
 			userChatList
 		},
+		computed:{
+			...mapState(['chatList','userInfo'])
+		},
 		data() {
 			return {
 				scrollTop:0,
+				index:0,
 				style:{
 					contentH:0,
 					itemH:0
 				},
-				list:[]
+				list:[],
+				socket:null,
+				fid: undefined,
+
 			};
 		},
+		async onLoad(data) {
+			this.index = data.index
+			this.fid = this.chatList[data.index].fid
+			// let socket = await this.$http.websocket("GET",'msg/111')
+			// this.socket = socket
+			
+
+		},
+
 		onReady() {
 			this.getdata();
 			this.initdata();
 			this.pageToBottom(true);
 		},
+
 		methods:{
 			// 初始化参数
 			initdata(){
@@ -69,37 +88,29 @@
 					}).exec();
 				})
 			},
+
+
 			// 获取聊天数据
-			getdata(){
+			async getdata(){
 				// 从服务器获取到的数据
-				let arr=[
+				let pic = this.chatList[this.index].userpic
+				let data = this.chatList[this.index].messages
+				let arr = data.map((item)=>{
+					return{
+						isme:item.fromId==this.userInfo.id,
+						userpic:pic,
+						type:"text",
+						data:item.message,
+						time: new Date(data.sendTime).getTime()+''
+					}
+				})
+				let arr1=[
 					{
 						isme:false,
 						userpic:"../../static/demo/userpic/11.jpg",
 						type:"text",
 						data:"哈哈哈",
 						time:"1555146412"
-					},
-					{
-						isme:true,
-						userpic:"../../static/demo/userpic/10.jpg",
-						type:"img",
-						data:"../../static/demo/3.jpg",
-						time:"1555146414",
-					},
-					{
-						isme:false,
-						userpic:"../../static/demo/userpic/11.jpg",
-						type:"text",
-						data:"哈哈哈",
-						time:"1555146412"
-					},
-					{
-						isme:true,
-						userpic:"../../static/demo/userpic/10.jpg",
-						type:"img",
-						data:"../../static/demo/3.jpg",
-						time:"1555146414",
 					},
 					{
 						isme:false,
@@ -135,18 +146,35 @@
 				}
 				this.list=arr;
 			},
-			submit(data){
+			async submit(data){
 				// 构建数据
+				console.log(888)
 				let now=new Date().getTime();
-				let obj={
-					isme:true,
-					userpic:"../../static/demo/userpic/10.jpg",
-					type:"text",
-					data:data,
-					time:now,
-					gstime:time.gettime.getChatTime(now,this.list[this.list.length-1].time)
-				};
-				this.list.push(obj);
+				// this.socketTask.send({
+				// 	data: "uni-app发送一条消息",
+				// 	async success() {
+				// 		console.log("消息发送成功");
+				// 	},
+				// });
+				// this.socket.onOpen( (res) => {
+				// 	 this.socket.send({
+				// 		data: data,
+				// 		success: () => {
+				// 				console.log(8888)
+				// 		}
+				// 	});
+
+				// })
+
+				// let obj={
+				// 	isme:true,
+				// 	userpic:"../../static/demo/userpic/10.jpg",
+				// 	type:"text",
+				// 	data:data,
+				// 	time:now,
+				// 	gstime:time.gettime.getChatTime(now,this.list[this.list.length-1].time)
+				// };
+				// this.list.push(obj);
 				this.pageToBottom();
 			}
 		}

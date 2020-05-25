@@ -6,6 +6,7 @@ export default class request {
 		this.fileUrl = options.fileUrl || "";
 		//默认请求头
 		this.headers = options.headers || {};
+		this.websocketUrl = options.websocket
 
 	}
 	get(url = '', data = {}, options = {}){
@@ -44,19 +45,43 @@ export default class request {
 		})
 
 	}
+	async websocket(method="GET", url = '', data = {}, options = {}){
+		this.headers.Authorization=uni.getStorageSync('token');
+		let h = Object.assign({...this.headers},options)
+			var socketTask =await uni.connectSocket({
+			    url: this.websocketUrl + url,
+			    data() {
+			        return {
+			            x: '',
+			            y: ''
+			        };
+			    },
+			    header: {
+					...h
+			    },
+			    method: method,
+				success:()=>{
+					 console.log('WebSocket连接已打开！')
+				}
+			});
+			return socketTask
+	
+	}
+	
 	ajax(method="GET", url = '', data = {}, options = {}){
+		this.headers.Authorization=uni.getStorageSync('token');
+		let h = Object.assign({...this.headers},options)
 		return new Promise((resolve, reject) => {
 				uni.showLoading({
 					title: '加载中'
 				});
-				this.headers.Authorization=uni.getStorageSync('token');
 		        uni.request({
 		            url: this.baseUrl + url,
 					data: data,
 					method: method,
 					dataType:"json",
 					header:{
-						...this.headers
+						...h
 					},
 		            success: (res) => {
 		                resolve(res.data);

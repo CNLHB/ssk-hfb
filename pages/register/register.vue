@@ -185,7 +185,15 @@
 					return;
 				}
 				var password = e.detail.value.password;
+				if(password.length<6){
+					uni.showToast({
+						title: '密码强度太低',
+						icon:"none"
+					});
+					return
+				}
 				var confirmPassword = e.detail.value.confirmPassword;
+				
 				if(password != '' && password === confirmPassword){
 					let data = await this.$http.post('user/register',{
 						userName:username,

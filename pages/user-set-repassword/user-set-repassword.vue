@@ -92,7 +92,26 @@
 					mask: false,
 					duration: 1500
 				});
-				this.loading=false; this.disabled=false;
+				this.$http.put('user/password',{
+					oldpassword: this.oldpassword,
+					newpassword:this.newpassword,
+					renewpassword:this.renewpassword,
+				},{
+					"content-type":"application/x-www-form-urlencoded"
+				}).then((res)=>{
+					if(res.code==0){
+						uni.navigateBack({
+							delta:1
+						})
+					}else{
+						uni.showToast({
+							title:"密码不正确",
+							icon:'none'
+						})
+					}
+				})
+				this.loading=false;
+				this.disabled=false;
 			}
 		}
 	}

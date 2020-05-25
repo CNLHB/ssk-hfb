@@ -47,6 +47,7 @@
 	import commonList from "../../components/common/common-list.vue";
 	import loadMore from "../../components/common/load-more.vue";
 	import userSpacePopup from "../../components/user-space/user-space-popup.vue";
+	import {mapMutations, mapState} from 'vuex'
 	export default {
 		components:{
 			userSpaceHead,
@@ -56,6 +57,9 @@
 			commonList,
 			loadMore,
 			userSpacePopup
+		},
+		computed:{
+			...mapState(['userInfo'])
 		},
 		data() {
 			return {
@@ -210,6 +214,7 @@
 			if(e.index==0){ this.togleShow(); }
 		},
 		methods: {
+			
 			// 操作菜单显示隐藏
 			togleShow(){
 				this.show=!this.show;

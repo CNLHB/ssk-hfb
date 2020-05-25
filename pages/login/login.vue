@@ -16,7 +16,8 @@
 				placeholder="手机号" />
 				
 				<view class="login-input-box">
-					<input type="text" v-model="password"
+					<input type="password" v-model="password"
+					
 					class="uni-input common-input forget-input"
 					placeholder="请输入密码" />
 					<view class="forget u-f-ajc login-font-color">忘记密码</view>
@@ -64,7 +65,9 @@
 			<!-- 注册即代表您同意<view>《韩府帮协议》</view> -->
 			<navigator url="../register/register">还没账号去注册></navigator>
 		</view>
-		
+		<view class="login-rule u-f-ajc login-padding login-font-color">
+			<view class="">默认账号：15363398328  密码：123456</view>
+		</view>
 	</view>
 </template>
 
@@ -168,7 +171,14 @@
 						phoneNumber: this.username,
 						password: this.password
 					})
-					console.log(data.data)
+					if(data.status==404){
+						uni.showToast({
+							title:'账号或密码错误！',
+							icon:'none'
+							
+						})
+						return
+					}
 					try{
 						uni.setStorageSync('userInfo',JSON.stringify(data.data.userInfo));
 						uni.setStorageSync('token',data.data.token);
@@ -190,10 +200,23 @@
 					});
 					return;
 				}
-				this.$http.post('user/login',{
+				let data =await this.$http.post('user/login/code',{
 					phone: this.phone,
 					code: this.checknum
+				},{
+					"content-type":"application/x-www-form-urlencoded"
 				})
+				try{
+					uni.setStorageSync('userInfo',JSON.stringify(data.data.userInfo));
+					uni.setStorageSync('token',data.data.token);
+				}catch(e){
+					
+				}
+				this.setUserInfo(data.data.userInfo);
+				uni.switchTab({
+					url: '/pages/home/home'
+				});
+				return;
 				console.log("提交登录")
 			}
 		}

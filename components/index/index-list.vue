@@ -84,6 +84,14 @@
 			},
 			// 顶踩
 			async caozuo(type){
+				if(!this.userInfo || !this.userInfo.id){
+					uni.showToast({
+						title:"你还未登录！或登录过有效期!",
+						icon:'none'
+					})
+					return
+				}
+				
 				switch (type){
 					case "ding":
 					if(this.infoNum.index==1){ 

@@ -31,15 +31,15 @@
 			</view>
 			</picker>
 		</view>
-		<view class="user-set-userinfo-list u-f-ac u-f-jsb">
+<!-- 		<view class="user-set-userinfo-list u-f-ac u-f-jsb">
 			<view>职业</view>
 			<view class="u-f-ac" @tap="changeOne('qg')">
 				<view>{{qg}}</view>
 				<view class="icon iconfont icon-bianji1"></view>
 			</view>
-		</view>
+		</view> -->
 		<view class="user-set-userinfo-list u-f-ac u-f-jsb">
-			<view>情感</view>
+			<view>职业</view>
 			<view class="u-f-ac" @tap="changeOne('job')">
 				<view>{{job}}</view>
 				<view class="icon iconfont icon-bianji1"></view>
@@ -63,24 +63,26 @@
 </template>
 
 <script>
-	let sex=['不限','男','女'];
+	let sex=['男','女'];
 	let qg=['秘密','未婚','已婚'];
-	let job=['秘密','IT','老师'];
+	let job=['秘密','IT','老师',"学生"];
+	import {mapState, mapMutations} from 'vuex'
 	import mpvueCityPicker from "../../components/mpvue-citypicker/mpvueCityPicker.vue";
 	export default {
 		components:{
 			mpvueCityPicker
 		},
+
 		data() {
 			return {
-				userpic:"../../static/demo/userpic/11.jpg",
-				username:"哈哈哈",
-				sex:"不限",
-				qg:"未婚",
-				job:"IT",
-				birthday:"1987-02-07",
+				userpic:"",
+				username:"",
+				sex:"",
+				job:"",
+				birthday:"",
 				cityPickerValueDefault: [0, 0, 1],
-				pickerText: '广东省-广州市-白云区',
+				pickerText: '',
+				authorFile: undefined
 			}
 		},
 		onBackPress() {
@@ -94,7 +96,19 @@
 				this.$refs.mpvueCityPicker.pickerCancel()
 			}
 		},
+		mounted() {
+			if(this.userInfo&&this.userInfo.id){
+				this.userpic = this.userInfo.authorUrl
+				this.username = this.userInfo.userName
+				this.sex = this.userInfo.gender==0?"男":"女"
+				this.job = this.userInfo.occupation
+				this.birthday = this.userInfo.birthday
+				this.cityPickerValueDefault =  [0, 0, 1]
+				this.pickerText =  this.userInfo.address
+			}
+		},
 		computed: {
+			...mapState(['userInfo']),
 			startDate() {
 				return this.getDate('start');
 			},
@@ -103,6 +117,7 @@
 			}
 		},
 		methods: {
+			...mapMutations(['setUserInfo']),
 			// 三级联动
 			showMulLinkageThreePicker() {
 				this.$refs.mpvueCityPicker.show()
@@ -120,7 +135,8 @@
 					count:1,
 					sizeType:['compressed'],
 					success: (res) => {
-						this.userpic=res.tempFilePaths;
+						this.userpic = res.tempFiles[0].path
+						this.authorFile = res.tempFiles[0]
 					}
 				})
 			},
@@ -155,8 +171,30 @@
 					},
 				});
 			},
-			submit(){
+			async submit(){
+				let url = this.userpic;
+				if(this.authorFile!=undefined){
+					 url = await this.$http.uploudFile('upload/cloud', this.authorFile)
+				}
 				
+				let data = {
+					userpic: url,
+					username:this.username,
+					gender:this.sex=="男"?0:1,
+					occupation:this.job,
+					birthday:this.birthday,
+					address: this.pickerText,
+				}
+				let res = await this.$http.put("user/info",data)
+				if(res.code==0){
+					let data = await this.$http.get("user/info")
+					if(data.code==0){
+						this.setUserInfo(data.data.userInfo)
+						uni.setStorageSync('token',data.data.token)
+						uni.setStorageSync('userInfo',JSON.stringify(data.data.userInfo))
+					}
+					console.log(data)
+				}
 			},
 			getDate(type) {
 				const date = new Date();
