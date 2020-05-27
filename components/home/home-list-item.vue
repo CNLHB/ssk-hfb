@@ -22,7 +22,11 @@
 			clickevent(){
 				switch (this.item.clicktype){
 					case "navigateTo":
-					if(this.item.url){ uni.navigateTo({ url:this.item.url}); }
+					console.log(this.item.url)
+					if(this.item.url){ 
+						
+						uni.navigateTo({ url:this.item.url}); 
+						}
 						break;
 					case "switchTab":
 					if(this.item.url){ uni.switchTab({url:this.item.url}) }

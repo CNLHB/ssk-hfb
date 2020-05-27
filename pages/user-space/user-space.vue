@@ -1,7 +1,9 @@
 <template>
 	<view>
 		<!-- 背景图 + 用户基本信息 -->
-		<user-space-head :userinfo="userinfo"></user-space-head>
+		<user-space-head 
+			@userActive="userActive"
+			:userinfo="info"></user-space-head>
 		<!-- 统计 -->
 		<view class="user-space-data">
 			<home-data :homedata="spacedata"></home-data>
@@ -17,13 +19,17 @@
 		</swiper-tab-head>
 		<template v-if="tabIndex==0">
 			<!-- 主页 -->
-			<user-space-userinfo :userinfo="userinfo"></user-space-userinfo>
+			<user-space-userinfo 
+				:userinfo="info"
+				:authInfo="userInfo"
+				></user-space-userinfo>
 		</template>
 		<block v-for="(item,index) in tablist" :key="index">
-			<template v-if="tabIndex==index">
+			<template v-if="tabIndex==index+1">
 				<!-- 列表 -->
 				<block v-for="(list,listindex) in item.list" :key="listindex">
-					<common-list :item="list" :index="listindex"></common-list>
+					<card @gotoTopic="gotoTopic" :cardinfo="list" :index="listindex"></card>
+					<!-- <common-list :item="list" :index="listindex"></common-list> -->
 				</block>
 				<!-- 上拉加载 -->
 				<load-more :loadtext="item.loadtext"></load-more>
@@ -45,9 +51,11 @@
 	import swiperTabHead from "../../components/index/swiper-tab-head.vue";
 	import userSpaceUserinfo from "../../components/user-space/user-space-userinfo.vue";
 	import commonList from "../../components/common/common-list.vue";
+	import card from '../../components/list-card/list-card.vue'
 	import loadMore from "../../components/common/load-more.vue";
 	import userSpacePopup from "../../components/user-space/user-space-popup.vue";
 	import {mapMutations, mapState} from 'vuex'
+	import time from '../../common/time.js'
 	export default {
 		components:{
 			userSpaceHead,
@@ -56,150 +64,60 @@
 			userSpaceUserinfo,
 			commonList,
 			loadMore,
-			userSpacePopup
+			userSpacePopup,
+			card
 		},
 		computed:{
 			...mapState(['userInfo'])
 		},
+		onLoad(data) {
+			this.info.id = data.uid
+			this.initData(data.uid)
+			if(data.uid!=this.userInfo.id){
+				this.$http.post('user/access',{
+					fromId:this.userInfo.id,
+					toId: data.uid
+				})
+			}
+		},
 		data() {
 			return {
 				show:false,
-				userinfo:{
+				info:{
+					currentId: -1,
 					bgimg:1,
-					userpic:"../../static/demo/userpic/11.jpg",
-					username:"昵称",
+					userpic:"",
+					username:"",
 					sex:0,
-					age:20,
-					isguanzhu:false,
-					regtime:"2019-04-11",
-					id:1213,
-					birthday:"1987-02-07",
-					job:"IT",
-					path:"广东广州",
-					qg:"已婚"
+					age:0,
+					isguanzhu:0,
+					regtime:"",
+					id:0,
+					job:"",
+					path:"",
 				},
+				topicList:[],
 				spacedata:[
-					{ name:"获赞", num:"10k" },
-					{ name:"关注", num:11 },
-					{ name:"粉丝", num:12 },
+					{ name:"获赞", num:"" },
+					{ name:"关注", num:0 },
+					{ name:"粉丝", num:0 },
 				],
 				tabIndex:0,
 				tabBars:[
 					{ name:"主页",id:"zhuye" },
-					{ name:"发布",id:"fabu" },
+					{ name:"话题",id:"huati" },
 					{ name:"动态",id:"dongtai" },
 				],
 				tablist:[ {},
 					{
-						loadtext:"上拉加载更多",
+						loadtext:"",
 						list:[
-							// 文字
-							{
-								userpic:"../../static/demo/userpic/12.jpg",
-								username:"哈哈",
-								sex:0, //0 男 1 女
-								age:25,
-								isguanzhu:false,
-								title:"我是标题",
-								titlepic:"",
-								video:false,
-								share:false,
-								path:"深圳 龙岗",
-								sharenum:20,
-								commentnum:30,
-								goodnum:20
-							},
-							// 图文
-							{
-								userpic:"../../static/demo/userpic/12.jpg",
-								username:"哈哈",
-								sex:0, //0 男 1 女
-								age:25,
-								isguanzhu:false,
-								title:"我是标题",
-								titlepic:"../../static/demo/datapic/13.jpg",
-								video:false,
-								share:false,
-								path:"深圳 龙岗",
-								sharenum:20,
-								commentnum:30,
-								goodnum:20
-							},
-							// 视频
-							{
-								userpic:"../../static/demo/userpic/12.jpg",
-								username:"哈哈",
-								sex:0, //0 男 1 女
-								age:25,
-								isguanzhu:false,
-								title:"我是标题",
-								titlepic:"../../static/demo/datapic/13.jpg",
-								video:{
-									looknum:"20w",
-									long:"2:47"
-								},
-								share:false,
-								path:"深圳 龙岗",
-								sharenum:20,
-								commentnum:30,
-								goodnum:20
-							},
 						]
 					},
 					{
-						loadtext:"上拉加载更多",
+						loadtext:"",
+						// 上拉加载更多
 						list:[
-							// 文字
-							{
-								userpic:"../../static/demo/userpic/12.jpg",
-								username:"哈哈",
-								sex:0, //0 男 1 女
-								age:25,
-								isguanzhu:false,
-								title:"我是标题",
-								titlepic:"",
-								video:false,
-								share:false,
-								path:"深圳 龙岗",
-								sharenum:20,
-								commentnum:30,
-								goodnum:20
-							},
-							// 图文
-							{
-								userpic:"../../static/demo/userpic/12.jpg",
-								username:"哈哈",
-								sex:0, //0 男 1 女
-								age:25,
-								isguanzhu:false,
-								title:"我是标题",
-								titlepic:"../../static/demo/datapic/13.jpg",
-								video:false,
-								share:false,
-								path:"深圳 龙岗",
-								sharenum:20,
-								commentnum:30,
-								goodnum:20
-							},
-							// 视频
-							{
-								userpic:"../../static/demo/userpic/12.jpg",
-								username:"哈哈",
-								sex:0, //0 男 1 女
-								age:25,
-								isguanzhu:false,
-								title:"我是标题",
-								titlepic:"../../static/demo/datapic/13.jpg",
-								video:{
-									looknum:"20w",
-									long:"2:47"
-								},
-								share:false,
-								path:"深圳 龙岗",
-								sharenum:20,
-								commentnum:30,
-								goodnum:20
-							},
 						]
 					},
 				]
@@ -214,15 +132,66 @@
 			if(e.index==0){ this.togleShow(); }
 		},
 		methods: {
-			
+			async initData(id){
+				let {code,data} = await this.$http.get('user/willinfo/'+id);
+				let topicList = await this.$http.get('topic/'+id);
+				console.log(topicList)
+				this.topicList = topicList
+				if(topicList&&topicList.length){
+					let list = topicList.map((item)=>{
+						return{
+							"authImg": item.userpic,
+							"authName": item.username,
+							"createTime": time.gettime.gettime(item.createTime),
+							"content": item.title,
+							"tag":item.cName
+						}
+					})
+					
+					this.tablist[0].list  =list
+					this.tablist[1].list  =list
+				}
+				if(code==0&&data){
+				this.spacedata[0].num = data.likeNum>=1000?(data.likeNum/1000)+"k":data.likeNum
+				this.spacedata[1].num = data.attNum
+				this.spacedata[2].num = data.fansNum
+				let currentId = this.userInfo.id
+				this.info.currentId = currentId;
+				this.info.userpic = data.userPic;
+				this.info.userName = data.userName;
+				this.info.sex = data.gender;
+				this.info.isguanzhu = data.isguanzhu;
+				this.info.regtime = data.createTime;
+				this.info.id = data.id;
+				this.info.job = data.job==null ?"未知" :data.job
+				this.info.path = data.path==null?"未知":data.path
+
+				}
+				
+			},
+			userActive(){
+				this.info.isguanzhu = !this.info.isguanzhu
+			},
+			gotoTopic(index){
+				console.log(index)
+				let topicDetail = this.topicList[index];
+				topicDetail.images = topicDetail.images.split(",")
+				uni.setStorageSync("topicDatail",JSON.stringify(topicDetail))
+				uni.navigateTo({
+					url: '../../pages/detail/detail',
+				});
+			},
 			// 操作菜单显示隐藏
 			togleShow(){
 				this.show=!this.show;
 			},
-			// 拉黑
+			// 私信
 			lahei(){
-				console.log("拉黑")
+				console.log("私信")
 				this.togleShow();
+				uni.navigateTo({
+					url: '../../pages/user-chat/user-chat?fid='+this.info.id
+				});
 			},
 			// 备注
 			beizhu(){
@@ -235,27 +204,7 @@
 				// 修改状态
 				this.tablist[this.tabIndex].loadtext="加载中...";
 				// 获取数据
-				setTimeout(()=> {
-					//获取完成
-					let obj={
-						userpic:"../../static/demo/userpic/12.jpg",
-						username:"哈哈",
-						sex:0, //0 男 1 女
-						age:25,
-						isguanzhu:false,
-						title:"我是标题",
-						titlepic:"../../static/demo/datapic/13.jpg",
-						video:false,
-						share:false,
-						path:"深圳 龙岗",
-						sharenum:20,
-						commentnum:30,
-						goodnum:20
-					};
-					this.tablist[this.tabIndex].list.push(obj);
-					this.tablist[this.tabIndex].loadtext="上拉加载更多";
-				}, 1000);
-				//this.tablist[this.tabIndex].loadtext="没有更多数据了";
+				// this.tablist[this.tabIndex].loadtext="没有更多数据了";
 			},
 			tabtap(index){
 				this.tabIndex=index;

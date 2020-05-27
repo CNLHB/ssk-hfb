@@ -1,37 +1,30 @@
 <template>
-	<view class="user-list u-f-ac animated fadeIn fast" @tap="navUserInfo">
+	<view class="user-list u-f-ac animated fadeIn fast"  @tap="gotoTopicInfo">
 		<image :src="item.userpic" mode="widthFix" lazy-load></image>
-		<view>
+		<view >
 			<view>{{item.username}}</view>
-			<view style="display: inline-block;">
-				<tag-sex-age :age="item.age" :sex="item.sex"></tag-sex-age>
+			<view class="wrap">
+				{{item.title}}
 			</view>
 		</view>
-		<view class="icon iconfont u-f-ajc" 
-			:class="[item.isguanzhu?'icon-xuanze-yixuan':'icon-zengjia1']"
-			@tap.stop="attActive"
+		<view class="icon iconfont icon-jinru u-f-ajc" 
 			></view>
 	</view>
 </template>
 
 <script>
-	import tagSexAge from "../../components/common/tag-sex-age.vue";
 	export default {
-		components:{
-			tagSexAge
-		},
 		props:{
 			item:Object,
 			index:Number
 		},
 		methods:{
-			attActive(){
-				this.$emit("attActive",this.index,this.item)
-			},
-			navUserInfo(){
+			gotoTopicInfo(){
+				 this.item.images = this.item.images.split(",")
+				uni.setStorageSync("topicDatail",JSON.stringify(this.item))
 				uni.navigateTo({
-					url:'../../pages/user-space/user-space?uid='+this.item.id
-				})
+					url: '../../pages/detail/detail',
+				});
 			}
 		}
 	}
@@ -42,6 +35,12 @@
 	margin: 0 20upx; 
 	padding: 20upx 0;
 	border-bottom: 1upx solid #EEEEEE;
+}
+.wrap{
+	width: 500upx;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap
 }
 .user-list>image{
 	width: 100upx;

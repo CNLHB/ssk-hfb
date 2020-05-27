@@ -1,1 +1,153 @@
-"use weex:vue";var __wxConfig = {"debug":false,"appname":"韩府帮","entryPagePath":"pages/index/index.html","page":{"pages/index/index.html":{"window":{"navigationBarTitleText":"韩府帮","scrollIndicator":"none","bounce":"none","titleNView":{"searchInput":{"align":"center","backgroundColor":"#F7F7F7","borderRadius":"4px","placeholder":"韩府帮","placeholderColor":"#CCCCCC","disabled":true},"buttons":[{"color":"#FF9619","colorPressed":"#BBBBBB","float":"left","fontSize":"22px","fontSrc":"/static/font/icon.ttf","text":""},{"color":"#000000","colorPressed":"#BBBBBB","float":"right","fontSize":"22px","fontSrc":"/static/font/icon.ttf","text":""}]},"usingComponents":{"index-list":"/components/index/index-list","swiper-tab-head":"/components/index/swiper-tab-head","load-more":"/components/common/load-more","no-thing":"/components/common/no-thing"}}},"pages/news/news.html":{"window":{"navigationBarTitleText":"最近动态","titleNView":false,"bounce":"none","usingComponents":{"news-nav-bar":"/components/news/news-nav-bar","common-list":"/components/common/common-list","load-more":"/components/common/load-more","topic-nav":"/components/news/topic-nav","topic-list":"/components/news/topic-list"}}},"pages/paper/paper.html":{"window":{"enablePullDownRefresh":true,"navigationBarTitleText":"小纸条","titleNView":{"buttons":[{"color":"#000000","colorPressed":"#BBBBBB","float":"left","fontSize":"22px","fontSrc":"/static/font/icon.ttf","text":""},{"color":"#000000","colorPressed":"#BBBBBB","float":"right","fontSize":"22px","fontSrc":"/static/font/icon.ttf","text":""}]},"usingComponents":{"paper-list":"/components/paper/paper-list","load-more":"/components/common/load-more","paper-left-popup":"/components/paper/paper-left-popup"}}},"pages/home/home.html":{"window":{"navigationBarTitleText":"我的","scrollIndicator":"none","bounce":"none","titleNView":{"buttons":[{"type":"menu"}]},"usingComponents":{"home-list-item":"/components/home/home-list-item","home-info":"/components/home/home-info","other-login":"/components/home/other-login","home-data":"/components/home/home-data"}}},"pages/search/search.html":{"window":{"enablePullDownRefresh":true,"scrollIndicator":"none","bounce":"none","titleNView":{"autoBackButton":false,"searchInput":{"align":"left","backgroundColor":"#F7F7F7","borderRadius":"4px","placeholder":"搜索糗事","placeholderColor":"#CCCCCC","disabled":false},"buttons":[{"color":"#000000","colorPressed":"#BBBBBB","float":"right","fontSize":"16px","text":"取消"}]},"usingComponents":{"index-list":"/components/index/index-list","no-thing":"/components/common/no-thing","load-more":"/components/common/load-more"}}},"pages/add-input/add-input.html":{"window":{"animationType":"slide-in-bottom","animationDuration":200,"titleNView":false,"usingComponents":{"uni-nav-bar":"/components/uni-nav-bar/uni-nav-bar","uploud-images":"/components/common/uploud-images","uni-popup":"/components/uni-popup/uni-popup"}}},"pages/topic-nav/topic-nav.html":{"window":{"navigationBarTitleText":"话题分类","bounce":"none","usingComponents":{"swiper-tab-head":"/components/index/swiper-tab-head","no-thing":"/components/common/no-thing","load-more":"/components/common/load-more","topic-list":"/components/news/topic-list"}}},"pages/topic-detail/topic-detail.html":{"window":{"enablePullDownRefresh":true,"animationType":"slide-in-bottom","animationDuration":200,"scrollIndicator":"none","titleNView":{"type":"transparent","buttons":[{"type":"menu"}]},"usingComponents":{"topic-info":"/components/topic/topic-info","swiper-tab-head":"/components/index/swiper-tab-head","common-list":"/components/common/common-list","load-more":"/components/common/load-more"}}},"pages/user-list/user-list.html":{"window":{"animationType":"slide-in-left","scrollIndicator":"none","bounce":"none","titleNView":{"autoBackButton":false,"searchInput":{"align":"left","backgroundColor":"#F7F7F7","borderRadius":"4px","placeholder":"搜索韩府","placeholderColor":"#CCCCCC","disabled":false},"buttons":[{"color":"#000000","colorPressed":"#BBBBBB","float":"right","fontSize":"16px","text":"取消"}]},"usingComponents":{"swiper-tab-head":"/components/index/swiper-tab-head","user-list":"/components/user-list/user-list","load-more":"/components/common/load-more","no-thing":"/components/common/no-thing"}}},"pages/user-chat/user-chat.html":{"window":{"navigationBarTitleText":"聊天页","titleNView":{"buttons":[{"color":"#000000","colorPressed":"#BBBBBB","float":"right","fontSize":"22px","fontSrc":"/static/font/icon.ttf","text":""}]},"usingComponents":{"user-chat-bottom":"/components/user-chat/user-chat-bottom","user-chat-list":"/components/user-chat/user-chat-list"}}},"pages/detail/detail.html":{"window":{"navigationBarTitleText":"详情","scrollIndicator":"none","bounce":"none","titleNView":{"buttons":[{"type":"menu"}]},"usingComponents":{"detail-info":"/components/detail/detail-info","comment-list":"/components/detail/comment-list","user-chat-bottom":"/components/user-chat/user-chat-bottom","more-share":"/components/common/more-share"}}},"pages/user-set/user-set.html":{"window":{"navigationBarTitleText":"设置","usingComponents":{"home-list-item":"/components/home/home-list-item"}}},"pages/user-set-repassword/user-set-repassword.html":{"window":{"navigationBarTitleText":"修改密码","scrollIndicator":"none","usingComponents":{}}},"pages/user-set-email/user-set-email.html":{"window":{"navigationBarTitleText":"修改邮箱","scrollIndicator":"none","usingComponents":{}}},"pages/user-set-userinfo/user-set-userinfo.html":{"window":{"navigationBarTitleText":"修改资料","scrollIndicator":"none","usingComponents":{"mpvue-city-picker":"/components/mpvue-citypicker/mpvueCityPicker"}}},"pages/user-set-help/user-set-help.html":{"window":{"navigationBarTitleText":"意见反馈","scrollIndicator":"none","usingComponents":{"uni-collapse":"/components/uni-collapse/uni-collapse","uni-collapse-item":"/components/uni-collapse-item/uni-collapse-item"}}},"pages/user-set-about/user-set-about.html":{"window":{"navigationBarTitleText":"关于韩府","scrollIndicator":"none","usingComponents":{"home-list-item":"/components/home/home-list-item"}}},"pages/login/login.html":{"window":{"titleNView":false,"bounce":"none","scrollIndicator":"none","usingComponents":{"uni-status-bar":"/components/uni-status-bar/uni-status-bar","other-login":"/components/home/other-login"}}},"pages/user-space/user-space.html":{"window":{"navigationBarTitleText":"个人空间","scrollIndicator":"none","titleNView":{"type":"transparent","buttons":[{"type":"menu"}]},"usingComponents":{"user-space-head":"/components/user-space/user-space-head","home-data":"/components/home/home-data","swiper-tab-head":"/components/index/swiper-tab-head","user-space-userinfo":"/components/user-space/user-space-userinfo","common-list":"/components/common/common-list","load-more":"/components/common/load-more","user-space-popup":"/components/user-space/user-space-popup"}}},"pages/register/register.html":{"window":{"usingComponents":{}}}},"global":{"window":{"navigationBarTextStyle":"black","navigationBarTitleText":"韩府帮","navigationBarBackgroundColor":"#FFFFFF","backgroundColor":"#FFFFFF"}},"tabBar":{"color":"#B5B5B5","selectedColor":"#FEE42B","backgroundColor":"#FFFFFF","borderStyle":"black","list":[{"pagePath":"pages/index/index.html","text":"韩府","iconPath":"/static/tabbar/index.png","selectedIconPath":"/static/tabbar/indexed.png"},{"pagePath":"pages/news/news.html","text":"动态","iconPath":"/static/tabbar/news.png","selectedIconPath":"/static/tabbar/newsed.png"},{"pagePath":"pages/paper/paper.html","text":"消息","iconPath":"/static/tabbar/hxiaoxi.png","selectedIconPath":"/static/tabbar/xiaoxi.png"},{"pagePath":"pages/home/home.html","text":"我的","iconPath":"/static/tabbar/home.png","selectedIconPath":"/static/tabbar/homeed.png"}],"position":"bottom"},"networkTimeout":{"request":6000,"connectSocket":60000,"uploadFile":60000,"downloadFile":60000},"platform":"devtools","pages":["pages/index/index","pages/news/news","pages/paper/paper","pages/home/home","pages/search/search","pages/add-input/add-input","pages/topic-nav/topic-nav","pages/topic-detail/topic-detail","pages/user-list/user-list","pages/user-chat/user-chat","pages/detail/detail","pages/user-set/user-set","pages/user-set-repassword/user-set-repassword","pages/user-set-email/user-set-email","pages/user-set-userinfo/user-set-userinfo","pages/user-set-help/user-set-help","pages/user-set-about/user-set-about","pages/login/login","pages/user-space/user-space","pages/register/register"],"nvueCompiler":"uni-app","renderer":"auto","splashscreen":{"alwaysShowBeforeRender":true,"autoclose":false},"compilerVersion":"2.4.6","usingComponents":{}};
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// install a JSONP callback for chunk loading
+/******/ 	function webpackJsonpCallback(data) {
+/******/ 		var chunkIds = data[0];
+/******/ 		var moreModules = data[1];
+/******/ 		var executeModules = data[2];
+/******/
+/******/ 		// add "moreModules" to the modules object,
+/******/ 		// then flag all "chunkIds" as loaded and fire callback
+/******/ 		var moduleId, chunkId, i = 0, resolves = [];
+/******/ 		for(;i < chunkIds.length; i++) {
+/******/ 			chunkId = chunkIds[i];
+/******/ 			if(installedChunks[chunkId]) {
+/******/ 				resolves.push(installedChunks[chunkId][0]);
+/******/ 			}
+/******/ 			installedChunks[chunkId] = 0;
+/******/ 		}
+/******/ 		for(moduleId in moreModules) {
+/******/ 			if(Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
+/******/ 				modules[moduleId] = moreModules[moduleId];
+/******/ 			}
+/******/ 		}
+/******/ 		if(parentJsonpFunction) parentJsonpFunction(data);
+/******/
+/******/ 		while(resolves.length) {
+/******/ 			resolves.shift()();
+/******/ 		}
+/******/
+/******/ 		// add entry modules from loaded chunk to deferred list
+/******/ 		deferredModules.push.apply(deferredModules, executeModules || []);
+/******/
+/******/ 		// run deferred modules when all chunks ready
+/******/ 		return checkDeferredModules();
+/******/ 	};
+/******/ 	function checkDeferredModules() {
+/******/ 		var result;
+/******/ 		for(var i = 0; i < deferredModules.length; i++) {
+/******/ 			var deferredModule = deferredModules[i];
+/******/ 			var fulfilled = true;
+/******/ 			for(var j = 1; j < deferredModule.length; j++) {
+/******/ 				var depId = deferredModule[j];
+/******/ 				if(installedChunks[depId] !== 0) fulfilled = false;
+/******/ 			}
+/******/ 			if(fulfilled) {
+/******/ 				deferredModules.splice(i--, 1);
+/******/ 				result = __webpack_require__(__webpack_require__.s = deferredModule[0]);
+/******/ 			}
+/******/ 		}
+/******/ 		return result;
+/******/ 	}
+/******/
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// object to store loaded and loading chunks
+/******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 	// Promise = chunk loading, 0 = chunk loaded
+/******/ 	var installedChunks = {
+/******/ 		"app-config": 0
+/******/ 	};
+/******/
+/******/ 	var deferredModules = [];
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/";
+/******/
+/******/ 	var jsonpArray = this["webpackJsonp"] = this["webpackJsonp"] || [];
+/******/ 	var oldJsonpFunction = jsonpArray.push.bind(jsonpArray);
+/******/ 	jsonpArray.push = webpackJsonpCallback;
+/******/ 	jsonpArray = jsonpArray.slice();
+/******/ 	for(var i = 0; i < jsonpArray.length; i++) webpackJsonpCallback(jsonpArray[i]);
+/******/ 	var parentJsonpFunction = oldJsonpFunction;
+/******/
+/******/
+/******/ 	// run deferred modules from other chunks
+/******/ 	checkDeferredModules();
+/******/ })
+/************************************************************************/
+/******/ ([]);

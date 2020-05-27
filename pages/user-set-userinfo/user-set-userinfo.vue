@@ -178,8 +178,8 @@
 				}
 				
 				let data = {
-					userpic: url,
-					username:this.username,
+					authorUrl: url,
+					userName:this.username,
 					gender:this.sex=="男"?0:1,
 					occupation:this.job,
 					birthday:this.birthday,

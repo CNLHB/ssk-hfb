@@ -32,10 +32,11 @@
 			}
 		},
 		methods: {
-			...mapMutations(['setUserInfo']),
+			...mapMutations(['setUserInfo','setChatList']),
 			loginOut(){
 				this.setUserInfo({});
 				uni.clearStorageSync('userInfo')
+				this.setChatList([])
 				uni.switchTab({
 					url:'../home/home'
 				})

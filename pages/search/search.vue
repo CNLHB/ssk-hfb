@@ -1,31 +1,37 @@
 <template>
-	<view class="search-view">
-		<template v-if="list.length>0">
-			<block v-for="(item,index) in list" :key="index">
-				<index-list :item="item" :index="index"></index-list>
-			</block>
-			<load-more :loadtext="loadtext"></load-more>
-		</template>
-		<template v-else-if="issearch && list.length<1">
-			<no-thing></no-thing>
-		</template>
-	</view>
+		<view class="search-view">
+			<template v-if="list.length>0">
+				<block v-for="(item,index) in list" :key="index">
+					<index-list 
+						:userInfo="userInfo"
+						:item="item" :index="index"></index-list>
+				</block>
+				<load-more :loadtext="loadtext"></load-more>
+			</template>
+			<template v-else-if="issearch && list.length<1">
+				<no-thing></no-thing>
+			</template>
+		</view>
 </template>
 
 <script>
 	import indexList from "../../components/index/index-list.vue";
 	import noThing from "../../components/common/no-thing.vue";
 	import loadMore from "../../components/common/load-more.vue";
+	import {mapState} from 'vuex'
 	export default {
 		components:{
 			indexList,
 			noThing,
 			loadMore
 		},
+		computed:{
+			...mapState(['userInfo'])
+		},
 		data() {
 			return {
 				issearch:false,
-				loadtext:"上拉加载更多",
+				loadtext:"",
 				list:[],
 				searchtext:"",
 				page:0
@@ -95,7 +101,9 @@
 </script>
 
 <style scoped>
+
 	.search-view{
+		height: 100vh;
 		background-color: #F9F9F9;
 		padding-top: 2upx;
 	}

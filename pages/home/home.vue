@@ -13,7 +13,9 @@
 			<home-info :homeinfo="homeinfo"></home-info>
 		</template>
 		<!-- 数据 -->
-		<home-data :homedata="homedata"></home-data>
+		<home-data 
+			@goToSpace="goToSpace"
+			:homedata="homedata"></home-data>
 		<!-- 广告位 -->
 		<view class="home-adv u-f-ajc animated fadeIn fast" >
 			<image src="../../static/demo/demo20.jpg" mode="widthFix" lazy-load></image>
@@ -47,27 +49,25 @@
 			...mapState(['userInfo'])
 		},
 		onShow(){
-			if(this.userInfo){
+			if(this.userInfo.id){
 				console.log(this.userInfo)
-				this.homeinfo.totalnum = 0
-				this.homeinfo.todaynum = 0
 				this.homeinfo.userpic = this.userInfo.authorUrl
 				this.homeinfo.username =this.userInfo.userName
+				if(!this.islogin){
+					this.initDat()
+				}
+			}else{
+				this.homedata[0].num = 0
+				this.homedata[1].num = 0
+				this.islogin =false
 			}
+
 		},
 		created() {
 
 		},
 		async mounted() {
-			console.log(this.userInfo)
-			if(this.userInfo&&this.userInfo.id){
-				let topicCount = await this.$http.get('topic/count')
-				let commCount = await this.$http.get('comment/count')
-				this.homedata[0].num = topicCount.data.count
-				this.homedata[1].num = commCount.data.count
-				console.log(topicCount)
-				console.log(commCount)
-			}
+			this.initDat()
 		},
 		data() {
 			return {
@@ -85,7 +85,7 @@
 					{ name:"收藏", num:0 },
 				],
 				list:[
-					{ icon:"liulan",name:"浏览历史",clicktype:"",url:""},
+					{ icon:"liulan",name:"浏览历史",clicktype:"navigateTo",url:"../../pages/user-history/user-history"},
 					{ icon:"huiyuanvip",name:"韩府认证",clicktype:"",url:"" },
 					{ icon:"keyboard",name:"审核历史",clicktype:"",url:"" },
 				]
@@ -111,6 +111,27 @@
 				uni.navigateTo({
 					url: '../login/login'
 				});
+			},
+			async initDat(){
+				if(this.userInfo&&this.userInfo.id){
+					let topicCount = await this.$http.get('topic/count')
+					let commCount = await this.$http.get('comment/count')
+					let userAccess = await this.$http.get('user/access')
+					this.homeinfo.totalnum = userAccess.allAcc
+					this.homeinfo.todaynum = userAccess.dayAcc
+					this.homedata[0].num = topicCount.data.count
+					this.homedata[1].num = commCount.data.count
+					this.islogin = true
+				}
+			},
+			goToSpace(index){
+				if(index==0){
+					if(index==0){
+						uni.navigateTo({
+							url:'../../pages/user-space/user-space?uid=' + this.userInfo.id
+						})
+					}
+				}
 			}
 		}
 	}

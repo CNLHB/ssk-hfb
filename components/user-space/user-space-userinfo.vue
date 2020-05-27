@@ -2,15 +2,13 @@
 	<view class="user-space-userinfo">
 		<view class="user-space-userinfo-item">
 			<view>账号信息</view>
-			<view>糗龄：{{getRegAge}}</view>
-			<view>糗百ID：{{userinfo.id}}</view>
+			<view>韩龄：{{getRegAge}}</view>
+			<view>韩友ID：{{userinfo.id}}</view>
 		</view>
 		<view class="user-space-userinfo-item">
 			<view>个人信息</view>
-			<view>星座：{{getXingZuo}}</view>
 			<view>职业：{{userinfo.job}}</view>
 			<view>故乡：{{userinfo.path}}</view>
-			<view>情感：{{userinfo.qg}}</view>
 		</view>
 	</view>
 </template>

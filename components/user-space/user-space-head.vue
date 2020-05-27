@@ -5,12 +5,22 @@
 			<image :src="userinfo.userpic" mode="widthFix" lazy-load></image>
 			<view class="user-space-margin u-f-ac">
 				{{userinfo.username}} 
-				<tag-sex-age :sex="userinfo.sex" :age="userinfo.age">
+				<tag-sex-age :sex="userinfo.sex">
 				</tag-sex-age> 
 			</view>
-			<view class="icon iconfont user-space-head-btn user-space-margin" :class="[isguanzhu?'active':'icon-zengjia']" @tap.stop="guanzhu">
+			<view 
+				v-if="userinfo.id==userinfo.currentId"
+				@tap="goToInfo"
+				class="icon iconfont user-space-head-btn user-space-margin"
+			>
+				编辑资料
+			</view>
+			<view
+				v-else
+				class="icon iconfont user-space-head-btn user-space-margin" :class="[isguanzhu?'active':'icon-zengjia']" @tap.stop="guanzhu">
 				{{isguanzhu?'已关注':'关注'}}
 			</view>
+			
 		</view>
 	</view>
 </template>
@@ -22,16 +32,19 @@
 			tagSexAge
 		},
 		props:{
-			userinfo:Object
-		},
+			userinfo:Object,
+			},
 		data() {
 			return {
-				isguanzhu: this.userinfo.isguanzhu
 			}
 		},
 		computed:{
 			getBgImg(){
 				return "../../static/bgimg/"+this.userinfo.bgimg+".jpg";
+			},
+			isguanzhu(){
+
+				return this.userinfo.isguanzhu
 			}
 		},
 		methods:{
@@ -41,8 +54,30 @@
 				this.userinfo.bgimg = no<4 ? ++no : 1;
 			},
 			// 关注
-			guanzhu(){
-				this.isguanzhu=!this.isguanzhu;
+			async guanzhu(){
+				if(this.userinfo.currentId==-1){
+					uni.showToast({
+						title:"你还未登录!或登录已过期!",
+						icon:'none'
+					})
+				}
+				let data =await this.$http.post('user/active',{
+					fromId:this.userinfo.currentId,
+					toId: this.userinfo.id
+				})
+				if(data.code==0){
+					await this.$emit("userActive")
+				}else{
+					uni.showToast({
+						title:"操作失败!",
+						icon:'none'
+					})
+				}
+			},
+			goToInfo(){
+				uni.navigateTo({
+					url:'../../pages/user-set-userinfo/user-set-userinfo'
+				})
 			}
 		}
 	}

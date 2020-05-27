@@ -5,7 +5,7 @@
 		<view class="papar-left-popup" v-show="show">
 			<view class="u-f-ac" hover-class="papar-left-popup-h" @tap="addfriend">
 				<view class="icon iconfont icon-sousuo"></view> 
-				加糗友
+				关注韩友
 			</view>
 			<view class="u-f-ac" hover-class="papar-left-popup-h" @tap="clear">
 				<view class="icon iconfont icon-qingchu"></view> 

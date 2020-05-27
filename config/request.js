@@ -7,7 +7,11 @@ export default class request {
 		//默认请求头
 		this.headers = options.headers || {};
 		this.websocketUrl = options.websocket
+		this.loading = true;
 
+	}
+	setLoading(boo){
+		this.loading = boo
 	}
 	get(url = '', data = {}, options = {}){
 		
@@ -72,9 +76,11 @@ export default class request {
 		this.headers.Authorization=uni.getStorageSync('token');
 		let h = Object.assign({...this.headers},options)
 		return new Promise((resolve, reject) => {
-				uni.showLoading({
-					title: '加载中'
-				});
+				if(this.loading){
+					uni.showLoading({
+						title: '加载中'
+					});
+				}
 		        uni.request({
 		            url: this.baseUrl + url,
 					data: data,
@@ -91,7 +97,10 @@ export default class request {
 		                reject(err)
 		            },
 					complete: () => {
-						uni.hideLoading();	
+						if(this.loading){
+							uni.hideLoading();	
+						}
+						
 					}
 		        });
 		    })

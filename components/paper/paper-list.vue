@@ -3,7 +3,7 @@
 		<image :src="item.userpic" mode="widthFix" lazy-load></image>
 		<view>
 			<view class="u-f-ac u-f-jsb">{{item.username}} <view>{{item.time}}</view></view>
-			<view class="u-f-ac u-f-jsb">{{item.data}}
+			<view class="u-f-ac u-f-jsb">{{item.message}}
 			<template v-if="item.noreadnum>0">
 				<uni-badge :text="item.noreadnum" type="error"></uni-badge>
 			</template>

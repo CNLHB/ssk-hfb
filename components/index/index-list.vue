@@ -65,14 +65,25 @@
 		},
 		data() {
 			return {
-				isguanzhu: this.item.isguanzhu,
+				isguanzhu: false,
 				infoNum:this.item.infoNum,
 				topicActive:{
 					uid:this.userInfo.id,
-					tid:this.item.id
+					tid:this.item.id,
+					tUid: this.item.uid
 					
 				}
 			}
+		},
+		onLoad() {
+			this.isguanzhu=this.item.isguanzhu
+			this.infoNum=this.item.infoNum
+			this.topicActive.uid = this.userInfo.id
+			this.topicActive.tid = this.item.id
+			this.topicActive.tUid = this.item.uid
+
+			
+			
 		},
 		methods:{
 			// 关注
@@ -82,6 +93,7 @@
 					title: '关注成功',
 				});
 			},
+			
 			// 顶踩
 			async caozuo(type){
 				if(!this.userInfo || !this.userInfo.id){

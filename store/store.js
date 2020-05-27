@@ -18,8 +18,14 @@ const store = new Vuex.Store({
 			state.chatList = chatList
 			
 		},
+		addChatList(state, chat){
+			state.chatList.unshift(chat)
+			
+		},
 		updateMsg(state, index){
 			state.chatList[index].noreadnum = 0
+		},
+		setChatMessage(state, obj){
 		}
 	}
 

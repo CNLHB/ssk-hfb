@@ -13,9 +13,7 @@ const gettime = {
 		let dateBegin = new Date(data);
 		let dateEnd = new Date();//获取当前时间
 		let dateDiff = dateEnd.getTime() - dateBegin.getTime();//时间差的毫秒数
-		
 		let dayDiff = Math.floor(dateDiff / (24 * 3600 * 1000));//计算出相差天数
-		console.log(dateBegin)
 		let leave1=dateDiff%(24*3600*1000)    //计算天数后剩余的毫秒数
 		let hours=Math.floor(leave1/(3600*1000))//计算出小时数
 		//计算相差分钟数
@@ -45,10 +43,12 @@ const gettime = {
 			return this.dateFormat(new Date(shorttime),"{A} {t}:{ii}");
 		} else if(cha < 518400){
 			// 隔天 显示日期+时间
-			return this.dateFormat(new Date(shorttime),"{Mon}月{DD}日 {A} {t}:{ii}");
+			return this.dateFormat(new Date(shorttime),"{Mon}月{DD}日 ");
+			// return this.dateFormat(new Date(shorttime),"{Mon}月{DD}日 {A} {t}:{ii}");
 		} else {
 			// 隔年 显示完整日期+时间
-			return this.dateFormat(new Date(shorttime),"{Y}-{MM}-{DD} {A} {t}:{ii}");
+			return this.dateFormat(new Date(shorttime)," {A} {t}:{ii}");
+			// return this.dateFormat(new Date(shorttime),"{Y}-{MM}-{DD} {A} {t}:{ii}");
 		}
 	},
 	

@@ -44,9 +44,9 @@
 				<view class="third-icos-wapper">
 					<!-- 5+app 用qq/微信/微博 登录 小程序用微信小程序登录 h5不支持 -->
 					<!-- #ifdef APP-PLUS -->
-						<image src="../../static/icos/weixin.png" data-logintype="weixin" @click="appOAuthLogin" class="third-ico"></image>
-						<image src="../../static/icos/QQ.png" data-logintype="qq" @click="appOAuthLogin" class="third-ico" style="margin-left: 80upx;"></image>
-						<image src="../../static/icos/weibo.png" data-logintype="sinaweibo" @click="appOAuthLogin" class="third-ico" style="margin-left: 80upx;"></image>
+						<!-- <image src="../../static/icos/weixin.png" data-logintype="weixin" @click="appOAuthLogin" class="third-ico"></image> -->
+						<!-- <image src="../../static/icos/QQ.png" data-logintype="qq" @click="appOAuthLogin" class="third-ico" style="margin-left: 80upx;"></image> -->
+						<!-- <image src="../../static/icos/weibo.png" data-logintype="sinaweibo" @click="appOAuthLogin" class="third-ico" style="margin-left: 80upx;"></image> -->
 					<!-- #endif -->
 					<!-- #ifdef MP-WEIXIN -->
 						<button open-type='getUserInfo' @getuserinfo="wxLogin" class="third-btn-ico">

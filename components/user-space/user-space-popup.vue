@@ -5,7 +5,7 @@
 		<view class="papar-left-popup" v-show="show">
 			<view class="u-f-ac" hover-class="papar-left-popup-h" @tap="lahei">
 				<view class="icon iconfont icon-sousuo"></view> 
-				拉黑
+				私信
 			</view>
 			<view class="u-f-ac" hover-class="papar-left-popup-h" @tap="beizhu">
 				<view class="icon iconfont icon-qingchu"></view> 

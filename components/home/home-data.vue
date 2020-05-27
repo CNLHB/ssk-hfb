@@ -1,7 +1,7 @@
 <template>
 	<view class="home-data u-f-ac animated fadeIn fast">
 		<block v-for="(item,index) in homedata" :key="index">
-			<view class="u-f1 u-f-ajc u-f-column">
+			<view class="u-f1 u-f-ajc u-f-column" @tap="goToInfo(index)">
 				<view>{{item.num}}</view>{{item.name}}
 			</view>
 		</block>
@@ -12,6 +12,11 @@
 	export default {
 		props:{
 			homedata:Array
+		},
+		methods:{
+			goToInfo(index){
+				this.$emit("goToSpace",index)
+			}
 		}
 	}
 </script>

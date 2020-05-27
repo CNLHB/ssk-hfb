@@ -56,7 +56,7 @@
             "path" : "pages/paper/paper",
             "style" : {
 				"enablePullDownRefresh":true,//开启下拉刷新功能
-				"navigationBarTitleText":"小纸条",
+				"navigationBarTitleText":"消息",
 				"app-plus":{
 					"titleNView":{
 						"buttons":[
@@ -329,6 +329,45 @@
 			}
         }
 
+        ,{
+            "path" : "pages/user-history/user-history",
+            "style" : {
+				"navigationBarTitleText":"浏览历史"
+			}
+        }
+        ,{
+            "path" : "pages/user-search/user-search",
+            "style" : {
+            	"enablePullDownRefresh":true,
+            	"app-plus":{
+            		 "scrollIndicator":"none",//隐藏滚动条
+            		 "bounce":"none",//关闭反弹效果
+            		 "titleNView":{
+            			 "autoBackButton":false,
+            			 // 搜索框配置
+            			 "searchInput":{
+            				 "align":"center",
+            				 "backgroundColor":"#F7F7F7",
+            				 "borderRadius":"4px",
+            				 "placeholder":"搜索韩友",
+            				 "placeholderColor":"#CCCCCC",
+            				 "disabled":false
+            			 },
+            			 //配置按钮
+            			 "buttons":[
+            				 // 右边
+            				 {
+            					 "color":"#000000",								 
+            					 "colorPressed":"#BBBBBB",
+            					 "float":"right",
+            					 "fontSize":"16px",
+            					 "text":"取消"
+            				 }
+            			 ]
+            		 }
+            	}
+            }
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

@@ -1,5 +1,5 @@
 import request from "./request";
-let baseUrl=process.env.NODE_ENV === 'development'?"http://localhost:8081/":"https://api.xquery:cn/";
+let baseUrl=process.env.NODE_ENV === 'development'?"http://192.168.31.164:8081/":"https://api.xquery:cn/";
 //可以new多个request来支持多个域名请求
 let $http = new request({
 	//接口请求地址

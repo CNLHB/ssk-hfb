@@ -24,7 +24,9 @@
 					<template v-if="items.list.length>0">
 						<!-- 图文列表 -->
 						<block v-for="(item,index1) in items.list" :key="index1">
-							<user-list :item="item" :index="index1"></user-list>
+							<user-list 
+							@attActive="attActive"
+							:item="item" :index="index1"></user-list>
 						</block>
 						<!-- 上拉加载 -->
 						<load-more :loadtext="items.loadtext"></load-more>
@@ -47,6 +49,7 @@
 	import userList from "../../components/user-list/user-list.vue";
 	import loadMore from "../../components/common/load-more.vue";
 	import noThing from "../../components/common/no-thing.vue";
+	import {mapState} from 'vuex'
 	export default {
 		components:{
 			swiperTabHead,
@@ -54,114 +57,36 @@
 			loadMore,
 			noThing
 		},
+		computed:{
+			...mapState(['userInfo'])
+		},
 		data() {
 			return {
 				swiperheight:500,
 				tabIndex:0,
 				tabBars:[
-					{ name:"互关",id:"huguan",num:10 },
-					{ name:"关注",id:"guanzhu",num:20 },
-					{ name:"粉丝",id:"fensi",num:30 },
+					{ name:"互关",id:"huguan",num:0 },
+					{ name:"关注",id:"guanzhu",num:0 },
+					{ name:"粉丝",id:"fensi",num:0 },
 				],
 				
 				newslist:[
 					{
-						loadtext:"上拉加载更多",
+						loadtext:"",
 						list:[
-							{
-								userpic:"../../static/demo/userpic/11.jpg",
-								username:"昵称",
-								age:20,
-								sex:0,
-								isguanzhu:true
-							},
-							{
-								userpic:"../../static/demo/userpic/11.jpg",
-								username:"昵称",
-								age:21,
-								sex:1,
-								isguanzhu:false
-							},
-							{
-								userpic:"../../static/demo/userpic/11.jpg",
-								username:"昵称",
-								age:20,
-								sex:0,
-								isguanzhu:true
-							},
-							{
-								userpic:"../../static/demo/userpic/11.jpg",
-								username:"昵称",
-								age:21,
-								sex:1,
-								isguanzhu:false
-							},
-							{
-								userpic:"../../static/demo/userpic/11.jpg",
-								username:"昵称",
-								age:20,
-								sex:0,
-								isguanzhu:true
-							},
-							{
-								userpic:"../../static/demo/userpic/11.jpg",
-								username:"昵称",
-								age:21,
-								sex:1,
-								isguanzhu:false
-							},
-							{
-								userpic:"../../static/demo/userpic/11.jpg",
-								username:"昵称",
-								age:20,
-								sex:0,
-								isguanzhu:true
-							},
-							{
-								userpic:"../../static/demo/userpic/11.jpg",
-								username:"昵称",
-								age:21,
-								sex:1,
-								isguanzhu:false
-							}
+
 						]
 					},
 					{
-						loadtext:"上拉加载更多",
+						loadtext:"",
 						list:[
-							{
-								userpic:"../../static/demo/userpic/11.jpg",
-								username:"昵称",
-								age:20,
-								sex:0,
-								isguanzhu:true
-							},
-							{
-								userpic:"../../static/demo/userpic/11.jpg",
-								username:"昵称",
-								age:21,
-								sex:1,
-								isguanzhu:false
-							}
+
 						]
 					},
 					{
-						loadtext:"上拉加载更多",
+						loadtext:"",
 						list:[
-							{
-								userpic:"../../static/demo/userpic/11.jpg",
-								username:"昵称",
-								age:20,
-								sex:0,
-								isguanzhu:true
-							},
-							{
-								userpic:"../../static/demo/userpic/11.jpg",
-								username:"昵称",
-								age:21,
-								sex:1,
-								isguanzhu:false
-							}
+		
 						]
 					}
 				]
@@ -175,6 +100,7 @@
 					this.swiperheight=height;
 				}
 			});
+			this.initData()
 		},
 		// 监听导航按钮事件
 		onNavigationBarButtonTap(e) {
@@ -186,22 +112,10 @@
 		},
 		methods:{
 			loadmore(index){
-				if(this.newslist[index].loadtext!="上拉加载更多"){ return; }
+				// if(this.newslist[index].loadtext!="上拉加载更多"){ return; }
 				// 修改状态
 				this.newslist[index].loadtext="加载中...";
 				// 获取数据
-				setTimeout(()=> {
-					//获取完成
-					let obj={
-						userpic:"../../static/demo/userpic/11.jpg",
-						username:"昵称",
-						age:20,
-						sex:0,
-						isguanzhu:true
-					};
-					this.newslist[index].list.push(obj);
-					this.newslist[index].loadtext="上拉加载更多";
-				}, 1000);
 				// this.newslist[index].loadtext="没有更多数据了";
 			},
 			// tabbar点击事件
@@ -211,6 +125,72 @@
 			// 滑动事件
 			tabChange(e){
 				this.tabIndex=e.detail.current;
+			},
+			async attActive(index,item){
+				this.$http.setLoading(false)
+				let data = await this.$http.post('user/active',{
+					fromId: this.userInfo.id,
+					toId: item.id
+				})
+				this.$http.setLoading(true)
+				if(data&&data.code==0){
+					this.initData()
+				}
+			},
+			async initData(){
+				this.$http.setLoading(false)
+				let  attData =await this.$http.get("user/att/list")
+				let  fansData =await this.$http.get("user/fans/list")
+				let  eachData =await this.$http.get("user/each/list")
+				this.$http.setLoading(true)
+				if(attData&&attData.length){
+					this.tabBars[1].num = attData.length
+					this.newslist[1].list = attData.map((item)=>{
+						return	{
+								id:item.id,
+								userpic:item.authorUrl,
+								username:item.userName,
+								// age:21,
+								sex:item.gender,
+								isguanzhu:true
+						}
+					})
+				
+			}
+			if(eachData&&eachData.length){
+				this.tabBars[0].num = eachData.length
+				
+				this.newslist[0].list = eachData.map((item)=>{
+					return	{
+							id:item.id,
+							userpic:item.authorUrl,
+							username:item.userName,
+							// age:21,
+							sex:item.gender,
+							isguanzhu:true
+					}
+				})
+			}
+			if(fansData&&fansData.length){
+				this.tabBars[2].num = fansData.length
+				
+				this.newslist[2].list = fansData.map((item)=>{
+					let isguanzhu = false;
+					if(eachData&&eachData.length){
+						isguanzhu = eachData.some((eItem)=>{
+							return item.id ==eItem.id
+						})
+					}
+					return	{
+							id:item.id,
+							userpic:item.authorUrl,
+							username:item.userName,
+							// age:21,
+							sex:item.gender,
+							isguanzhu:isguanzhu
+					}
+				})
+			}
 			}
 		}
 	}

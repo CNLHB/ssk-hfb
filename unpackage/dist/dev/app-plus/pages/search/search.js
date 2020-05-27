@@ -1,2 +1,0 @@
-setCssToHead([".",[1],"search-view.",[1],"data-v-6488631a{ background-color: #F9F9F9; padding-top: ",[0,2],"; }\n",],undefined,{path:"./pages/search/search.wxss"})();
-document.dispatchEvent(new CustomEvent("generateFuncReady", { detail: { generateFunc: $gwx('./pages/search/search.wxml') } }));
