@@ -3,7 +3,9 @@
 		<!-- 自定义导航栏 -->
 		<news-nav-bar :tabBars="tabBars" :tabIndex="tabIndex" @change-tab="changeTab">
 		</news-nav-bar>
-
+<!-- 		<view class="head">
+			<text>关注</text>
+		</view> -->
 		<view class="uni-tab-bar">
 			<swiper class="swiper-box" :style="{height:swiperheight+'px'}" :current="tabIndex" @change="tabChange">
 				<!-- 关注 -->
@@ -78,11 +80,12 @@
 				tabBars: [{
 						name: "关注",
 						id: "guanzhu"
-					},
-					{
-						name: "话题",
-						id: "topic"
 					}
+					// ,
+					// {
+					// 	name: "话题",
+					// 	id: "topic"
+					// }
 				],
 				guanzhu: {
 					loadtext: "",
@@ -165,6 +168,12 @@
 				}
 			};
 		},
+		onShow() {
+			if(this.userInfo.id &&this.guanzhu.list.length==0){
+				this.requestData()
+				this.guanzhu.loadtext = ""
+			}
+		},
 		onLoad() {
 			uni.getSystemInfo({
 				success: (res) => {
@@ -179,7 +188,6 @@
 			}
 		},
 		methods: {
-
 			async requestData(GoPage) {
 				let currentPage = GoPage || this.guanzhu.page;
 				let data;
@@ -189,7 +197,6 @@
 					console.log(e)
 					return
 				}
-				console.log(data)
 				let {
 					page,
 					items
@@ -241,6 +248,10 @@
 </script>
 
 <style scoped>
+    .head{
+		height: 90upx;
+		width: 100vw;
+	}
 	.wrap-new{
 		background-color: #F9F9F9;
 	}

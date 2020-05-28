@@ -5,7 +5,7 @@
 		:scroll-with-animation="true"
 		:style="{height:style.contentH+'px'}">
 			<!-- 聊天列表 -->
-			<block v-for="(item,index) in list" :key="index">
+			<block v-for="(item,index) in currentChatMsgs" :key="index">
 				<view class="chat-item">
 				<user-chat-list 
 					@goToUserInfo="goToUserInfo"
@@ -23,20 +23,22 @@
 	import userChatBottom from "../../components/user-chat/user-chat-bottom.vue";
 	import time from "../../common/time.js";
 	import userChatList from "../../components/user-chat/user-chat-list.vue";
-	import {mapState,mapMutations} from 'vuex'
+	import {mapState,mapMutations,mapGetters} from 'vuex'
 	import $http from '../../config/requestConfig.js';
+	import Vue from 'vue'
 	export default {
 		components:{
 			userChatBottom,
 			userChatList
 		},
 		computed:{
-			...mapState(['chatList','userInfo'])
+			...mapState(['chatList','userInfo','msgIndex']),
+			...mapGetters(['currentChatMsgs'])
 		},
 		data() {
 			return {
 				scrollTop:0,
-				index:0,
+				index:-1,
 				style:{
 					contentH:0,
 					itemH:0
@@ -54,22 +56,26 @@
 		},
 		beforeDestroy() {
 			this.isShow = false
-			console.log(this.isShow)
+			this.setIndex(-1)
+			console.log(-1)
 		},
 		async onLoad(data) {
 			if(data.index){
+				this.setIndex(parseInt(data.index))
 				this.index = data.index
+				// this.list = this.chatList[this.index].messages
 			}
-			let fid = data.fid
+			 this.fid = data.fid
+			 let fid = data.fid
+			// console.log(this.currentChatMsgs)
 			let flag = true
 			if(!data.index&&!!fid){
 				for(let i =0;i<this.chatList.length;i++){
 					if(this.chatList[i].fid == fid){
 						this.index = i
+						this.setIndex(i)
 						flag = false
 						return
-					}else{
-						this.index = 0
 					}
 				}
 				if(flag){
@@ -79,63 +85,37 @@
 						toId:parseInt(fid),
 					})
 					this.cId = chat.id
-					chat.time= new Date(chat.afterTime).getTime()
+					chat.time= time.gettime.gettime(chat.afterTime)
 					console.log(chat)
+					this.setIndex(0)
 					this.addChatList(chat);
+					
 				}
 
 			}else{
 				this.fid = this.chatList[data.index].fid
 				this.cId = this.chatList[data.index].id
 			}
-				if(this.$is_open_socket){
-					this.$socket.onMessage((res) => {
-						let data = {}
-						try{
-							data = JSON.parse(res.data);
-						}catch(e){
-							
-						}
-						let pic = this.chatList[this.index].userpic
-						let obj={
-								fromId:data.fromId,
-								toId:data.toId,
-								isme:data.fromId==this.userInfo.id,
-								userpic:pic,
-								type:"text",
-								message:data.message,
-								time:  time.gettime.gettime(data.sendTime)
-							}
-								console.log(obj)
-						// gstime:time.gettime.getChatTime(now,this.list[this.list.length-1].time)
-						this.list.push(obj);
-						obj.index = this.index
-						obj.isme=false
-						this.addChatMessage(obj)
-						this.pageToBottom(true);
-						let msgs = [data.id]
-						console.log(this.isShow)
-						if(this.isShow){
-							this.$http.put('chat/read',{
-								mids: msgs
-							},{
-								"content-type":"application/x-www-form-urlencoded"
-							})
-						}else{
-							this.addNoreadMessage(this.index)
-						}
-					});
-				}
+	
 		},
 
 		onReady() {
 			this.getdata();
 			this.initdata();
+			console.log(2)
 			this.pageToBottom(true);
 		},
-
+		watch:{
+			currentChatMsgs(){
+				this.pageToBottom(true);
+			}
+		},
 		methods:{
-			...mapMutations(['setChatMessage','addChatList','addChatMessage','addNoreadMessage']),
+			...mapMutations(['setChatMessage',
+			'setIsPaper',
+			'addChatList',
+			'setIndex',
+			'addChatMessage','addNoreadMessage']),
 			// 初始化参数
 			initdata(){
 				try {
@@ -146,7 +126,7 @@
 			pageToBottom(isfirst = false){
 				let q=uni.createSelectorQuery().in(this);
 				let itemH = q.selectAll('.chat-item');
-				if(this.list.length!=0){
+				if(this.currentChatMsgs.length!=0){
 					this.$nextTick(()=>{
 						itemH.fields({
 							size:true
@@ -177,27 +157,9 @@
 				if( this.chatList.length==0){
 					return
 				}
-				let pic = this.chatList[this.index].userpic
-				let data = this.chatList[this.index].messages
-				let arr = data.map((item)=>{
-					return{
-						isme:item.fromId==this.userInfo.id,
-						uid:item.fromId==this.userInfo.id?item.fromId:item.toId,
-						userpic: item.fromId==this.userInfo.id?this.userInfo.authorUrl:pic,
-						type:"text",
-						message:item.message,
-						time:  time.gettime.gettime(item.sendTime)
-					}
-				})
-
-				for (let i = 0; i < arr.length; i++) {
-					arr[i].gstime=time.gettime.getChatTime(arr[i].time,i>0?arr[i-1].time:0);
-				}
-				this.list=arr || [];
 			},
 			async submit(data){
 				// 构建数据
-				console.log(data)
 				let now=new Date().getTime();
 				if(data==''){
 					uni.showToast({
@@ -206,6 +168,7 @@
 					})
 					return
 				}
+				console.log(data)
 				this.$http.setLoading(false);
 				let msg =await this.$http.post("push/message",{
 					cId: this.cId,
@@ -225,10 +188,8 @@
 						time:  time.gettime.gettime(msg.sendTime),
 						sendTime:msg.sendTime
 					}
-				this.list.push(obj);
-				obj.index = this.index
 				this.addChatMessage(obj)
-				this.pageToBottom();
+				this.pageToBottom(true);
 			}
 		}
 	}

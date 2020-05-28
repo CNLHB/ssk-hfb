@@ -65,6 +65,9 @@
 				let data = JSON.parse(uni.getStorageSync("topicDatail"))
 				this.initdata(data);
 				this.getcomment();
+				if(this.userInfo.id){
+					this.pushHistory(data)
+				}
 				
 			}catch(e){
 				
@@ -80,6 +83,13 @@
 			...mapState(['userInfo'])
 		},
 		methods: {
+			pushHistory(data){
+				this.$http.post('topic/history',{
+					cid:data.cid,
+					tid:data.id,
+					uid:this.userInfo.id
+				})
+			},
 			togle(){
 				this.shareshow=!this.shareshow
 			},
@@ -111,7 +121,13 @@
 				this.maskState = !this.maskState
 			},
 			submit(data){
-				console.log(this.detail)
+				if(!this.userInfo.id){
+					uni.showToast({
+						title:"你还未登录!",
+						icon:'none'
+					})
+					return
+				}
 				if(data==''){
 					uni.showToast({
 						title:"评论不能为空",

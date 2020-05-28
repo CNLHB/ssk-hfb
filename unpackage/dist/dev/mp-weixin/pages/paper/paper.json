@@ -4,6 +4,8 @@
   "usingComponents": {
     "paper-list": "/components/paper/paper-list",
     "load-more": "/components/common/load-more",
-    "paper-left-popup": "/components/paper/paper-left-popup"
+    "paper-left-popup": "/components/paper/paper-left-popup",
+    "uni-swipe-action": "/components/uni-swipe-action/uni-swipe-action",
+    "uni-swipe-action-item": "/components/uni-swipe-action-item/uni-swipe-action-item"
   }
 }

@@ -757,7 +757,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -3447,9 +3447,28 @@ _vue.default.use(_vuex.default);
 var store = new _vuex.default.Store({
   state: {
     userInfo: {},
-    chatList: [] },
+    chatList: [],
+    isPaper: false,
+    msgPage: 1,
+    msgIndex: -1,
+    currentChat: [] },
+
+  getters: {
+    currentChatMsgs: function currentChatMsgs(state) {
+      if (state.msgIndex == -1) {
+        return [];
+      }
+      var len = state.chatList[state.msgIndex].messages ? state.chatList[state.msgIndex].messages.length : 0;
+      if (len > 20) {
+        return state.chatList[state.msgIndex].messages.slice(len - 20, len);
+      }
+      return state.chatList[state.msgIndex].messages || [];
+    } },
 
   mutations: {
+    setIndex: function setIndex(state, msgIndex) {
+      state.msgIndex = msgIndex;
+    },
     setUserInfo: function setUserInfo(state, userInfo) {
       state.userInfo = userInfo;
 
@@ -3458,14 +3477,36 @@ var store = new _vuex.default.Store({
       state.chatList = chatList;
 
     },
+    delChatList: function delChatList(state, index) {
+      state.chatList.splice(index, 1);
+
+    },
     addChatList: function addChatList(state, chat) {
       state.chatList.unshift(chat);
 
     },
     updateMsg: function updateMsg(state, index) {
-      state.chatList[index].noreadnum = 0;
+      state.chatList[state.msgIndex].noreadnum = 0;
     },
-    setChatMessage: function setChatMessage(state, obj) {
+    addChatMessage: function addChatMessage(state, obj) {
+      state.chatList[state.msgIndex].message = obj.message;
+      state.chatList[state.msgIndex].time = obj.time;
+      state.chatList[state.msgIndex].afterTime = +new Date(obj.sendTime);
+      state.chatList[state.msgIndex].messages.push(obj);
+
+    },
+    sortChatList: function sortChatList(state) {
+      state.chatList.sort(function (a, b) {
+        return b.afterTime - a.afterTime;
+      });
+    },
+    addNoreadMessage: function addNoreadMessage(state, index) {
+      state.chatList[index].noreadnum = state.chatList[index].noreadnum + 1;
+    } },
+
+  actions: {
+    addChatListMessage: function addChatListMessage(state, data) {
+
     } } });var _default =
 
 
@@ -9009,7 +9050,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -9030,14 +9071,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -9113,7 +9154,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -9885,6 +9926,113 @@ var Update = function Update() {};var _default = { NetWork: NetWork, Update: Upd
 
 /***/ }),
 
+/***/ 279:
+/*!**************************************************************************!*\
+  !*** D:/桌面文件/mypro/韩府/韩府帮/韩府帮/components/uni-swipe-action-item/mpwxs.js ***!
+  \**************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = {
+  data: function data() {
+    return {
+      position: [],
+      button: [] };
+
+  },
+  computed: {
+    pos: function pos() {
+      return JSON.stringify(this.position);
+    },
+    btn: function btn() {
+      return JSON.stringify(this.button);
+    } },
+
+  watch: {
+    show: function show(newVal) {
+      if (this.autoClose) return;
+      var valueObj = this.position[0];
+      if (!valueObj) {
+        this.init();
+        return;
+      }
+      valueObj.show = newVal;
+      this.$set(this.position, 0, valueObj);
+    } },
+
+  created: function created() {
+    if (this.swipeaction.children !== undefined) {
+      this.swipeaction.children.push(this);
+    }
+  },
+  mounted: function mounted() {
+    this.init();
+
+  },
+  beforeDestroy: function beforeDestroy() {var _this = this;
+    this.swipeaction.children.forEach(function (item, index) {
+      if (item === _this) {
+        _this.swipeaction.children.splice(index, 1);
+      }
+    });
+  },
+  methods: {
+    init: function init() {var _this2 = this;
+
+      setTimeout(function () {
+        _this2.getSize();
+        _this2.getButtonSize();
+      }, 50);
+    },
+    closeSwipe: function closeSwipe(e) {
+      if (!this.autoClose) return;
+      this.swipeaction.closeOther(this);
+    },
+
+    change: function change(e) {
+      this.$emit('change', e.open);
+      var valueObj = this.position[0];
+      if (valueObj.show !== e.open) {
+        valueObj.show = e.open;
+        this.$set(this.position, 0, valueObj);
+      }
+    },
+    onClick: function onClick(index, item) {
+      this.$emit('click', {
+        content: item,
+        index: index });
+
+    },
+    appTouchStart: function appTouchStart() {},
+    appTouchEnd: function appTouchEnd() {},
+    getSize: function getSize() {var _this3 = this;
+      var views = uni.createSelectorQuery().in(this);
+      views.
+      selectAll('.selector-query-hock').
+      boundingClientRect(function (data) {
+        if (_this3.autoClose) {
+          data[0].show = false;
+        } else {
+          data[0].show = _this3.show;
+        }
+        _this3.position = data;
+      }).
+      exec();
+    },
+    getButtonSize: function getButtonSize() {var _this4 = this;
+      var views = uni.createSelectorQuery().in(this);
+      views.
+      selectAll('.button-hock').
+      boundingClientRect(function (data) {
+        _this4.button = data;
+      }).
+      exec();
+    } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
 /***/ 3:
 /*!***********************************!*\
   !*** (webpack)/buildin/global.js ***!
@@ -9916,7 +10064,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 372:
+/***/ 387:
 /*!**********************************************************************************!*\
   !*** D:/桌面文件/mypro/韩府/韩府帮/韩府帮/components/mpvue-citypicker/city-data/province.js ***!
   \**********************************************************************************/
@@ -10066,7 +10214,7 @@ provinceData;exports.default = _default;
 
 /***/ }),
 
-/***/ 373:
+/***/ 388:
 /*!******************************************************************************!*\
   !*** D:/桌面文件/mypro/韩府/韩府帮/韩府帮/components/mpvue-citypicker/city-data/city.js ***!
   \******************************************************************************/
@@ -11580,7 +11728,7 @@ cityData;exports.default = _default;
 
 /***/ }),
 
-/***/ 374:
+/***/ 389:
 /*!******************************************************************************!*\
   !*** D:/桌面文件/mypro/韩府/韩府帮/韩府帮/components/mpvue-citypicker/city-data/area.js ***!
   \******************************************************************************/
@@ -24188,6 +24336,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   },
   // 人性化时间格式
   gettime: function gettime(shorttime) {
+    shorttime = new Date(shorttime).getTime();
     shorttime = shorttime.toString().length < 13 ? shorttime * 1000 : shorttime;
     var now = new Date().getTime();
     var cha = (now - parseInt(shorttime)) / 1000;
@@ -24197,12 +24346,12 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
       return this.dateFormat(new Date(shorttime), "{A} {t}:{ii}");
     } else if (cha < 518400) {
       // 隔天 显示日期+时间
-      return this.dateFormat(new Date(shorttime), "{Mon}月{DD}日 ");
-      // return this.dateFormat(new Date(shorttime),"{Mon}月{DD}日 {A} {t}:{ii}");
+      // return this.dateFormat(new Date(shorttime),"{Mon}月{DD}日 ");
+      return this.dateFormat(new Date(shorttime), "{Mon}月{DD}日 {A} {t}:{ii}");
     } else {
       // 隔年 显示完整日期+时间
-      return this.dateFormat(new Date(shorttime), " {A} {t}:{ii}");
       // return this.dateFormat(new Date(shorttime),"{Y}-{MM}-{DD} {A} {t}:{ii}");
+      return this.dateFormat(new Date(shorttime), "{Y}-{MM}-{DD} {A} {t}:{ii}");
     }
   },
 
@@ -24214,7 +24363,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     var dateObj = {},
     rStr = /\{([^}]+)\}/,
     mons = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'];
-
     dateObj["Y"] = date.getFullYear();
     dateObj["M"] = date.getMonth() + 1;
     dateObj["MM"] = this.parseNumber(dateObj["M"]);
@@ -24225,12 +24373,19 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     dateObj["hh"] = this.parseNumber(dateObj["h"]);
     dateObj["t"] = dateObj["h"] > 12 ? dateObj["h"] - 12 : dateObj["h"];
     dateObj["tt"] = this.parseNumber(dateObj["t"]);
-    dateObj["A"] = dateObj["h"] > 12 ? '下午' : '上午';
+    var tmep = "";
+    if (dateObj["h"] < 12) {
+      tmep = "上午";
+    } else if (dateObj["h"] >= 12 && dateObj["h"] < 20) {
+      tmep = "下午";
+    } else {
+      tmep = "晚上";
+    }
+    dateObj["A"] = tmep;
     dateObj["i"] = date.getMinutes();
     dateObj["ii"] = this.parseNumber(dateObj["i"]);
     dateObj["s"] = date.getSeconds();
     dateObj["ss"] = this.parseNumber(dateObj["s"]);
-
     while (rStr.test(formatStr)) {
       formatStr = formatStr.replace(rStr, dateObj[RegExp.$1]);
     }

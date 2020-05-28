@@ -37,6 +37,7 @@
 .paper-list{
 	border-bottom: 1upx solid #EEEEEE;
 	padding: 20upx 0;
+	width: 100%;
 }
 .paper-list>image{
 	width: 100upx;

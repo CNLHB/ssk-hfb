@@ -322,15 +322,9 @@ var _vuex = __webpack_require__(/*! vuex */ 15);function _interopRequireDefault(
                   _this2.newslist[_this2.tabIndex].loadtext = "没有更多数据了";
                 }case 21:case "end":return _context.stop();}}}, _callee, null, [[2, 8]]);}))();
     },
-    likeOrTread: function likeOrTread(data) {var _this3 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {return _regenerator.default.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:if (!(
-                !_this3.userInfo || !_this3.userInfo.id)) {_context2.next = 3;break;}
-                uni.showToast({
-                  title: "你还未登录！或登录过有效期!",
-                  icon: 'none' });return _context2.abrupt("return");case 3:_context2.next = 5;return (
+    likeOrTread: function likeOrTread(data) {var _this3 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {return _regenerator.default.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:_context2.next = 2;return (
 
-
-
-                  _this3.$http.post('topic/active', data));case 5:case "end":return _context2.stop();}}}, _callee2);}))();
+                  _this3.$http.post('topic/active', data));case 2:case "end":return _context2.stop();}}}, _callee2);}))();
     },
     checkIn: function checkIn() {
       console.log("checkIn");

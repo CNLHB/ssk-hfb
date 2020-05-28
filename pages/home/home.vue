@@ -50,7 +50,6 @@
 		},
 		onShow(){
 			if(this.userInfo.id){
-				console.log(this.userInfo)
 				this.homeinfo.userpic = this.userInfo.authorUrl
 				this.homeinfo.username =this.userInfo.userName
 				if(!this.islogin){
@@ -119,8 +118,8 @@
 					let userAccess = await this.$http.get('user/access')
 					this.homeinfo.totalnum = userAccess.allAcc
 					this.homeinfo.todaynum = userAccess.dayAcc
-					this.homedata[0].num = topicCount.data.count
-					this.homedata[1].num = commCount.data.count
+					this.homedata[0].num = userAccess.topicCount
+					this.homedata[1].num = userAccess.commCount
 					this.islogin = true
 				}
 			},

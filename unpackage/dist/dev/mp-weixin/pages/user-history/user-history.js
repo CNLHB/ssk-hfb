@@ -92,7 +92,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   "history-list": function() {
-    return __webpack_require__.e(/*! import() | components/history-list/history-list */ "components/history-list/history-list").then(__webpack_require__.bind(null, /*! @/components/history-list/history-list.vue */ 426))
+    return __webpack_require__.e(/*! import() | components/history-list/history-list */ "components/history-list/history-list").then(__webpack_require__.bind(null, /*! @/components/history-list/history-list.vue */ 441))
   }
 }
 var render = function() {
@@ -132,7 +132,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@vue/babel-preset-app/node_modules/@babel/runtime/regenerator */ 12));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var historyList = function historyList() {__webpack_require__.e(/*! require.ensure | components/history-list/history-list */ "components/history-list/history-list").then((function () {return resolve(__webpack_require__(/*! ../../components/history-list/history-list.vue */ 426));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@vue/babel-preset-app/node_modules/@babel/runtime/regenerator */ 12));
 
 
 
@@ -143,21 +143,33 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+var _vuex = __webpack_require__(/*! vuex */ 15);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var historyList = function historyList() {__webpack_require__.e(/*! require.ensure | components/history-list/history-list */ "components/history-list/history-list").then((function () {return resolve(__webpack_require__(/*! ../../components/history-list/history-list.vue */ 441));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var loadMore = function loadMore() {__webpack_require__.e(/*! require.ensure | components/common/load-more */ "components/common/load-more").then((function () {return resolve(__webpack_require__(/*! ../../components/common/load-more.vue */ 213));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
 {
-  components: { historyList: historyList },
+  components: { historyList: historyList, loadMore: loadMore },
+  computed: _objectSpread({},
+  (0, _vuex.mapState)(['userInfo'])),
+
   data: function data() {
     return {
-      list: [] };
+      list: [],
+      loadtext: '' };
 
   },
   mounted: function mounted() {
     this.initData();
   },
   methods: {
-    initData: function initData() {var _this = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var data;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:_context.next = 2;return (
-                  _this.$http.get("topic/history"));case 2:data = _context.sent;
-                _this.list = data.reverse();
-                console.log(data);case 5:case "end":return _context.stop();}}}, _callee);}))();
+    initData: function initData() {var _this = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var data;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:if (!
+                _this.userInfo.id) {_context.next = 5;break;}_context.next = 3;return (
+                  _this.$http.get("topic/history"));case 3:data = _context.sent;
+                if (data && data.length) {
+                  _this.list = data.reverse();
+                } else {
+                  _this.list = [];
+                  _this.loadtext = '浏览历史为空';
+                }case 5:case "end":return _context.stop();}}}, _callee);}))();
+
     },
     gotoTopicInfo: function gotoTopicInfo() {
       console.log(88);

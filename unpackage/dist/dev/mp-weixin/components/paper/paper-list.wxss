@@ -2,6 +2,7 @@
 .paper-list.data-v-7722f731{
 	border-bottom: 1rpx solid #EEEEEE;
 	padding: 20rpx 0;
+	width: 100%;
 }
 .paper-list>image.data-v-7722f731{
 	width: 100rpx;

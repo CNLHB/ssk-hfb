@@ -13,7 +13,7 @@
 }
 .user-space-head-info>image.data-v-1d6a4dcd{
 	width: 150rpx;
-	height: 150rpx;
+	height: 150rpx !important;
 	border-radius: 100%;
 }
 .user-space-head-info>view.data-v-1d6a4dcd:first-of-type{

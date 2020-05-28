@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "浏览历史",
   "usingComponents": {
-    "history-list": "/components/history-list/history-list"
+    "history-list": "/components/history-list/history-list",
+    "load-more": "/components/common/load-more"
   }
 }

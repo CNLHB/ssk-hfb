@@ -154,19 +154,21 @@ __webpack_require__.r(__webpack_exports__);
 var _time = _interopRequireDefault(__webpack_require__(/*! ../../common/time.js */ 47));
 
 var _vuex = __webpack_require__(/*! vuex */ 15);
-var _requestConfig = _interopRequireDefault(__webpack_require__(/*! ../../config/requestConfig.js */ 22));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var userChatBottom = function userChatBottom() {__webpack_require__.e(/*! require.ensure | components/user-chat/user-chat-bottom */ "components/user-chat/user-chat-bottom").then((function () {return resolve(__webpack_require__(/*! ../../components/user-chat/user-chat-bottom.vue */ 325));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var userChatList = function userChatList() {__webpack_require__.e(/*! require.ensure | components/user-chat/user-chat-list */ "components/user-chat/user-chat-list").then((function () {return resolve(__webpack_require__(/*! ../../components/user-chat/user-chat-list.vue */ 332));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+var _requestConfig = _interopRequireDefault(__webpack_require__(/*! ../../config/requestConfig.js */ 22));
+var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var userChatBottom = function userChatBottom() {__webpack_require__.e(/*! require.ensure | components/user-chat/user-chat-bottom */ "components/user-chat/user-chat-bottom").then((function () {return resolve(__webpack_require__(/*! ../../components/user-chat/user-chat-bottom.vue */ 340));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var userChatList = function userChatList() {__webpack_require__.e(/*! require.ensure | components/user-chat/user-chat-list */ "components/user-chat/user-chat-list").then((function () {return resolve(__webpack_require__(/*! ../../components/user-chat/user-chat-list.vue */ 347));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
 {
   components: {
     userChatBottom: userChatBottom,
     userChatList: userChatList },
 
   computed: _objectSpread({},
-  (0, _vuex.mapState)(['chatList', 'userInfo'])),
+  (0, _vuex.mapState)(['chatList', 'userInfo', 'msgIndex']), {},
+  (0, _vuex.mapGetters)(['currentChatMsgs'])),
 
   data: function data() {
     return {
       scrollTop: 0,
-      index: 0,
+      index: -1,
       style: {
         contentH: 0,
         itemH: 0 },
@@ -174,81 +176,76 @@ var _requestConfig = _interopRequireDefault(__webpack_require__(/*! ../../config
       list: [],
       cId: 0,
       socket: null,
-      fid: undefined };
+      fid: undefined,
+      isShow: false };
 
 
   },
+  onShow: function onShow() {
+    this.isShow = true;
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.isShow = false;
+    this.setIndex(-1);
+    console.log(-1);
+  },
   onLoad: function onLoad(data) {var _this = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var fid, flag, i, chat;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:
               if (data.index) {
+                _this.setIndex(parseInt(data.index));
                 _this.index = data.index;
+                // this.list = this.chatList[this.index].messages
               }
+              _this.fid = data.fid;
               fid = data.fid;
+              // console.log(this.currentChatMsgs)
               flag = true;if (!(
               !data.index && !!fid)) {_context.next = 27;break;}
-              i = 0;case 5:if (!(i < _this.chatList.length)) {_context.next = 16;break;}if (!(
+              i = 0;case 6:if (!(i < _this.chatList.length)) {_context.next = 15;break;}if (!(
               _this.chatList[i].fid == fid)) {_context.next = 12;break;}
               _this.index = i;
-              flag = false;return _context.abrupt("return");case 12:
+              _this.setIndex(i);
+              flag = false;return _context.abrupt("return");case 12:i++;_context.next = 6;break;case 15:if (!
 
-
-              _this.index = 0;case 13:i++;_context.next = 5;break;case 16:if (!
 
 
               flag) {_context.next = 25;break;}
-              _this.fid = fid;_context.next = 20;return (
+              _this.fid = fid;_context.next = 19;return (
                 _this.$http.post('chat', {
                   fromId: _this.userInfo.id,
-                  toId: parseInt(fid) }));case 20:chat = _context.sent;
+                  toId: parseInt(fid) }));case 19:chat = _context.sent;
 
               _this.cId = chat.id;
-              chat.messages = [];
+              chat.time = _time.default.gettime.gettime(chat.afterTime);
               console.log(chat);
+              _this.setIndex(0);
               _this.addChatList(chat);case 25:_context.next = 29;break;case 27:
 
 
 
+
               _this.fid = _this.chatList[data.index].fid;
-              _this.cId = _this.chatList[data.index].id;case 29:
+              _this.cId = _this.chatList[data.index].id;case 29:case "end":return _context.stop();}}}, _callee);}))();
 
-              if (_this.$is_open_socket) {
-                _this.$socket.onMessage(function (res) {
-                  var data = {};
-                  try {
-                    data = JSON.parse(res.data);
-                  } catch (e) {
-
-                  }
-                  var pic = _this.chatList[_this.index].userpic;
-                  var obj = {
-
-                    isme: data.fromId == _this.userInfo.id,
-                    userpic: pic,
-                    type: "text",
-                    message: data.message,
-                    time: new Date(data.sendTime).getTime() + '' };
-
-                  // gstime:time.gettime.getChatTime(now,this.list[this.list.length-1].time)
-                  _this.list.push(obj);
-                  _this.pageToBottom(true);
-                  var msgs = [data.id];
-                  _this.$http.put('chat/read', {
-                    mids: msgs },
-                  {
-                    "content-type": "application/x-www-form-urlencoded" });
-
-                });
-              }case 30:case "end":return _context.stop();}}}, _callee);}))();
 
   },
 
   onReady: function onReady() {
     this.getdata();
     this.initdata();
+    console.log(2);
     this.pageToBottom(true);
   },
+  watch: {
+    currentChatMsgs: function currentChatMsgs() {
+      this.pageToBottom(true);
+    } },
 
   methods: _objectSpread({},
-  (0, _vuex.mapMutations)(['setChatMessage', 'addChatList']), {
+  (0, _vuex.mapMutations)(['setChatMessage',
+  'setIsPaper',
+  'addChatList',
+  'setIndex',
+  'addChatMessage', 'addNoreadMessage']), {
     // 初始化参数
     initdata: function initdata() {
       try {
@@ -259,7 +256,7 @@ var _requestConfig = _interopRequireDefault(__webpack_require__(/*! ../../config
     pageToBottom: function pageToBottom() {var _this2 = this;var isfirst = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
       var q = uni.createSelectorQuery().in(this);
       var itemH = q.selectAll('.chat-item');
-      if (this.list.length != 0) {
+      if (this.currentChatMsgs.length != 0) {
         this.$nextTick(function () {
           itemH.fields({
             size: true },
@@ -280,43 +277,28 @@ var _requestConfig = _interopRequireDefault(__webpack_require__(/*! ../../config
     },
 
     goToUserInfo: function goToUserInfo(item) {
-      console.log(item);
       uni.navigateTo({
         url: '../../pages/user-space/user-space?uid=' + item.uid });
 
     },
     // 获取聊天数据
-    getdata: function getdata() {var _this3 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {var pic, data, arr, i;return _regenerator.default.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:
-                // 从服务器获取到的数据
-                pic = _this3.chatList[_this3.index].userpic;
-                data = _this3.chatList[_this3.index].messages;
-                arr = data.map(function (item) {
-                  return {
-                    isme: item.fromId == _this3.userInfo.id,
-                    uid: item.fromId == _this3.userInfo.id ? item.fromId : item.toId,
-                    userpic: pic,
-                    type: "text",
-                    message: item.message,
-                    time: new Date(data.sendTime).getTime() + '' };
+    getdata: function getdata() {var _this3 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {return _regenerator.default.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:if (!(
 
-                });
+                _this3.chatList.length == 0)) {_context2.next = 2;break;}return _context2.abrupt("return");case 2:case "end":return _context2.stop();}}}, _callee2);}))();
 
-                for (i = 0; i < arr.length; i++) {
-                  arr[i].gstime = _time.default.gettime.getChatTime(arr[i].time, i > 0 ? arr[i - 1].time : 0);
-                }
-                _this3.list = arr || [];case 5:case "end":return _context2.stop();}}}, _callee2);}))();
+
     },
     submit: function submit(data) {var _this4 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {var now, msg, obj;return _regenerator.default.wrap(function _callee3$(_context3) {while (1) {switch (_context3.prev = _context3.next) {case 0:
                 // 构建数据
-                console.log(data);
                 now = new Date().getTime();if (!(
-                data == '')) {_context3.next = 5;break;}
+                data == '')) {_context3.next = 4;break;}
                 uni.showToast({
                   title: "消息不能为空",
-                  icon: 'none' });return _context3.abrupt("return");case 5:
+                  icon: 'none' });return _context3.abrupt("return");case 4:
 
 
 
+                console.log(data);
                 _this4.$http.setLoading(false);_context3.next = 8;return (
                   _this4.$http.post("push/message", {
                     cId: _this4.cId,
@@ -326,15 +308,18 @@ var _requestConfig = _interopRequireDefault(__webpack_require__(/*! ../../config
 
                 _this4.$http.setLoading(true);
                 obj = {
+                  fromId: msg.fromId,
+                  toId: msg.toId,
                   index: _this4.index,
                   isme: msg.fromId == _this4.userInfo.id,
                   userpic: _this4.userInfo.authorUrl,
                   type: "text",
                   message: msg.message,
-                  time: new Date(msg.sendTime).getTime() + '' };
+                  time: _time.default.gettime.gettime(msg.sendTime),
+                  sendTime: msg.sendTime };
 
-                _this4.list.push(obj);
-                _this4.pageToBottom();case 13:case "end":return _context3.stop();}}}, _callee3);}))();
+                _this4.addChatMessage(obj);
+                _this4.pageToBottom(true);case 13:case "end":return _context3.stop();}}}, _callee3);}))();
     } }) };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

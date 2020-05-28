@@ -1,6 +1,5 @@
 <template>
 	<view class="other-login u-f-ac">
-		
 		<block v-for="(item,index) in providerList" :key="index">
 			<view class="u-f-ajc u-f1" @tap="tologin(item)">
 				<view class="icon iconfont u-f-ajc" 
@@ -12,21 +11,28 @@
 </template>
 
 <script>
+	import {mapMutations} from 'vuex'
 	export default {
 		data() {
 			return {
 				providerList: []
 			}
 		},
-		onReady() {
+		created() {
+			console.log(11)
 			this.getLoginAuth();
 		},
+		onReady() {
+			
+		},
 		methods:{
+			...mapMutations(['setUserInfo']),
 			// 获取当前登录渠道
 			getLoginAuth(){
 				uni.getProvider({
 					service: 'oauth',
 					success: (result) => {
+						console.log(result)
 						this.providerList = result.provider.map((value) => {
 							let providerName = '';
 							let icon='';
@@ -42,6 +48,7 @@
 								case 'sinaweibo':
 									providerName = '新浪微博登录';
 									icon='xinlangweibo';
+									
 									break;
 							}
 								return {
@@ -70,13 +77,54 @@
 				uni.login({
 					provider: provider.id,
 					success: (res) => {
-						console.log(JSON.stringify(res))
-						console.log('login success:', res);
-						
 						uni.getUserInfo({
 						  provider:provider.id,
-						  success: (infoRes)=> {
-							console.log(JSON.stringify(infoRes.userInfo))
+						  success: async (infoRes)=> {
+							  let obj = {
+							  								  
+							  }
+							  if(provider.id=="qq"){
+								  obj={
+									 userName:infoRes.userInfo.nickName,
+									 openId:infoRes.userInfo.openId,
+									 gender:  infoRes.userInfo.gender=="男"?0:1,
+									 authorUrl: infoRes.userInfo.figureurl_qq_2, 
+								  }
+							  }
+							  if(provider.id=="weixin"){
+								  obj={
+									 userName:infoRes.userInfo.nickName,
+									 openId:infoRes.userInfo.openId,
+									 gender: infoRes.userInfo.gender,
+									 authorUrl: infoRes.userInfo.avatarUrl, 
+								  }
+							  }
+							  if(provider.id=="sinaweibo"){
+								  obj={
+									 userName:infoRes.userInfo.nickName,
+									 openId:infoRes.userInfo.id,
+									 gender: infoRes.userInfo.gender=="m"?0:1,
+									 authorUrl: infoRes.userInfo.cover_image_phone, 
+								  }
+							  }
+							  
+							  
+							  let data = await this.$http.post('user/auth/login',obj)
+							  if(data.status>=400){
+							  	uni.showToast({
+							  		title: data.massage,
+							  		icon:"none"
+							  	});
+							  }
+							  try{
+								  console.log(data)
+								this.setUserInfo(data.data.userInfo);
+							  	uni.setStorageSync('userInfo',JSON.stringify(data.data.userInfo));
+							  	uni.setStorageSync('token',data.data.token);
+							  }catch(e){
+							  	
+							  }
+							  console.log( infoRes.userInfo);
 						  }
 						});
 						
@@ -84,6 +132,10 @@
 						console.log('登录成功，保存到本地存储，修改当前用户登录状态')
 					},
 					fail: (err) => {
+						uni.showToast({
+							title:"三方登录失败!",
+							icon:'none'
+						})
 						console.log('login fail:', err);
 					}
 				});

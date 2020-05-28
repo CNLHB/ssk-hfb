@@ -73,41 +73,8 @@
 								commentnum:30,
 								goodnum:20
 							},
-							// 图文
-							{
-								userpic:"../../static/demo/userpic/12.jpg",
-								username:"哈哈",
-								sex:0, //0 男 1 女
-								age:25,
-								isguanzhu:false,
-								title:"我是标题",
-								titlepic:"../../static/demo/datapic/13.jpg",
-								video:false,
-								share:false,
-								path:"深圳 龙岗",
-								sharenum:20,
-								commentnum:30,
-								goodnum:20
-							},
-							// 视频
-							{
-								userpic:"../../static/demo/userpic/12.jpg",
-								username:"哈哈",
-								sex:0, //0 男 1 女
-								age:25,
-								isguanzhu:false,
-								title:"我是标题",
-								titlepic:"../../static/demo/datapic/13.jpg",
-								video:{
-									looknum:"20w",
-									long:"2:47"
-								},
-								share:false,
-								path:"深圳 龙岗",
-								sharenum:20,
-								commentnum:30,
-								goodnum:20
-							},
+
+
 						]
 					},
 					{
@@ -129,41 +96,7 @@
 								commentnum:30,
 								goodnum:20
 							},
-							// 图文
-							{
-								userpic:"../../static/demo/userpic/12.jpg",
-								username:"哈哈",
-								sex:0, //0 男 1 女
-								age:25,
-								isguanzhu:false,
-								title:"我是标题",
-								titlepic:"../../static/demo/datapic/13.jpg",
-								video:false,
-								share:false,
-								path:"深圳 龙岗",
-								sharenum:20,
-								commentnum:30,
-								goodnum:20
-							},
-							// 视频
-							{
-								userpic:"../../static/demo/userpic/12.jpg",
-								username:"哈哈",
-								sex:0, //0 男 1 女
-								age:25,
-								isguanzhu:false,
-								title:"我是标题",
-								titlepic:"../../static/demo/datapic/13.jpg",
-								video:{
-									looknum:"20w",
-									long:"2:47"
-								},
-								share:false,
-								path:"深圳 龙岗",
-								sharenum:20,
-								commentnum:30,
-								goodnum:20
-							},
+
 						]
 					},
 				]
@@ -184,57 +117,7 @@
 				setTimeout(()=> {
 					// 获取数据
 					let arr=[
-						// 文字
-						{
-							userpic:"../../static/demo/userpic/12.jpg",
-							username:"哈哈111111",
-							sex:0, //0 男 1 女
-							age:25,
-							isguanzhu:false,
-							title:"我是标题11111",
-							titlepic:"",
-							video:false,
-							share:false,
-							path:"深圳 龙岗",
-							sharenum:20,
-							commentnum:30,
-							goodnum:20
-						},
-						// 图文
-						{
-							userpic:"../../static/demo/userpic/12.jpg",
-							username:"哈哈",
-							sex:0, //0 男 1 女
-							age:25,
-							isguanzhu:false,
-							title:"我是标题",
-							titlepic:"../../static/demo/datapic/13.jpg",
-							video:false,
-							share:false,
-							path:"深圳 龙岗",
-							sharenum:20,
-							commentnum:30,
-							goodnum:20
-						},
-						// 视频
-						{
-							userpic:"../../static/demo/userpic/12.jpg",
-							username:"哈哈",
-							sex:0, //0 男 1 女
-							age:25,
-							isguanzhu:false,
-							title:"我是标题",
-							titlepic:"../../static/demo/datapic/13.jpg",
-							video:{
-								looknum:"20w",
-								long:"2:47"
-							},
-							share:false,
-							path:"深圳 龙岗",
-							sharenum:20,
-							commentnum:30,
-							goodnum:20
-						},
+			
 					];
 					// 赋值
 					this.tablist[this.tabIndex].list=arr;

@@ -128,7 +128,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var topicInfo = function topicInfo() {__webpack_require__.e(/*! require.ensure | components/topic/topic-info */ "components/topic/topic-info").then((function () {return resolve(__webpack_require__(/*! ../../components/topic/topic-info.vue */ 318));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var swiperTabHead = function swiperTabHead() {__webpack_require__.e(/*! require.ensure | components/index/swiper-tab-head */ "components/index/swiper-tab-head").then((function () {return resolve(__webpack_require__(/*! ../../components/index/swiper-tab-head.vue */ 206));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var commonList = function commonList() {__webpack_require__.e(/*! require.ensure | components/common/common-list */ "components/common/common-list").then((function () {return resolve(__webpack_require__(/*! ../../components/common/common-list.vue */ 234));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var loadMore = function loadMore() {__webpack_require__.e(/*! require.ensure | components/common/load-more */ "components/common/load-more").then((function () {return resolve(__webpack_require__(/*! ../../components/common/load-more.vue */ 213));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var topicInfo = function topicInfo() {__webpack_require__.e(/*! require.ensure | components/topic/topic-info */ "components/topic/topic-info").then((function () {return resolve(__webpack_require__(/*! ../../components/topic/topic-info.vue */ 333));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var swiperTabHead = function swiperTabHead() {__webpack_require__.e(/*! require.ensure | components/index/swiper-tab-head */ "components/index/swiper-tab-head").then((function () {return resolve(__webpack_require__(/*! ../../components/index/swiper-tab-head.vue */ 206));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var commonList = function commonList() {__webpack_require__.e(/*! require.ensure | components/common/common-list */ "components/common/common-list").then((function () {return resolve(__webpack_require__(/*! ../../components/common/common-list.vue */ 234));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var loadMore = function loadMore() {__webpack_require__.e(/*! require.ensure | components/common/load-more */ "components/common/load-more").then((function () {return resolve(__webpack_require__(/*! ../../components/common/load-more.vue */ 213));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
 
 
 
@@ -201,42 +201,9 @@ __webpack_require__.r(__webpack_exports__);
           path: "深圳 龙岗",
           sharenum: 20,
           commentnum: 30,
-          goodnum: 20 },
-
-        // 图文
-        {
-          userpic: "../../static/demo/userpic/12.jpg",
-          username: "哈哈",
-          sex: 0, //0 男 1 女
-          age: 25,
-          isguanzhu: false,
-          title: "我是标题",
-          titlepic: "../../static/demo/datapic/13.jpg",
-          video: false,
-          share: false,
-          path: "深圳 龙岗",
-          sharenum: 20,
-          commentnum: 30,
-          goodnum: 20 },
-
-        // 视频
-        {
-          userpic: "../../static/demo/userpic/12.jpg",
-          username: "哈哈",
-          sex: 0, //0 男 1 女
-          age: 25,
-          isguanzhu: false,
-          title: "我是标题",
-          titlepic: "../../static/demo/datapic/13.jpg",
-          video: {
-            looknum: "20w",
-            long: "2:47" },
-
-          share: false,
-          path: "深圳 龙岗",
-          sharenum: 20,
-          commentnum: 30,
           goodnum: 20 }] },
+
+
 
 
 
@@ -257,42 +224,8 @@ __webpack_require__.r(__webpack_exports__);
           path: "深圳 龙岗",
           sharenum: 20,
           commentnum: 30,
-          goodnum: 20 },
-
-        // 图文
-        {
-          userpic: "../../static/demo/userpic/12.jpg",
-          username: "哈哈",
-          sex: 0, //0 男 1 女
-          age: 25,
-          isguanzhu: false,
-          title: "我是标题",
-          titlepic: "../../static/demo/datapic/13.jpg",
-          video: false,
-          share: false,
-          path: "深圳 龙岗",
-          sharenum: 20,
-          commentnum: 30,
-          goodnum: 20 },
-
-        // 视频
-        {
-          userpic: "../../static/demo/userpic/12.jpg",
-          username: "哈哈",
-          sex: 0, //0 男 1 女
-          age: 25,
-          isguanzhu: false,
-          title: "我是标题",
-          titlepic: "../../static/demo/datapic/13.jpg",
-          video: {
-            looknum: "20w",
-            long: "2:47" },
-
-          share: false,
-          path: "深圳 龙岗",
-          sharenum: 20,
-          commentnum: 30,
           goodnum: 20 }] }] };
+
 
 
 
@@ -313,57 +246,7 @@ __webpack_require__.r(__webpack_exports__);
     getdata: function getdata() {var _this = this;
       setTimeout(function () {
         // 获取数据
-        var arr = [
-        // 文字
-        {
-          userpic: "../../static/demo/userpic/12.jpg",
-          username: "哈哈111111",
-          sex: 0, //0 男 1 女
-          age: 25,
-          isguanzhu: false,
-          title: "我是标题11111",
-          titlepic: "",
-          video: false,
-          share: false,
-          path: "深圳 龙岗",
-          sharenum: 20,
-          commentnum: 30,
-          goodnum: 20 },
-
-        // 图文
-        {
-          userpic: "../../static/demo/userpic/12.jpg",
-          username: "哈哈",
-          sex: 0, //0 男 1 女
-          age: 25,
-          isguanzhu: false,
-          title: "我是标题",
-          titlepic: "../../static/demo/datapic/13.jpg",
-          video: false,
-          share: false,
-          path: "深圳 龙岗",
-          sharenum: 20,
-          commentnum: 30,
-          goodnum: 20 },
-
-        // 视频
-        {
-          userpic: "../../static/demo/userpic/12.jpg",
-          username: "哈哈",
-          sex: 0, //0 男 1 女
-          age: 25,
-          isguanzhu: false,
-          title: "我是标题",
-          titlepic: "../../static/demo/datapic/13.jpg",
-          video: {
-            looknum: "20w",
-            long: "2:47" },
-
-          share: false,
-          path: "深圳 龙岗",
-          sharenum: 20,
-          commentnum: 30,
-          goodnum: 20 }];
+        var arr = [];
 
 
         // 赋值

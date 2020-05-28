@@ -75,7 +75,7 @@
 			this.initData(data.uid)
 			if(data.uid!=this.userInfo.id){
 				this.$http.post('user/access',{
-					fromId:this.userInfo.id,
+					fromId:this.userInfo.id?this.userInfo.id:(+new Date+"").slice(5),
 					toId: data.uid
 				})
 			}
@@ -98,7 +98,7 @@
 				},
 				topicList:[],
 				spacedata:[
-					{ name:"获赞", num:"" },
+					{ name:"获赞", num:0 },
 					{ name:"关注", num:0 },
 					{ name:"粉丝", num:0 },
 				],
@@ -134,7 +134,7 @@
 		methods: {
 			async initData(id){
 				let {code,data} = await this.$http.get('user/willinfo/'+id);
-				let topicList = await this.$http.get('topic/'+id);
+				let topicList = await this.$http.get('topic/list/'+id);
 				console.log(topicList)
 				this.topicList = topicList
 				if(topicList&&topicList.length){

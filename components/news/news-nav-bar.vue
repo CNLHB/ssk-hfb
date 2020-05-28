@@ -2,11 +2,7 @@
 	<view>
 		<uni-nav-bar :fixed="true" :statusBar="true" :border="false" @click-right="openAdd">
 			<!-- 左边 -->
-			<block slot="left">
-				<view class="nav-left">
-					<view class="icon iconfont icon-qiandao"></view>
-				</view>
-			</block>
+
 			<!-- 中间 -->
 			<view class="nav-tab-bar u-f-ajc">
 				<block v-for="(tab,index) in tabBars" :key="tab.id">

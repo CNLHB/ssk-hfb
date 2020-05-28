@@ -186,7 +186,7 @@ var _default =
       topicActive: {
         uid: this.userInfo.id,
         tid: this.item.id,
-        tUid: this.item.uid } };
+        tuid: this.item.uid } };
 
 
 
@@ -196,7 +196,7 @@ var _default =
     this.infoNum = this.item.infoNum;
     this.topicActive.uid = this.userInfo.id;
     this.topicActive.tid = this.item.id;
-    this.topicActive.tUid = this.item.uid;
+    this.topicActive.tuid = this.item.uid;
 
 
 
@@ -243,35 +243,40 @@ var _default =
 
 
 
-                "cai" ? 18 : 23;break;case 6:if (!(_this.infoNum.index == 1)) {_context.next = 12;break;}_context.next = 9;return _this.$emit("likeOrTread", _objectSpread({}, _this.topicActive, { tactive: 0 }));case 9:_this.infoNum.likeNum--;_this.infoNum.index = 0;return _context.abrupt("return");case 12:_context.next = 14;return _this.$emit("likeOrTread", _objectSpread({}, _this.topicActive, { tactive: 1 }));case 14:_this.infoNum.likeNum++;if (_this.infoNum.index == 2) {_this.infoNum.treadNum--;}_this.infoNum.index = 1;return _context.abrupt("break", 23);case 18:if (!(
+                "cai" ? 18 : 30;break;case 6:if (!(_this.infoNum.index == 1)) {_context.next = 12;break;}_context.next = 9;return _this.$emit("likeOrTread", _objectSpread({}, _this.topicActive, { tactive: 0 }));case 9:_this.infoNum.likeNum--;_this.infoNum.index = 0;return _context.abrupt("return");case 12:_context.next = 14;return _this.$emit("likeOrTread", _objectSpread({}, _this.topicActive, { tactive: 1 }));case 14:_this.infoNum.likeNum++;if (_this.infoNum.index == 2) {_this.infoNum.treadNum--;}_this.infoNum.index = 1;return _context.abrupt("break", 30);case 18:if (!(
 
-                _this.infoNum.index == 2)) {_context.next = 21;break;}
+                _this.infoNum.index == 2)) {_context.next = 24;break;}_context.next = 21;return (
+                  _this.$emit("likeOrTread", _objectSpread({},
+                  _this.topicActive, {
+                    tactive: 0 })));case 21:
 
-                _this.$http.post('/topic/active', {
-                  tid: _this.item.id,
-                  uid: 2,
-                  tactive: 0 }).
-                then(function (data) {
-                  _this.infoNum.treadNum--;
-                  _this.infoNum.index = 0;
-                });return _context.abrupt("return");case 21:
+                // this.$http.post('/topic/active',{
+                // 	tid:this.item.id,
+                // 	uid:2,
+                // 	tactive: 0
+                // }).then((data)=>{
+                _this.infoNum.treadNum--;
+                _this.infoNum.index = 0;
+                // })
+                return _context.abrupt("return");case 24:_context.next = 26;return (
 
 
+                  _this.$emit("likeOrTread", _objectSpread({},
+                  _this.topicActive, {
+                    tactive: 2 })));case 26:
 
-
-
-                _this.$http.post('/topic/active', {
-                  tid: _this.item.id,
-                  uid: 2,
-                  tactive: 2 }).
-                then(function (data) {
-                  _this.infoNum.treadNum++;
-                  if (_this.infoNum.index == 1) {
-                    _this.infoNum.likeNum--;
-                  }
-                  _this.infoNum.index = 2;
-                });return _context.abrupt("break", 23);case 23:case "end":return _context.stop();}}}, _callee);}))();
-
+                // this.$http.post('/topic/active',{
+                // 	tid:this.item.id,
+                // 	uid:2,
+                // 	tactive: 2
+                // }).then((data)=>{
+                _this.infoNum.treadNum++;
+                if (_this.infoNum.index == 1) {
+                  _this.infoNum.likeNum--;
+                }
+                _this.infoNum.index = 2;
+                // })
+                return _context.abrupt("break", 30);case 30:case "end":return _context.stop();}}}, _callee);}))();
 
     },
     // 进入详情页
