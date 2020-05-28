@@ -19,7 +19,9 @@
     "pages/user-set-about/user-set-about",
     "pages/login/login",
     "pages/user-space/user-space",
-    "pages/register/register"
+    "pages/register/register",
+    "pages/user-history/user-history",
+    "pages/user-search/user-search"
   ],
   "subPackages": [],
   "window": {

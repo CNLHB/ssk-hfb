@@ -34,6 +34,9 @@
 	width: 120rpx;
 	padding: 0 12rpx
 }
+.uni-navbar-btn--left-text{
+	padding-left: 12rpx
+}
 .uni-navbar__header-btns:first-child {
 	padding-left: 0
 }
@@ -57,7 +60,8 @@
 	z-index: 998
 }
 .uni-navbar--shadow {
-	box-shadow: 0 1px 6px #ccc
+	-webkit-box-shadow: 0 1px 6px #ccc;
+	        box-shadow: 0 1px 6px #ccc
 }
 .uni-navbar--border:after {
 	position: absolute;

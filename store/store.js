@@ -25,7 +25,19 @@ const store = new Vuex.Store({
 		updateMsg(state, index){
 			state.chatList[index].noreadnum = 0
 		},
-		setChatMessage(state, obj){
+		addChatMessage(state, obj){
+			state.chatList[obj.index].message = obj.message
+			state.chatList[obj.index].time = obj.time
+			state.chatList[obj.index].afterTime = +new Date(obj.sendTime)
+			state.chatList[obj.index].messages.push(obj)
+		},
+		sortChatList(state){
+			state.chatList.sort((a,b)=>{
+				return b.afterTime - a.afterTime
+			})
+		},
+		addNoreadMessage(state, index){
+			state.chatList[index].noreadnum = state.chatList[index].noreadnum + 1
 		}
 	}
 

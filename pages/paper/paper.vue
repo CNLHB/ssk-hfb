@@ -35,6 +35,7 @@
 		computed: {
 			...mapState(['chatList', 'userInfo'])
 		},
+		
 		data() {
 			return {
 				show: false,
@@ -48,8 +49,9 @@
 			if (this.userInfo.id && this.$is_open_socket == false) {
 				this.connectSocketInit();
 				this.getChatList()
+			}else{
+				this.sortChatList()
 			}
-			
 
 		},
 		// 监听下拉刷新
@@ -97,7 +99,7 @@
 			this.closeSocket();
 		},
 		methods: {
-			...mapMutations(['setChatList', 'updateMsg']),
+			...mapMutations(['setChatList', 'updateMsg','sortChatList']),
 			async getChatList() {
 				this.$http.setLoading(false);
 				let data = await this.$http.get('chat/list');
@@ -118,7 +120,6 @@
 							time.gettime.gettime(new Date())
 						let message = item.messages[len] ? item.messages[len].message :
 							''
-						
 						return {
 							id: item.id,
 							fid: fid,
@@ -135,7 +136,6 @@
 						return  b.afterTime -a.afterTime
 					})
 					this.setChatList(chatList);
-					console.log(chatList)
 					uni.setStorageSync('chatList', JSON.stringify(chatList))
 				}
 
@@ -149,11 +149,40 @@
 					Vue.prototype.$socket.onOpen((res) => {
 						console.log("WebSocket连接正常打开中...！");
 						Vue.prototype.$is_open_socket = true;
-						// 注：只有连接正常打开中 ，才能正常收到消息
-						Vue.prototype.$socket.onMessage((res) => {
-							console.log("收到服务器内容：" + res.data);
-							console.log("执行数据加载")
-						});
+						if(Vue.prototype.$is_open_socket){
+							Vue.prototype.$socket.onMessage((res) => {
+								let data = {}
+								try{
+									data = JSON.parse(res.data);
+								}catch(e){
+									
+								}
+								let index = 0;
+								for(let i =0;i<this.chatList.length;i++){
+									if(this.chatList[i].id == data.cId){
+										index = i
+										return
+									}else{
+										this.index = 0
+									}
+								}
+								// let pic = this.chatList[this.index].userpic
+								// let obj={
+								// 		fromId:data.fromId,
+								// 		toId:data.toId,
+								// 		isme:data.fromId==this.userInfo.id,
+								// 		userpic:pic,
+								// 		type:"text",
+								// 		message:data.message,
+								// 		time:  time.gettime.gettime(data.sendTime)
+								// 	}
+								console.log(data)
+								// gstime:time.gettime.getChatTime(now,this.list[this.list.length-1].time)
+
+								// this.addChatMessage(obj)
+								// this.addNoreadMessage(this.index)
+							});
+						}
 					})
 					// 这里仅是事件监听【如果socket关闭了会执行】
 					Vue.prototype.$socket.onClose(() => {
@@ -201,11 +230,20 @@
 					return
 				}
 
-				let msgs = this.chatList[index].messages.map((item => {
+				let msgs = this.chatList[index].messages.filter((item => {
+					if(item.id&&item.status==false){
+						return true
+					}else{
+						return false
+					}
+				}));
+				
+				let mids = this.chatList[index].messages.map((item => {
 					return item.id
 				}));
+				console.log(mids)
 				this.$http.put('chat/read', {
-					mids: msgs
+					mids: mids
 				}, {
 					"content-type": "application/x-www-form-urlencoded"
 				})

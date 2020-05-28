@@ -8,6 +8,9 @@
 .list-pd {
 	margin-top: 50rpx;
 }
+.uni-uploader__input-box{
+	margin: 10rpx 0 10rpx 10rpx;
+}
 .icon-shanchu{
 	position: absolute;
 	right: 0;

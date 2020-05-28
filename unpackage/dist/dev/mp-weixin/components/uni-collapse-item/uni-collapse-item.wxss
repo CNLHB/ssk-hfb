@@ -31,7 +31,8 @@
 .uni-collapse-cell__title {
 	padding: 24rpx 30rpx;
 	width: 100%;
-	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
 	-webkit-box-flex: 1;
 	-webkit-flex: 1;
 	        flex: 1;

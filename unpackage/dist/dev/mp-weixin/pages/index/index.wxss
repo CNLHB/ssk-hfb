@@ -1,5 +1,5 @@
 
-.search-wrp.data-v-01332640{
+.search-wrp.data-v-01332640 {
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: flex;
@@ -14,19 +14,19 @@
 	        align-items: center;
 	padding: 8rpx 16rpx 0 16rpx;
 }
-.index-icontainer.data-v-01332640{
+.index-icontainer.data-v-01332640 {
 	background-color: #F9F9F9;
 }
-.font-x.data-v-01332640{
+.font-x.data-v-01332640 {
 	font-size: 22px;
 }
-.uni-input.data-v-01332640{
+.uni-input.data-v-01332640 {
 	background: #F9F9F9;
 	text-align: center;
 	margin-right: 10px;
 	margin-left: 10px;
 }
-.serach.data-v-01332640{
+.serach.data-v-01332640 {
 	position: absolute;
 	top: 10rpx;
 	left: 280rpx;

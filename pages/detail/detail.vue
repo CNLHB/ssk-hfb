@@ -1,6 +1,7 @@
 <template>
 	<view class="detail">
 		<detail-info 
+			@goToUserInfo="goToUserInfo"
 			:userInfo="userInfo"
 			:detail="detail"
 			:item="detail"></detail-info>
@@ -125,6 +126,11 @@
 					content: data
 				}).then(()=>{
 					this.getcomment()
+				})
+			},
+			goToUserInfo(item){
+				uni.navigateTo({
+					url:'../../pages/user-space/user-space?uid='+item.uid
 				})
 			},
 			// 获取评论

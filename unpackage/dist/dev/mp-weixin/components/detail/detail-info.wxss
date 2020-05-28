@@ -27,7 +27,6 @@
 	font-size: 32rpx;
 }
 .common-list-r>view:nth-child(1)>view.data-v-d034188a:last-child{
-	background: #EEEEEE;
 	padding: 0 10rpx;
 	font-size: 26rpx;
 }
@@ -78,6 +77,10 @@
 	display:-webkit-flex;
 	display:flex;
 }
+.common-list-l .com-img.data-v-d034188a{
+	    width: 68rpx;
+	    height: 68rpx;
+}
 .dre.data-v-d034188a{
 	display: -webkit-box;
 	display: -webkit-flex;
@@ -105,7 +108,7 @@
 	font-size: 32rpx;
 }
 .common-list-r>view:nth-child(1)>view:nth-child(1)>view.data-v-d034188a:last-child{
-	background: #EEEEEE;
+	background-color: #FFFFFF;
 	padding: 0 10rpx;
 	font-size: 26rpx;
 }
@@ -129,11 +132,13 @@
 	height: 230rpx;
 	margin-bottom: 10rpx;
 	border-radius: 20rpx;
+	margin-right: 7rpx;
 }
 .img-1.data-v-d034188a{
 	width: 100%;
 }
 .img-1>image.data-v-d034188a{
+	width: 100%;
 	margin-bottom: 10rpx;
 	border-radius: 20rpx;
 }

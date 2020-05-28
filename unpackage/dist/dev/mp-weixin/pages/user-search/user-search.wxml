@@ -1,0 +1,1 @@
+<view><block wx:for="{{list}}" wx:for-item="item" wx:for-index="index1" wx:key="index1"><block><user-list vue-id="{{'6b07fc2a-1-'+index1}}" item="{{item}}" index="{{index1}}" data-event-opts="{{[['^attActive',[['attActive']]]]}}" bind:attActive="__e" bind:__l="__l"></user-list></block></block></view>

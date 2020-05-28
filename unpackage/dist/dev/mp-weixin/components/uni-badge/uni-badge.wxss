@@ -2,7 +2,8 @@
 @charset "UTF-8";
 .uni-badge {
 	font-family: 'Helvetica Neue', Helvetica, sans-serif;
-	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
 	font-size: 12px;
 	line-height: 1;
 	display: inline-block;

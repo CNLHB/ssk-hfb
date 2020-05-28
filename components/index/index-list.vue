@@ -70,7 +70,7 @@
 				topicActive:{
 					uid:this.userInfo.id,
 					tid:this.item.id,
-					tUid: this.item.uid
+					tuid: this.item.uid
 					
 				}
 			}
@@ -80,7 +80,7 @@
 			this.infoNum=this.item.infoNum
 			this.topicActive.uid = this.userInfo.id
 			this.topicActive.tid = this.item.id
-			this.topicActive.tUid = this.item.uid
+			this.topicActive.tuid = this.item.uid
 
 			
 			
@@ -130,31 +130,36 @@
 					case "cai":
 					
 					if(this.infoNum.index==2){
-
-						this.$http.post('/topic/active',{
-							tid:this.item.id,
-							uid:2,
-							tactive: 0
-						}).then((data)=>{
+						await this.$emit("likeOrTread",{
+								...this.topicActive,
+								tactive: 0
+							})
+						// this.$http.post('/topic/active',{
+						// 	tid:this.item.id,
+						// 	uid:2,
+						// 	tactive: 0
+						// }).then((data)=>{
 						this.infoNum.treadNum--;
 						this.infoNum.index=0;
-						})
+						// })
 						
 						return  
 					}
-
-					
-					this.$http.post('/topic/active',{
-						tid:this.item.id,
-						uid:2,
-						tactive: 2
-					}).then((data)=>{
+					await this.$emit("likeOrTread",{
+							...this.topicActive,
+							tactive: 2
+						})
+					// this.$http.post('/topic/active',{
+					// 	tid:this.item.id,
+					// 	uid:2,
+					// 	tactive: 2
+					// }).then((data)=>{
 						this.infoNum.treadNum++;
 						if(this.infoNum.index==1){
 							this.infoNum.likeNum--;
 						}
 						this.infoNum.index=2;
-					})
+					// })
 						break;
 				}
 			},

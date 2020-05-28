@@ -14,7 +14,8 @@
 	background: #FFFFFF;
 	z-index: 2000;
 	width: 55%;
-	box-shadow: 1rpx 1rpx 20rpx 2rpx #CCCCCC;
+	-webkit-box-shadow: 1rpx 1rpx 20rpx 2rpx #CCCCCC;
+	        box-shadow: 1rpx 1rpx 20rpx 2rpx #CCCCCC;
 }
 .papar-left-popup>view{
 	padding: 20rpx;

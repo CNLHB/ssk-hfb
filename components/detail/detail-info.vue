@@ -3,7 +3,7 @@
 		<view class="common-list-r">
 			<view>
 				<view class="u-f-ac u-f-jsb">
-					<view class="common-list-l">
+					<view class="common-list-l" @tap="goToUserInfo(item)">
 						<image :src="item.userpic" class="com-img" lazy-load></image>
 						<view class="u-f-ac dre">
 							{{item.username}} 
@@ -91,6 +91,12 @@
 			}
 		},
 		methods:{
+			goToUserInfo(item){
+				this.$emit("goToUserInfo",item)
+				// uni.navigateTo({
+				// 	url:'../../pages/user-space/user-space?uid='+this.item.id
+				// })
+			},
 			guanzhu(){
 					console.log(this.userInfo.id,this.detail.uid)
 				if(this.isguanzhu){

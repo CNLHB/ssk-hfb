@@ -1,54 +1,48 @@
 <template>
-	<view>
+	<view class="wrap-new">
 		<!-- 自定义导航栏 -->
-		<news-nav-bar 
-		:tabBars="tabBars" 
-		:tabIndex="tabIndex" 
-		@change-tab="changeTab">
+		<news-nav-bar :tabBars="tabBars" :tabIndex="tabIndex" @change-tab="changeTab">
 		</news-nav-bar>
-		
+
 		<view class="uni-tab-bar">
-		<swiper class="swiper-box" 
-		:style="{height:swiperheight+'px'}" 
-		:current="tabIndex"
-		@change="tabChange">
-			<!-- 关注 -->
-			<swiper-item> 
-				<scroll-view scroll-y class="list" @scrolltolower="loadmore()">
-					<block v-for="(item,index) in guanzhu.list" :key="index">
-						<common-list :item="item" :index="index"></common-list>
-					</block>
-					<!-- 上拉加载 -->
-					<load-more :loadtext="guanzhu.loadtext"></load-more>
-				</scroll-view>
-			</swiper-item>
-			<!-- 话题 -->
-			<swiper-item> 
-				<scroll-view scroll-y class="list">
-					<!-- 搜索框 -->
-					<view class="search-input">
-						<input class="uni-input" placeholder-class="icon iconfont icon-sousuo topic-search" placeholder="搜索内容"/>
-					</view>
-					<!-- 轮播图 -->
-					<swiper class="topic-swiper" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">
-						<block v-for="(item,index) in topic.swiper" :key="index">
-							<swiper-item>
-								<image :src="item.src" mode="widthFix" lazy-load></image>
-							</swiper-item>
+			<swiper class="swiper-box" :style="{height:swiperheight+'px'}" :current="tabIndex" @change="tabChange">
+				<!-- 关注 -->
+				<swiper-item>
+					<scroll-view scroll-y class="list" @scrolltolower="loadmore()">
+						<block v-for="(item,index) in guanzhu.list" :key="index">
+							<index-list @likeOrTread="likeOrTread" :item="item" :userInfo="userInfo" :index="index"></index-list>
 						</block>
-					</swiper>
-					<!-- 热门分类 -->
-					<topic-nav :nav="topic.nav"></topic-nav>
-					<!-- 最近更新 -->
-					<view class="topic-new">
-						<view>最近更新</view>
-						<block v-for="(item,index) in topic.list" :key="index">
-							<topic-list :item="item" :index="index"></topic-list>
-						</block>
-					</view>
-				</scroll-view>
-			</swiper-item>
-		</swiper>   
+						<!-- 上拉加载 -->
+						<load-more :loadtext="guanzhu.loadtext"></load-more>
+					</scroll-view>
+				</swiper-item>
+				<!-- 话题 -->
+				<swiper-item>
+					<scroll-view scroll-y class="list">
+						<!-- 搜索框 -->
+						<view class="search-input">
+							<input class="uni-input" placeholder-class="icon iconfont icon-sousuo topic-search" placeholder="搜索内容" />
+						</view>
+						<!-- 轮播图 -->
+						<swiper class="topic-swiper" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">
+							<block v-for="(item,index) in topic.swiper" :key="index">
+								<swiper-item>
+									<image :src="item.src" mode="widthFix" lazy-load></image>
+								</swiper-item>
+							</block>
+						</swiper>
+						<!-- 热门分类 -->
+						<topic-nav :nav="topic.nav"></topic-nav>
+						<!-- 最近更新 -->
+						<view class="topic-new">
+							<view>最近更新</view>
+							<block v-for="(item,index) in topic.list" :key="index">
+								<topic-list :item="item" :index="index"></topic-list>
+							</block>
+						</view>
+					</scroll-view>
+				</swiper-item>
+			</swiper>
 		</view>
 
 
@@ -58,156 +52,114 @@
 <script>
 	import newsNavBar from "../../components/news/news-nav-bar.vue";
 	import commonList from "../../components/common/common-list.vue";
+	import indexList from "../../components/index/index-list.vue";
 	import loadMore from "../../components/common/load-more.vue";
 	import topicNav from "../../components/news/topic-nav.vue";
 	import topicList from "../../components/news/topic-list.vue";
+	import {
+		mapState
+	} from 'vuex'
 	export default {
-		components:{
+		components: {
 			newsNavBar,
 			commonList,
 			loadMore,
 			topicNav,
-			topicList
+			topicList,
+			indexList
+		},
+		computed: {
+			...mapState(['userInfo'])
 		},
 		data() {
 			return {
-				swiperheight:500,
-				tabIndex:0,
-				tabBars:[
-					{name:"关注",id:"guanzhu"},
-					{name:"话题",id:"topic"}
+				swiperheight: 500,
+				tabIndex: 0,
+				tabBars: [{
+						name: "关注",
+						id: "guanzhu"
+					},
+					{
+						name: "话题",
+						id: "topic"
+					}
 				],
-				guanzhu:{
-					loadtext:"上拉加载更多",
-					list:[
-						// 文字
-						{
-							userpic:"../../static/demo/userpic/12.jpg",
-							username:"哈哈",
-							sex:0, //0 男 1 女
-							age:25,
-							isguanzhu:false,
-							title:"我是标题",
-							titlepic:"",
-							video:false,
-							share:false,
-							path:"深圳 龙岗",
-							sharenum:20,
-							commentnum:30,
-							goodnum:20
-						},
-						// 图文
-						{
-							userpic:"../../static/demo/userpic/12.jpg",
-							username:"哈哈",
-							sex:0, //0 男 1 女
-							age:25,
-							isguanzhu:false,
-							title:"我是标题",
-							titlepic:"../../static/demo/datapic/13.jpg",
-							video:false,
-							share:false,
-							path:"深圳 龙岗",
-							sharenum:20,
-							commentnum:30,
-							goodnum:20
-						},
-						// 视频
-						{
-							userpic:"../../static/demo/userpic/12.jpg",
-							username:"哈哈",
-							sex:0, //0 男 1 女
-							age:25,
-							isguanzhu:false,
-							title:"我是标题",
-							titlepic:"../../static/demo/datapic/13.jpg",
-							video:{
-								looknum:"20w",
-								long:"2:47"
-							},
-							share:false,
-							path:"深圳 龙岗",
-							sharenum:20,
-							commentnum:30,
-							goodnum:20
-						},
-						// 分享
-						{
-							userpic:"../../static/demo/userpic/12.jpg",
-							username:"哈哈",
-							sex:0, //0 男 1 女
-							age:25,
-							isguanzhu:false,
-							title:"我是标题",
-							titlepic:"",
-							video:false,
-							share:{
-								title:"我是分享的标题",
-								titlepic:"../../static/demo/datapic/14.jpg"
-							},
-							path:"深圳 龙岗",
-							sharenum:20,
-							commentnum:30,
-							goodnum:20
-						},
-					]
+				guanzhu: {
+					loadtext: "",
+					page: 1,
+					list: []
 				},
-				topic:{
-					swiper:[
-						{ src:"../../static/demo/banner2.jpg" },
-						{ src:"../../static/demo/banner2.jpg" },
-						{ src:"../../static/demo/banner2.jpg" },
+				topic: {
+					swiper: [{
+							src: "../../static/demo/banner2.jpg"
+						},
+						{
+							src: "../../static/demo/banner2.jpg"
+						},
+						{
+							src: "../../static/demo/banner2.jpg"
+						},
 					],
-					nav:[
-						{name:"最新"},
-						{name:"游戏"},
-						{name:"打卡"},
-						{name:"情感"},
-						{name:"故事"},
-						{name:"喜爱"},
+					nav: [{
+							name: "最新"
+						},
+						{
+							name: "游戏"
+						},
+						{
+							name: "打卡"
+						},
+						{
+							name: "情感"
+						},
+						{
+							name: "故事"
+						},
+						{
+							name: "喜爱"
+						},
 					],
-					list:[
-						{
-							titlepic:"../../static/demo/topicpic/13.jpeg",
-							title:"话题名称",
-							desc:"我是话题描述",
-							totalnum:50,
-							todaynum:10
+					list: [{
+							titlepic: "../../static/demo/topicpic/13.jpeg",
+							title: "话题名称",
+							desc: "我是话题描述",
+							totalnum: 50,
+							todaynum: 10
 						},
 						{
-							titlepic:"../../static/demo/topicpic/13.jpeg",
-							title:"话题名称",
-							desc:"我是话题描述",
-							totalnum:50,
-							todaynum:10
+							titlepic: "../../static/demo/topicpic/13.jpeg",
+							title: "话题名称",
+							desc: "我是话题描述",
+							totalnum: 50,
+							todaynum: 10
 						},
 						{
-							titlepic:"../../static/demo/topicpic/13.jpeg",
-							title:"话题名称",
-							desc:"我是话题描述",
-							totalnum:50,
-							todaynum:10
+							titlepic: "../../static/demo/topicpic/13.jpeg",
+							title: "话题名称",
+							desc: "我是话题描述",
+							totalnum: 50,
+							todaynum: 10
 						},
 						{
-							titlepic:"../../static/demo/topicpic/13.jpeg",
-							title:"话题名称",
-							desc:"我是话题描述",
-							totalnum:50,
-							todaynum:10
+							titlepic: "../../static/demo/topicpic/13.jpeg",
+							title: "话题名称",
+							desc: "我是话题描述",
+							totalnum: 50,
+							todaynum: 10
 						},
 						{
-							titlepic:"../../static/demo/topicpic/13.jpeg",
-							title:"话题名称",
-							desc:"我是话题描述",
-							totalnum:50,
-							todaynum:10
+							titlepic: "../../static/demo/topicpic/13.jpeg",
+							title: "话题名称",
+							desc: "我是话题描述",
+							totalnum: 50,
+							todaynum: 10
 						},
 						{
-							titlepic:"../../static/demo/topicpic/13.jpeg",
-							title:"话题名称",
-							desc:"我是话题描述",
-							totalnum:50,
-							todaynum:10
+							titlepic: "../../static/demo/topicpic/13.jpeg",
+							title: "话题名称",
+							desc: "我是话题描述",
+							totalnum: 50,
+							todaynum: 10
 						}
 					]
 				}
@@ -215,80 +167,113 @@
 		},
 		onLoad() {
 			uni.getSystemInfo({
-				success: (res)=> {
-					let height=res.windowHeight-uni.upx2px(100)
-					this.swiperheight=height;
+				success: (res) => {
+					let height = res.windowHeight - uni.upx2px(100)
+					this.swiperheight = height;
 				}
 			});
+			if(this.userInfo.id){
+				this.requestData()
+			}else{
+				this.guanzhu.loadtext = "你还未登录呢!"
+			}
 		},
-		methods:{
+		methods: {
+
+			async requestData(GoPage) {
+				let currentPage = GoPage || this.guanzhu.page;
+				let data;
+				try {
+					data = await this.$http.get(`/topic/page?page=${currentPage}&rows=10`)
+				} catch (e) {
+					console.log(e)
+					return
+				}
+				console.log(data)
+				let {
+					page,
+					items
+				} = data
+				if (items && items.length === 0) {
+					this.guanzhu.page = page
+					this.guanzhu.loadtext = "没有更多数据了";
+					return
+				}
+				items.forEach((item) => {
+					if (item.images != '') {
+						item.images = item.images.split(",");
+					} else {
+						item.images = []
+					}
+				})
+				this.guanzhu.page = page
+				this.guanzhu.list = this.guanzhu.list.concat(items)
+				if (items && items.length < 10) {
+					this.guanzhu.loadtext = "没有更多数据了";
+				}
+			},
+			async likeOrTread(data) {
+				await this.$http.post('topic/active', data);
+			},
 			// 点击切换
-			changeTab(index){
-				this.tabIndex=index;
+			changeTab(index) {
+				this.tabIndex = index;
 			},
 			// 滑动事件
-			tabChange(e){
-				this.tabIndex=e.detail.current;
+			tabChange(e) {
+				this.tabIndex = e.detail.current;
 			},
 			// 上拉加载
-			loadmore(){
-				if(this.guanzhu.loadtext!="上拉加载更多"){ return; }
+			loadmore() {
+				console.log(this.guanzhu)
+				if (this.guanzhu.loadtext != "") {
+					return;
+				}
 				// 修改状态
-				this.guanzhu.loadtext="加载中...";
+				this.guanzhu.loadtext = "加载中...";
+				this.requestData(this.guanzhu.page+1)
 				// 获取数据
-				setTimeout(()=> {
-					//获取完成
-					let obj={
-						userpic:"../../static/demo/userpic/12.jpg",
-						username:"哈哈",
-						sex:0, //0 男 1 女
-						age:25,
-						isguanzhu:false,
-						title:"我是标题",
-						titlepic:"../../static/demo/datapic/13.jpg",
-						video:false,
-						share:false,
-						path:"深圳 龙岗",
-						sharenum:20,
-						commentnum:30,
-						goodnum:20
-					};
-					this.guanzhu.list.push(obj);
-					this.guanzhu.loadtext="上拉加载更多";
-				}, 1000);
 				// this.guanzhu.loadtext="没有更多数据了";
 			}
+
 		}
 	}
 </script>
 
-<style>
-.search-input{
-	padding: 20upx;
-}
-.search-input>input{
-	background: #F4F4F4;
-	border-radius:10upx;
-}
-.topic-search{
-	display: flex;
-	justify-content: center;
-	font-size: 27upx;
-}
+<style scoped>
+	.wrap-new{
+		background-color: #F9F9F9;
+	}
+	.search-input {
+		padding: 20upx;
+	}
 
-.topic-swiper{
-	padding:0 20upx 20upx 20upx;
-}
-.topic-swiper image{
-	width: 100%;
-	border-radius:10upx;
-}
+	.search-input>input {
+		background: #F4F4F4;
+		border-radius: 10upx;
+	}
 
-.topic-new{
-	padding: 20upx;
-}
-.topic-new>view:first-child{
-	padding-bottom: 5upx;
-	font-size: 32upx;
-}
+	.topic-search {
+		display: flex;
+		justify-content: center;
+		font-size: 27upx;
+	}
+
+	.topic-swiper {
+		padding: 0 20upx 20upx 20upx;
+	}
+
+	.topic-swiper image {
+		width: 100%;
+		border-radius: 10upx;
+	}
+
+	.topic-new {
+		padding: 20upx;
+	}
+
+	.topic-new>view:first-child {
+		padding-bottom: 5upx;
+		font-size: 32upx;
+	}
 </style>

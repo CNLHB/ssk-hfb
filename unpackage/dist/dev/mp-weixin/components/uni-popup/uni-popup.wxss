@@ -40,7 +40,8 @@
 	-webkit-transform: translate(-50%, -65%);
 	        transform: translate(-50%, -65%);
 	background: none;
-	box-shadow: none;
+	-webkit-box-shadow: none;
+	        box-shadow: none;
 }
 .uni-popup-middle.uni-popup-fixed {
 	border-radius: 10rpx;

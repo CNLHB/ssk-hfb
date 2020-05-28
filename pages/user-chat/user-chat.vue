@@ -45,8 +45,16 @@
 				cId:0,
 				socket:null,
 				fid: undefined,
+				isShow:false
 
 			};
+		},
+		onShow() {
+			this.isShow = true
+		},
+		beforeDestroy() {
+			this.isShow = false
+			console.log(this.isShow)
 		},
 		async onLoad(data) {
 			if(data.index){
@@ -71,7 +79,7 @@
 						toId:parseInt(fid),
 					})
 					this.cId = chat.id
-					chat.messages=[]
+					chat.time= new Date(chat.afterTime).getTime()
 					console.log(chat)
 					this.addChatList(chat);
 				}
@@ -90,25 +98,34 @@
 						}
 						let pic = this.chatList[this.index].userpic
 						let obj={
-								
+								fromId:data.fromId,
+								toId:data.toId,
 								isme:data.fromId==this.userInfo.id,
 								userpic:pic,
 								type:"text",
 								message:data.message,
-								time: new Date(data.sendTime).getTime()+''
+								time:  time.gettime.gettime(data.sendTime)
 							}
-							// gstime:time.gettime.getChatTime(now,this.list[this.list.length-1].time)
+								console.log(obj)
+						// gstime:time.gettime.getChatTime(now,this.list[this.list.length-1].time)
 						this.list.push(obj);
+						obj.index = this.index
+						obj.isme=false
+						this.addChatMessage(obj)
 						this.pageToBottom(true);
 						let msgs = [data.id]
-						this.$http.put('chat/read',{
-							mids: msgs
-						},{
-							"content-type":"application/x-www-form-urlencoded"
-						})
+						console.log(this.isShow)
+						if(this.isShow){
+							this.$http.put('chat/read',{
+								mids: msgs
+							},{
+								"content-type":"application/x-www-form-urlencoded"
+							})
+						}else{
+							this.addNoreadMessage(this.index)
+						}
 					});
 				}
-
 		},
 
 		onReady() {
@@ -118,7 +135,7 @@
 		},
 
 		methods:{
-			...mapMutations(['setChatMessage','addChatList']),
+			...mapMutations(['setChatMessage','addChatList','addChatMessage','addNoreadMessage']),
 			// 初始化参数
 			initdata(){
 				try {
@@ -150,7 +167,6 @@
 			},
 
 			goToUserInfo(item){
-				console.log(item)
 				uni.navigateTo({
 					url:'../../pages/user-space/user-space?uid='+item.uid
 				})
@@ -158,16 +174,19 @@
 			// 获取聊天数据
 			async getdata(){
 				// 从服务器获取到的数据
+				if( this.chatList.length==0){
+					return
+				}
 				let pic = this.chatList[this.index].userpic
 				let data = this.chatList[this.index].messages
 				let arr = data.map((item)=>{
 					return{
 						isme:item.fromId==this.userInfo.id,
 						uid:item.fromId==this.userInfo.id?item.fromId:item.toId,
-						userpic:pic,
+						userpic: item.fromId==this.userInfo.id?this.userInfo.authorUrl:pic,
 						type:"text",
 						message:item.message,
-						time: new Date(data.sendTime).getTime()+''
+						time:  time.gettime.gettime(item.sendTime)
 					}
 				})
 
@@ -196,14 +215,19 @@
 				})
 				this.$http.setLoading(true);
 				let obj={
+						fromId:msg.fromId,
+						toId:msg.toId,
 						index:this.index,
 						isme:msg.fromId==this.userInfo.id,
 						userpic:this.userInfo.authorUrl,
 						type:"text",
 						message:msg.message,
-						time: new Date(msg.sendTime).getTime()+''
+						time:  time.gettime.gettime(msg.sendTime),
+						sendTime:msg.sendTime
 					}
 				this.list.push(obj);
+				obj.index = this.index
+				this.addChatMessage(obj)
 				this.pageToBottom();
 			}
 		}

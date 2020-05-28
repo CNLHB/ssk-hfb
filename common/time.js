@@ -34,6 +34,7 @@ const gettime = {
 	},
 	// 人性化时间格式
 	gettime(shorttime){
+		shorttime = new Date(shorttime).getTime();
 		shorttime=shorttime.toString().length<13 ? shorttime*1000 : shorttime;
 		let now = (new Date()).getTime();
 		let cha = (now-parseInt(shorttime))/1000;
@@ -43,12 +44,12 @@ const gettime = {
 			return this.dateFormat(new Date(shorttime),"{A} {t}:{ii}");
 		} else if(cha < 518400){
 			// 隔天 显示日期+时间
-			return this.dateFormat(new Date(shorttime),"{Mon}月{DD}日 ");
-			// return this.dateFormat(new Date(shorttime),"{Mon}月{DD}日 {A} {t}:{ii}");
+			// return this.dateFormat(new Date(shorttime),"{Mon}月{DD}日 ");
+			return this.dateFormat(new Date(shorttime),"{Mon}月{DD}日 {A} {t}:{ii}");
 		} else {
 			// 隔年 显示完整日期+时间
-			return this.dateFormat(new Date(shorttime)," {A} {t}:{ii}");
 			// return this.dateFormat(new Date(shorttime),"{Y}-{MM}-{DD} {A} {t}:{ii}");
+			return this.dateFormat(new Date(shorttime),"{Y}-{MM}-{DD} {A} {t}:{ii}");
 		}
 	},
 	
@@ -60,7 +61,6 @@ const gettime = {
 		let dateObj = {},
 			rStr = /\{([^}]+)\}/,
 			mons = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'];
-		 
 		dateObj["Y"] = date.getFullYear();
 		dateObj["M"] = date.getMonth() + 1;
 		dateObj["MM"] = this.parseNumber(dateObj["M"]);
@@ -71,12 +71,19 @@ const gettime = {
 		dateObj["hh"] = this.parseNumber(dateObj["h"]);
 		dateObj["t"] = dateObj["h"] > 12 ? dateObj["h"] - 12 : dateObj["h"];
 		dateObj["tt"] = this.parseNumber(dateObj["t"]);
-		dateObj["A"] = dateObj["h"] > 12 ? '下午' : '上午';
+		let tmep ="";
+		if(dateObj["h"] < 12){
+			tmep = "上午"
+		}else if(dateObj["h"] >= 12&&dateObj["h"] < 20){
+			tmep = "下午"
+		}else{
+			tmep = "晚上"
+		}
+		dateObj["A"] =tmep;
 		dateObj["i"] = date.getMinutes();
 		dateObj["ii"] = this.parseNumber(dateObj["i"]);
 		dateObj["s"] = date.getSeconds();
 		dateObj["ss"] = this.parseNumber(dateObj["s"]);
-	 
 		while(rStr.test(formatStr)) {
 			formatStr = formatStr.replace(rStr, dateObj[RegExp.$1]);
 		}

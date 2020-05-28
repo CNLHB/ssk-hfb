@@ -27,7 +27,6 @@
 	font-size: 32rpx;
 }
 .common-list-r>view:nth-child(1)>view.data-v-15be80eb:last-child{
-	background: #EEEEEE;
 	padding: 0 10rpx;
 	font-size: 26rpx;
 }

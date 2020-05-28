@@ -7,6 +7,7 @@
     "user-space-userinfo": "/components/user-space/user-space-userinfo",
     "common-list": "/components/common/common-list",
     "load-more": "/components/common/load-more",
-    "user-space-popup": "/components/user-space/user-space-popup"
+    "user-space-popup": "/components/user-space/user-space-popup",
+    "card": "/components/list-card/list-card"
   }
 }

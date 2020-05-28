@@ -98,7 +98,7 @@
 }
 .user-space-head-info>image{
 	width: 150upx;
-	height: 150upx;
+	height: 150upx !important;
 	border-radius: 100%;
 }
 .user-space-head-info>view:first-of-type{

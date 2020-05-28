@@ -9,8 +9,8 @@
 	color: #999999;
 }
 .index-list1>view:first-child image.data-v-1a253ab6{
-	width: 85rpx;
-	height: 85rpx;
+	width: 68rpx;
+	height: 68rpx;
 	border-radius: 100%;
 	margin-right: 10rpx;
 }
@@ -37,6 +37,10 @@
 	  padding: 0rpx 10rpx 0rpx 10rpx;
 	  -webkit-transform: translateX(8rpx);
 	          transform: translateX(8rpx)
+}
+.u-f-ac .author.data-v-1a253ab6{
+	width: 68rpx;
+	height: 68rpx;
 }
 .index-list3 .img-n>image.data-v-1a253ab6{
 	width: 220rpx;
@@ -74,5 +78,9 @@
 }
 .img-1.data-v-1a253ab6{
 	width: 100%;
+	height: 100%;
+}
+.img-1 image.data-v-1a253ab6{
+	border-radius: 10rpx;
 }
 

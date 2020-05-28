@@ -22,7 +22,12 @@
 		methods: {
 			async initData(){
 				let data = await this.$http.get("topic/history")
-				this.list = data.reverse()
+				if(data&&data.length){
+					this.list = data.reverse()
+				}else{
+					this.list = []
+				}
+				
 				console.log(data)
 			},
 			gotoTopicInfo(){

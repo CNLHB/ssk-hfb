@@ -35,9 +35,9 @@
 	-webkit-box-direction: normal;
 	-webkit-flex-direction: row;
 	        flex-direction: row;
-	-webkit-box-pack: center;
-	-webkit-justify-content: center;
-	        justify-content: center;
+	-webkit-box-pack: justify;
+	-webkit-justify-content: space-between;
+	        justify-content: space-between;
 	
 	border-bottom: solid 1px #DBDBDA;
 	
@@ -136,4 +136,13 @@ button::after{
 }
 
 /* 第三方登录 end */
+.login-font-color{ color: #BBBBBB;
+}
+.login-padding{ padding: 20rpx 0;
+}
+
+
+
+
+
 

@@ -173,7 +173,6 @@
 				this.info.isguanzhu = !this.info.isguanzhu
 			},
 			gotoTopic(index){
-				console.log(index)
 				let topicDetail = this.topicList[index];
 				topicDetail.images = topicDetail.images.split(",")
 				uni.setStorageSync("topicDatail",JSON.stringify(topicDetail))
@@ -188,6 +187,9 @@
 			// 私信
 			lahei(){
 				console.log("私信")
+				if(this.info.id==this.userInfo.id){
+					return
+				}
 				this.togleShow();
 				uni.navigateTo({
 					url: '../../pages/user-chat/user-chat?fid='+this.info.id

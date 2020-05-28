@@ -191,13 +191,7 @@
 				}
 			},
 			async likeOrTread(data){
-				if(!this.userInfo || !this.userInfo.id){
-					uni.showToast({
-						title:"你还未登录！或登录过有效期!",
-						icon:'none'
-					})
-					return
-				}
+
 				await this.$http.post('topic/active',data);
 			},
 			checkIn() {
