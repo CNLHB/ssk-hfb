@@ -65,7 +65,6 @@ export default class request {
 			    },
 			    method: method,
 				success:()=>{
-					 console.log('WebSocket连接已打开！')
 				}
 			});
 			return socketTask

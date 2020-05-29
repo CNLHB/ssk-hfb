@@ -82,11 +82,11 @@
 						name: "关注",
 						id: "guanzhu"
 					}
-					// ,
-					// {
-					// 	name: "话题",
-					// 	id: "topic"
-					// }
+					,
+					{
+						name: "话题",
+						id: "topic"
+					}
 				],
 				guanzhu: {
 					loadtext: "",

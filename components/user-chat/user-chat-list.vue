@@ -35,8 +35,8 @@
 	padding: 20upx 0;
 }
 .user-chat-list>image{
-	width: 80upx;
-	height: 80upx;
+	width: 80upx!important;;
+	height: 80upx!important;
 	/* border-radius: 100%; */
 	flex-shrink: 0;
 	margin: 0 10upx;

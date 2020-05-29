@@ -57,13 +57,22 @@
 		beforeDestroy() {
 			this.isShow = false
 			this.setIndex(-1)
+			this.setMsgPage(1)
 			console.log(-1)
+		},
+		// 监听下拉刷新
+		async onPullDownRefresh() {
+			this.setMsgPage()
+			console.log(8)
+			uni.stopPullDownRefresh();
 		},
 		async onLoad(data) {
 			if(data.index){
 				this.setIndex(parseInt(data.index))
 				this.index = data.index
-				// this.list = this.chatList[this.index].messages
+				uni.setNavigationBarTitle({
+					title:this.chatList[this.msgIndex].username
+				})
 			}
 			 this.fid = data.fid
 			 let fid = data.fid
@@ -86,10 +95,8 @@
 					})
 					this.cId = chat.id
 					chat.time= time.gettime.gettime(chat.afterTime)
-					console.log(chat)
 					this.setIndex(0)
 					this.addChatList(chat);
-					
 				}
 
 			}else{
@@ -107,7 +114,7 @@
 		},
 		watch:{
 			currentChatMsgs(){
-				this.pageToBottom(true);
+				// this.pageToBottom(true);
 			}
 		},
 		methods:{
@@ -115,12 +122,13 @@
 			'setIsPaper',
 			'addChatList',
 			'setIndex',
+			'setMsgPage',
 			'addChatMessage','addNoreadMessage']),
 			// 初始化参数
 			initdata(){
 				try {
 					const res = uni.getSystemInfoSync();
-					this.style.contentH=res.windowHeight - uni.upx2px(120);
+					this.style.contentH=res.windowHeight - uni.upx2px(200);
 				} catch (e) { }
 			},
 			pageToBottom(isfirst = false){
@@ -147,6 +155,7 @@
 			},
 
 			goToUserInfo(item){
+				console.log(item)
 				uni.navigateTo({
 					url:'../../pages/user-space/user-space?uid='+item.uid
 				})
@@ -177,6 +186,14 @@
 					message: data
 				})
 				this.$http.setLoading(true);
+				console.log(msg)
+				if(msg.code&&msg.code!=0){
+					uni.showToast({
+						title:'消息发送失败!',
+						icon:'none'
+					})
+					return
+				}
 				let obj={
 						fromId:msg.fromId,
 						toId:msg.toId,

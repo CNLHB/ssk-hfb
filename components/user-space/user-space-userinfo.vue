@@ -2,6 +2,7 @@
 	<view class="user-space-userinfo">
 		<view class="user-space-userinfo-item">
 			<view>账号信息</view>
+			<view>昵称：{{userinfo.username}}</view>
 			<view>韩龄：{{getRegAge}}</view>
 			<view>韩友ID：{{userinfo.id}}</view>
 		</view>

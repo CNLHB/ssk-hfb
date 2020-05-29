@@ -91,7 +91,7 @@
 					sex:0,
 					age:0,
 					isguanzhu:0,
-					regtime:"",
+					regtime:+new Date,
 					id:0,
 					job:"",
 					path:"",
@@ -158,7 +158,7 @@
 				let currentId = this.userInfo.id
 				this.info.currentId = currentId;
 				this.info.userpic = data.userPic;
-				this.info.userName = data.userName;
+				this.info.username = data.userName;
 				this.info.sex = data.gender;
 				this.info.isguanzhu = data.isguanzhu;
 				this.info.regtime = data.createTime;

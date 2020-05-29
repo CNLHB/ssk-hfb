@@ -15,7 +15,7 @@
 			}
 			let res ={};
 			if(uni.getStorageSync('token')){
-				res = await this.$http.post("auth/verify")
+				// res = await this.$http.post("auth/verify")
 			}
 			if(res && res.status==404){
 				uni.clearStorageSync('userInfo')

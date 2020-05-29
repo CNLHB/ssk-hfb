@@ -163,7 +163,7 @@
 							return {
 								id: mItem.id,
 								isme: mItem.fromId == this.userInfo.id,
-								uid: mItem.fromId == this.userInfo.id ? mItem.fromId : mItem.toId,
+								uid: mItem.fromId == this.userInfo.id ?mItem.toId : mItem.fromId ,
 								userpic: mItem.fromId == this.userInfo.id ? this.userInfo.authorUrl : item.userpic,
 								type: "text",
 								message: mItem.message,
@@ -223,10 +223,12 @@
 						Vue.prototype.$is_open_socket = true;
 						if (Vue.prototype.$is_open_socket) {
 							Vue.prototype.$socket.onMessage(async (res) => {
-								console.log("收到消息并追加")
+							
 								if (res.data === "连接成功") {
+										console.log("连接成功")
 									return
 								}
+								console.log("收到消息并追加")
 								let data = {}
 								try {
 									data = JSON.parse(res.data);

@@ -30,8 +30,8 @@
 }
 .home-info>image{
 	flex-shrink: 0;
-	width: 100upx;
-	height: 100upx;
+	width: 100upx!important;
+	height: 100upx !important;
 	border-radius: 100%;
 	margin-right: 15upx;
 }
