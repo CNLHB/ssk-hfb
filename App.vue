@@ -6,7 +6,6 @@
 			this.lib.NetWork.On();
 			let data;
 			let chatList;
-			
 			try{
 				 data =JSON.parse(uni.getStorageSync('userInfo'))
 				 chatList =JSON.parse(uni.getStorageSync('chatList'))

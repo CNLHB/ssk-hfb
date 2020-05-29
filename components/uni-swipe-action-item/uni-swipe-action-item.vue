@@ -73,7 +73,7 @@
 				  backgroundColor: item.style && item.style.backgroundColor ? item.style.backgroundColor : '#C7C6CD',
 				  fontSize: item.style && item.style.fontSize ? item.style.fontSize : '16px'
 				}"
-				 class="uni-swipe_button button-hock" @click.stop="onClick(index,item)"><text class="uni-swipe_button-text" :style="{color: item.style && item.style.color ? item.style.color : '#FFFFFF',}">{{ item.text }}</text></view>
+				 class="uni-swipe_button button-hock" @tap.stop="onClick"><text class="uni-swipe_button-text" :style="{color: item.style && item.style.color ? item.style.color : '#FFFFFF',}">{{ item.text }}</text></view>
 			</view>
 		</view>
 		<!-- #endif -->
@@ -135,6 +135,15 @@
 				default () {
 					return []
 				}
+			},
+			item:{
+				type: Object,
+				default () {
+					return {}
+				}
+			},
+			index:{
+				type: Number
 			},
 			/**
 			 * 禁用

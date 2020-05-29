@@ -58,7 +58,7 @@
 		
 		<!-- 第三方登陆 -->
 		<view class="other-login-title u-f-ajc login-padding login-font-color">第三方登录</view>
-		<other-login></other-login>
+		<other-login @goToHome="goToHome"></other-login>
 		
 		<!-- 协议 -->
 		<view class="login-rule u-f-ajc login-padding login-font-color">
@@ -109,6 +109,12 @@
 		},
 		methods: {
 			...mapMutations(['setUserInfo']),
+			goToHome(){
+				console.log(8)
+				uni.switchTab({
+					url:'../../pages/home/home'
+				})
+			},
 			// 验证手机号码
 			isPhone(){
 				let mPattern = /^1[34578]\d{9}$/; 
@@ -217,7 +223,6 @@
 					url: '/pages/home/home'
 				});
 				return;
-				console.log("提交登录")
 			}
 		}
 	}

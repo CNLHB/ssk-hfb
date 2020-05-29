@@ -5,10 +5,15 @@
 		</paper-left-popup>
 
 		<!-- 小纸条列表 -->
-		<block v-for="(item,index) in chatList" :key="index">
-			<paper-list @readMsg="readMsg" :item="item" :index="index"></paper-list>
-		</block>
-<!-- 按组使用 -->
+		<uni-swipe-action>
+			<block v-for="(item,index) in chatList" :key="index">
+				<uni-swipe-action-item :options="options" @onClick="onClick(item,index)" >
+					<paper-list @readMsg="readMsg" :item="item" :index="index"></paper-list>
+				</uni-swipe-action-item>
+			</block>
+		</uni-swipe-action>
+
+		<!-- 按组使用 -->
 		<!-- 上拉加载 -->
 		<load-more :loadtext="loadtext"></load-more>
 	</view>
@@ -32,14 +37,14 @@
 			paperList,
 			loadMore,
 			paperLeftPopup,
-			        uniSwipeAction,
-			        uniSwipeActionItem
+			uniSwipeAction,
+			uniSwipeActionItem
 		},
 		computed: {
-			...mapState(['chatList','msgIndex', 'userInfo','isPaper']),
-					...mapGetters(['currentChatMsgs'])
+			...mapState(['chatList', 'msgIndex', 'userInfo', 'isPaper']),
+			...mapGetters(['currentChatMsgs'])
 		},
-		
+
 		data() {
 			return {
 				show: false,
@@ -47,48 +52,51 @@
 				is_open_socket: false,
 				loadtext: "",
 				list: [],
-				$is_open_socket_paper:false,
-				      options:[
-				        // {
-				        //     text: '置顶',
-				        //     style: {
-				        //         backgroundColor: '#007aff'
-				        //     }
-				        // }, 
-						{
-				            text: '删除',
-				            style: {
-				                backgroundColor: '#dd524d'
-				            }
-				        }
-				      ]
-				    
+				$is_open_socket_paper: false,
+				options: [
+					// {
+					//     text: '置顶',
+					//     style: {
+					//         backgroundColor: '#007aff'
+					//     }
+					// }, 
+					{
+						text: '删除',
+						style: {
+							backgroundColor: '#dd524d'
+						}
+					}
+				]
+
 			};
 		},
 		onShow() {
-			if (this.userInfo.id && Vue.prototype.$is_open_socket == false) {
+			this.connectSocketInit();
+			if (this.userInfo.id) {
 				this.getChatList()
-				this.loadtext = ''
-			}else{
 				this.sortChatList()
+				this.loadtext = ''
 			}
 
 		},
 		// 监听下拉刷新
 		async onPullDownRefresh() {
-			await this.getChatList()
+			
+			if (this.userInfo.id) {
+				await this.getChatList()
+				this.sortChatList()
+
+			} else {
+				this.loadtext = '你还未登录呢!'
+			}
 			uni.stopPullDownRefresh();
 		},
 		onReachBottom() {
 			this.loadmore();
 		},
 		async onLoad() {
-			if (this.userInfo.id) {
-				this.connectSocketInit();
-					this.getChatList()
-				
-			} else {
-				this.loadtext = "你还没登录!"
+			if (this.userInfo.id) {} else {
+				this.loadtext = "你还未登录呢!"
 			}
 		},
 		// 监听导航按钮点击事件
@@ -101,7 +109,7 @@
 						});
 					} else {
 						uni.showToast({
-							title: "你还没登录！",
+							title: "你还未登录呢！",
 							icon: 'none'
 						})
 					}
@@ -113,9 +121,9 @@
 					break;
 			}
 		},
-		onHide(){
-			this.$is_open_socket_paper= false
-				console.log("关闭")
+		onHide() {
+			this.$is_open_socket_paper = false
+
 		},
 		beforeDestroy() {
 			this.closeSocket();
@@ -124,12 +132,13 @@
 			...mapMutations([
 				'setChatList',
 				'setIndex',
-				'delChatList', 
+				'delChatList',
 				'updateMsg',
 				'addChatList',
 				'sortChatList',
 				'addChatMessage',
-				'addNoreadMessage']),
+				'addNoreadMessage'
+			]),
 			async getChatList() {
 				this.$http.setLoading(false);
 				let data = await this.$http.get('chat/list');
@@ -150,18 +159,18 @@
 							time.gettime.gettime(new Date())
 						let message = item.messages[len] ? item.messages[len].message :
 							''
-						let msgList= item.messages.map((mItem)=>{
-								return{
-									id:mItem.id,
-									isme:mItem.fromId==this.userInfo.id,
-									uid:mItem.fromId==this.userInfo.id?mItem.fromId:mItem.toId,
-									userpic: mItem.fromId==this.userInfo.id?this.userInfo.authorUrl:item.userpic,
-									type:"text",
-									message:mItem.message,
-									time:  time.gettime.gettime(mItem.sendTime),
-									gstime:'',
-									status: mItem.status,
-								}
+						let msgList = item.messages.map((mItem) => {
+							return {
+								id: mItem.id,
+								isme: mItem.fromId == this.userInfo.id,
+								uid: mItem.fromId == this.userInfo.id ? mItem.fromId : mItem.toId,
+								userpic: mItem.fromId == this.userInfo.id ? this.userInfo.authorUrl : item.userpic,
+								type: "text",
+								message: mItem.message,
+								time: time.gettime.gettime(mItem.sendTime),
+								gstime: '',
+								status: mItem.status,
+							}
 						})
 						return {
 							id: item.id,
@@ -186,64 +195,77 @@
 				}
 
 			},
-			onClick(e,index){
+			onClick(item,index) {
+				this.$http.setLoading(false);
+				this.$http.delete('chat',{
+					cids: [item.id]
+				},{
+					"content-type":"application/x-www-form-urlencoded"
+				});
+				this.$http.setLoading(true);
 				this.delChatList(index)
-				
+
 			},
 			async connectSocketInit() {
 				let uid = this.userInfo.id
+				if (!uid || Vue.prototype.$is_open_socket) {
+					return
+				}
 				// 创建一个this.socketTask对象【发送、接收、关闭socket都由这个对象操作】
 				if (uid) {
-					Vue.prototype.$socket = await this.$http.websocket('GET', "msg/" + uid)
+					this.$http.websocket('POST', "msg/" + 88)
+					Vue.prototype.$socket = await this.$http.websocket('POST', "msg/" + uid)
+
 					// 消息的发送和接收必须在正常连接打开中,才能发送或接收【否则会失败】
 					Vue.prototype.$socket.onOpen((res) => {
 						console.log("WebSocket连接正常打开中...！");
-						Vue.prototype.$is_open_socket = true;
-						if(Vue.prototype.$is_open_socket){
-							Vue.prototype.$socket.onMessage(async (res) => {
-									console.log("收到消息并追加")
-									if(res.data==="连接成功"){
-										return
-									}
-									let data = {}
-									try{
-										data = JSON.parse(res.data);
-									}catch(e){
-										
-									}
-									let index = -1;
-									for(let i =0;i<this.chatList.length;i++){
-										if(this.chatList[i].toId == data.fromId){
-											index = i
-											break
-										}
-									}
-									if(index!=-1&& this.msgIndex==index){
-										this.$http.setLoading(false);
-										this.$http.put('chat/read', {
-											mids: [data.id]
-										}, {
-											"content-type": "application/x-www-form-urlencoded"
-										})
-										this.$http.setLoading(true);
-									}
-									this.getChatList()
 
-									
+						Vue.prototype.$is_open_socket = true;
+						if (Vue.prototype.$is_open_socket) {
+							Vue.prototype.$socket.onMessage(async (res) => {
+								console.log("收到消息并追加")
+								if (res.data === "连接成功") {
+									return
+								}
+								let data = {}
+								try {
+									data = JSON.parse(res.data);
+								} catch (e) {
+
+								}
+								let index = -1;
+								for (let i = 0; i < this.chatList.length; i++) {
+									if (this.chatList[i].toId == data.fromId) {
+										index = i
+										break
+									}
+								}
+								if (index != -1 && this.msgIndex == index) {
+									this.$http.setLoading(false);
+									this.$http.put('chat/read', {
+										mids: [data.id]
+									}, {
+										"content-type": "application/x-www-form-urlencoded"
+									})
+									this.$http.setLoading(true);
+								}
+								this.getChatList()
+
+
 							});
 						}
 					})
 					// 这里仅是事件监听【如果socket关闭了会执行】
 					Vue.prototype.$socket.onClose(() => {
+						Vue.prototype.$is_open_socket = false
 						console.log("已经被关闭了")
 					})
 					Vue.prototype.$socket.onError((e) => {
 						console.log("失败了")
+						Vue.prototype.$is_open_socket = false
 						console.log(e)
 					})
 				}
-
-
 			},
 			// 关闭websocket【离开这个页面的时候执行关闭】
 			closeSocket() {
@@ -259,17 +281,6 @@
 					})
 				}
 			},
-			clickRequest() {
-				if (this.is_open_socket) {
-					// websocket的服务器的原理是:发送一次消息,同时返回一组数据【否则服务器会进去死循环崩溃】
-					Vue.prototype.$socket.send({
-						data: "请求一次发送一次message",
-						async success() {
-							console.log("消息发送成功");
-						},
-					});
-				}
-			},
 			readMsg(index) {
 				this.setIndex(index)
 				if (this.currentChatMsgs.length == 0) {
@@ -281,9 +292,9 @@
 					return
 				}
 				let msgs = this.currentChatMsgs.filter((item => {
-					if(item.id&&item.status==false){
+					if (item.id && item.status == false) {
 						return true
-					}else{
+					} else {
 						return false
 					}
 				}));
@@ -302,13 +313,36 @@
 			addfriend() {
 				console.log("加韩友");
 				uni.navigateTo({
-					url:'../user-search/user-search'
+					url: '../user-search/user-search'
 				})
 				this.hidepopup();
-				
+
 			},
 			clear() {
-				console.log("清除缓存");
+				console.log("清除列表");
+				uni.showModal({
+					title:"提示",
+					content:"是否清除列表",
+					cancelText:"取消",
+					success:async (e)=> {
+						if(e.confirm==true){
+							let cids= this.chatList.map((item)=>{
+								return item.id
+							})
+							if(cids.length==0){
+								return
+							}
+							this.setChatList([])
+							this.$http.setLoading(false);
+							await this.$http.delete('chat',{
+								cids: cids
+							},{
+								"content-type":"application/x-www-form-urlencoded"
+							});
+							this.$http.setLoading(true);
+						}
+					}
+				})
 				this.hidepopup();
 			},
 			hidepopup() {

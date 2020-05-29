@@ -34,6 +34,7 @@
 .user-list{
 	margin: 0 20upx; 
 	padding: 20upx 0;
+	height: 110upx;
 	border-bottom: 1upx solid #EEEEEE;
 }
 .wrap{

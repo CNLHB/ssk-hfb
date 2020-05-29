@@ -1,11 +1,12 @@
 <template>
 	<view class="wrap-new">
 		<!-- 自定义导航栏 -->
-		<news-nav-bar :tabBars="tabBars" :tabIndex="tabIndex" @change-tab="changeTab">
+		
+		<news-nav-bar v-if="userInfo.id" :tabBars="tabBars" :tabIndex="tabIndex" @change-tab="changeTab">
 		</news-nav-bar>
-<!-- 		<view class="head">
-			<text>关注</text>
-		</view> -->
+		
+	<view v-else class="head">
+		</view>
 		<view class="uni-tab-bar">
 			<swiper class="swiper-box" :style="{height:swiperheight+'px'}" :current="tabIndex" @change="tabChange">
 				<!-- 关注 -->
@@ -249,7 +250,7 @@
 
 <style scoped>
     .head{
-		height: 90upx;
+		height: 100upx;
 		width: 100vw;
 	}
 	.wrap-new{

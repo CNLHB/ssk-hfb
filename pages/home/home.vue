@@ -72,8 +72,8 @@
 			return {
 				islogin:false,
 				homeinfo:{
-					userpic:"",
-					username:"",
+					userpic: this.userInfo?this.userInfo.authorUrl:'',
+					username:this.userInfo?this.userInfo.userName:"",
 					totalnum:0,
 					todaynum:0,
 				},

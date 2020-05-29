@@ -32,7 +32,6 @@
 				uni.getProvider({
 					service: 'oauth',
 					success: (result) => {
-						console.log(result)
 						this.providerList = result.provider.map((value) => {
 							let providerName = '';
 							let icon='';
@@ -95,7 +94,7 @@
 								  obj={
 									 userName:infoRes.userInfo.nickName,
 									 openId:infoRes.userInfo.openId,
-									 gender: infoRes.userInfo.gender,
+									 gender: infoRes.userInfo.gender==1?0:1,
 									 authorUrl: infoRes.userInfo.avatarUrl, 
 								  }
 							  }
@@ -117,14 +116,14 @@
 							  	});
 							  }
 							  try{
-								  console.log(data)
 								this.setUserInfo(data.data.userInfo);
 							  	uni.setStorageSync('userInfo',JSON.stringify(data.data.userInfo));
 							  	uni.setStorageSync('token',data.data.token);
+								this.$emit("goToToHome")
 							  }catch(e){
 							  	
 							  }
-							  console.log( infoRes.userInfo);
+							  // console.log( infoRes.userInfo);
 						  }
 						});
 						

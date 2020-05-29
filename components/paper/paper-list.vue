@@ -3,7 +3,7 @@
 		<image :src="item.userpic" mode="widthFix" lazy-load></image>
 		<view>
 			<view class="u-f-ac u-f-jsb">{{item.username}} <view>{{item.time}}</view></view>
-			<view class="u-f-ac u-f-jsb">{{item.message}}
+			<view class="u-f-ac u-f-jsb"><text class="overflowText">{{item.message}}</text>
 			<template v-if="item.noreadnum>0">
 				<uni-badge :text="item.noreadnum" type="error"></uni-badge>
 			</template>
@@ -37,7 +37,14 @@
 .paper-list{
 	border-bottom: 1upx solid #EEEEEE;
 	padding: 20upx 0;
+	height: 110upx;
 	width: 100%;
+}
+.overflowText{
+	width: 50vw;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 .paper-list>image{
 	width: 100upx;

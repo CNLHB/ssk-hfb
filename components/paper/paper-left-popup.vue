@@ -9,7 +9,7 @@
 			</view>
 			<view class="u-f-ac" hover-class="papar-left-popup-h" @tap="clear">
 				<view class="icon iconfont icon-qingchu"></view> 
-				清除缓存
+				清除列表
 			</view>
 		</view>
 	</view>

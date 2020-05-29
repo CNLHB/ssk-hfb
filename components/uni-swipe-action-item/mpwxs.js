@@ -62,11 +62,8 @@ export default {
 				this.$set(this.position, 0, valueObj)
 			}
 		},
-		onClick(index, item) {
-			this.$emit('click', {
-				content: item,
-				index
-			})
+		onClick() {
+			this.$emit('onClick')
 		},
 		appTouchStart(){},
 		appTouchEnd(){},

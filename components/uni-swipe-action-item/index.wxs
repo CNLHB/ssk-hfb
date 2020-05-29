@@ -65,6 +65,9 @@ function touchmove(e, ownerInstance) {
  */
 function touchend(e, ownerInstance) {
 	var instance = e.instance;
+	if(instance==null){
+		return
+	}
 	var disabled = instance.getDataset().disabled
 	var state = instance.getState()
 
