@@ -1,6 +1,0 @@
-{
-  "enablePullDownRefresh": true,
-  "usingComponents": {
-    "user-list": "/components/user-list/user-list"
-  }
-}

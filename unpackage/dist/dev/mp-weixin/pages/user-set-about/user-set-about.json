@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "关于韩府",
-  "usingComponents": {
-    "home-list-item": "/components/home/home-list-item"
-  }
-}

@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "修改资料",
-  "scrollIndicator": "none",
-  "usingComponents": {
-    "mpvue-city-picker": "/components/mpvue-citypicker/mpvueCityPicker"
-  }
-}
