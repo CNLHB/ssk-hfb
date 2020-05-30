@@ -74,7 +74,6 @@
 			this.connectSocketInit();
 			if (this.userInfo.id) {
 				this.getChatList()
-				this.sortChatList()
 				this.loadtext = ''
 			}
 
@@ -84,7 +83,7 @@
 			
 			if (this.userInfo.id) {
 				await this.getChatList()
-				this.sortChatList()
+
 
 			} else {
 				this.loadtext = '你还未登录呢!'
@@ -168,7 +167,7 @@
 								type: "text",
 								message: mItem.message,
 								time: time.gettime.gettime(mItem.sendTime),
-								gstime: '',
+								gstime: time.gettime.getChatTime(mItem.sendTime),
 								status: mItem.status,
 							}
 						})
@@ -186,12 +185,9 @@
 							messages: msgList
 						}
 					})
-					// chatList.sort((a,b)=>{
-					// 	return  b.afterTime -a.afterTime
-					// })
 					this.setChatList(chatList);
 					this.sortChatList()
-					uni.setStorageSync('chatList', JSON.stringify(chatList))
+					uni.setStorageSync('chatList', JSON.stringify(this.chatList))
 				}
 
 			},
@@ -215,7 +211,6 @@
 				if (uid) {
 					this.$http.websocket('POST', "msg/" + 88)
 					Vue.prototype.$socket = await this.$http.websocket('POST', "msg/" + uid)
-
 					// 消息的发送和接收必须在正常连接打开中,才能发送或接收【否则会失败】
 					Vue.prototype.$socket.onOpen((res) => {
 						console.log("WebSocket连接正常打开中...！");
@@ -223,7 +218,6 @@
 						Vue.prototype.$is_open_socket = true;
 						if (Vue.prototype.$is_open_socket) {
 							Vue.prototype.$socket.onMessage(async (res) => {
-							
 								if (res.data === "连接成功") {
 										console.log("连接成功")
 									return
@@ -286,7 +280,6 @@
 			readMsg(index) {
 				this.setIndex(index)
 				if (this.currentChatMsgs.length == 0) {
-					console.log(this.currentChatMsgs)
 					return
 				}
 				if (this.chatList[index].noreadnum == 0) {

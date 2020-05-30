@@ -25,11 +25,13 @@ const gettime = {
 		return dayDiff+"天 "+hours+"小时 ";
 	},
 	// 获取聊天时间（相差300s内的信息不会显示时间）
-	getChatTime(v1,v2){
-		v1=v1.toString().length<13 ? v1*1000 : v1;
-		v2=v2.toString().length<13 ? v2*1000 : v2;
-		if(((parseInt(v1)-parseInt(v2))/1000) > 300){
-			return this.gettime(v1);
+	getChatTime(v1){
+		let sendTime = +new Date(v1)
+		let day = +new Date
+		day=day.toString().length<13 ? day*1000 : day;
+		sendTime=sendTime.toString().length<13 ? sendTime*1000 : sendTime;
+		if(((parseInt(day)-parseInt(sendTime))/1000) > 300){
+			return this.gettime(sendTime);
 		}
 	},
 	// 人性化时间格式

@@ -208,11 +208,8 @@
         ,{
             "path" : "pages/user-chat/user-chat",
             "style" : {
-				"enablePullDownRefresh":true,//开启下拉刷新
 				"navigationBarTitleText":"聊天页",
 				"app-plus":{
-					"scrollIndicator":"none",//隐藏滚动条
-					"bounce":"none",//关闭反弹效果
 					"titleNView":{
 						"buttons":[
 							// 右边
@@ -370,6 +367,10 @@
             		 }
             	}
             }
+        }
+        ,{
+            "path" : "pages/user-collect/user-collect",
+            "style" : {}
         }
     ],
 	"globalStyle": {

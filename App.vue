@@ -9,25 +9,26 @@
 			try{
 				 data =JSON.parse(uni.getStorageSync('userInfo'))
 				 chatList =JSON.parse(uni.getStorageSync('chatList'))
+				 let res ={};
+				 if(uni.getStorageSync('token')){
+				 	res = await this.$http.post("auth/verify")
+				 }
+				 if(res && res.status==404){
+				 	uni.clearStorageSync('userInfo')
+				 	uni.clearStorageSync('token')
+				 }else{
+				 	if(res.data&&res.data.token){
+				 		uni.setStorageSync('token',res.data.token)
+				 		
+				 	}
+				 	this.setUserInfo(data||{})
+				 	this.setChatList(chatList||[])
+				 }
 				 
 			}catch(e){
 			
 			}
-			let res ={};
-			if(uni.getStorageSync('token')){
-				// res = await this.$http.post("auth/verify")
-			}
-			if(res && res.status==404){
-				uni.clearStorageSync('userInfo')
-				uni.clearStorageSync('token')
-			}else{
-				if(res.data&&res.data.token){
-					uni.setStorageSync('token',res.data.token)
-					
-				}
-				this.setUserInfo(data||{})
-				this.setChatList(chatList||[])
-			}
+
 
 			// 更新检测
 		},
@@ -51,7 +52,8 @@
 	@import './common/uni.css';
 	/* 引入自定义图标库 */
 	@import './common/icon.css';
-	
+	/* 引入自定义图标库 */
+	@import './common/ssk.css';
 	/* 引入动画库 */
 	@import './common/animate.css';
 	/* 公共样式 */

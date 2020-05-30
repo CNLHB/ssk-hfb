@@ -22,15 +22,42 @@
 			clickevent(){
 				switch (this.item.clicktype){
 					case "navigateTo":
-					console.log(this.item.url)
-					if(this.item.url){ 
-						
+						if(this.item.url){ 
 						uni.navigateTo({ url:this.item.url}); 
 						}
 						break;
 					case "switchTab":
 					if(this.item.url){ uni.switchTab({url:this.item.url}) }
+					
 						break;
+					case "showImage":
+						 uni.previewImage({
+						            urls: ["../../static/common/dashangimg.jpg"],
+						            longPressActions: {
+						                itemList: ['发送给朋友', '保存图片', '收藏'],
+						                success: function(data) {
+						                    console.log('选中了第' + (data.tapIndex + 1) + '个按钮,第' + (data.index + 1) + '张图片');
+						                },
+						                fail: function(err) {
+						                    console.log(err.errMsg);
+						                }
+						            }
+						        });
+						break
+					case "contactme":
+						 uni.previewImage({
+						            urls: ["../../static/common/contactme.jpg"],
+						            longPressActions: {
+						                itemList: ['发送给朋友', '保存图片', '收藏'],
+						                success: function(data) {
+						                    console.log('选中了第' + (data.tapIndex + 1) + '个按钮,第' + (data.index + 1) + '张图片');
+						                },
+						                fail: function(err) {
+						                    console.log(err.errMsg);
+						                }
+						            }
+						        });
+						break
 					case "clear":
 					uni.showModal({
 						title: '提示',

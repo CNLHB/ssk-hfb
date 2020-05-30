@@ -3,6 +3,9 @@
 		
 		<scroll-view id="scrollview" scroll-y :scroll-top="scrollTop" 
 		:scroll-with-animation="true"
+		refresher-enabled
+		@refresherrefresh="scrollTopHandle"
+		:refresher-triggered="triggered"
 		:style="{height:style.contentH+'px'}">
 			<!-- 聊天列表 -->
 			<block v-for="(item,index) in currentChatMsgs" :key="index">
@@ -32,12 +35,13 @@
 			userChatList
 		},
 		computed:{
-			...mapState(['chatList','userInfo','msgIndex']),
+			...mapState(['chatList','userInfo','msgIndex','msgPage']),
 			...mapGetters(['currentChatMsgs'])
 		},
 		data() {
 			return {
 				scrollTop:0,
+				triggered:false,
 				index:-1,
 				style:{
 					contentH:0,
@@ -58,14 +62,9 @@
 			this.isShow = false
 			this.setIndex(-1)
 			this.setMsgPage(1)
-			console.log(-1)
 		},
 		// 监听下拉刷新
-		async onPullDownRefresh() {
-			this.setMsgPage()
-			console.log(8)
-			uni.stopPullDownRefresh();
-		},
+		
 		async onLoad(data) {
 			if(data.index){
 				this.setIndex(parseInt(data.index))
@@ -109,12 +108,15 @@
 		onReady() {
 			this.getdata();
 			this.initdata();
-			console.log(2)
 			this.pageToBottom(true);
 		},
 		watch:{
-			currentChatMsgs(){
-				// this.pageToBottom(true);
+			currentChatMsgs(old){
+				if(this.triggered){
+					
+				}else{
+					this.pageToBottom(true);
+				}
 			}
 		},
 		methods:{
@@ -128,8 +130,27 @@
 			initdata(){
 				try {
 					const res = uni.getSystemInfoSync();
-					this.style.contentH=res.windowHeight - uni.upx2px(200);
+					this.style.contentH=res.windowHeight - uni.upx2px(120);
 				} catch (e) { }
+			},
+			scrollTopHandle(){
+				console.log(88)
+				if (this.triggered) {
+					console.log(this.triggered)
+					setTimeout(()=>{
+						if(this.msgPage>(this.currentChatMsgs.length/20)){
+							uni.showToast({
+								title:"没有更多消息了!",
+								icon:'none'
+							})
+						}
+						this.triggered = false;
+					},200)
+					return;
+				}
+				console.log(this.triggered)
+				this.triggered = true;
+				this.setMsgPage()
 			},
 			pageToBottom(isfirst = false){
 				let q=uni.createSelectorQuery().in(this);

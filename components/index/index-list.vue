@@ -7,6 +7,11 @@
 				lazy-load></image>
 				{{item.username}}
 			</view>
+			<view v-if="!isguanzhu" @tap="guanzhu"
+				class="icon iconfont icon-zengjia guanzhu">关注</view>
+			<view v-else @tap="guanzhu"
+			class="icon iconfont guanzhu">取消关注</view>
+			
 		</view>
 		<view class="index-list2" @tap="opendetail">{{item.title}}</view>
 		<view class="index-list3 u-f-ajc" @tap="opendetail">
@@ -44,6 +49,7 @@
 			</view>
 			<view class="u-f-ac">
 				<view class="u-f-ac" @tap="opendetail">
+					<uni-fav :checked="collect" class="favBtn" circle="true"  @click="onClick"></uni-fav>
 					<view class="icon iconfont icon-pinglun1"></view>
 					{{item.commentNum}}
 				</view>
@@ -57,7 +63,11 @@
 </template>
 
 <script>
+	import uniFav from '@/components/uni-fav/uni-fav.vue'
 	export default {
+		components:{
+			uniFav
+		},
 		props:{
 			item:Object,
 			index:Number,
@@ -65,35 +75,74 @@
 		},
 		data() {
 			return {
-				isguanzhu: false,
+				isguanzhu: this.item.isguanzhu,
+				collect: this.item.collect,
 				infoNum:this.item.infoNum,
 				topicActive:{
 					uid:this.userInfo.id,
 					tid:this.item.id,
-					tuid: this.item.uid
+					tuid: this.item.uid,
+					cid:this.item.cid
 					
 				}
 			}
 		},
 		onLoad() {
+			console.log(this.item)
 			this.isguanzhu=this.item.isguanzhu
 			this.infoNum=this.item.infoNum
 			this.topicActive.uid = this.userInfo.id
 			this.topicActive.tid = this.item.id
 			this.topicActive.tuid = this.item.uid
-
+		
 			
 			
 		},
 		methods:{
 			// 关注
 			guanzhu(){
-				this.isguanzhu=true;
-				uni.showToast({
-					title: '关注成功',
-				});
+				if(!this.userInfo.id){
+					uni.showToast({
+						title:'你还未登录!',
+						icon:'none'
+					})
+					return 
+				}
+				if(this.isguanzhu){
+					this.$http.delete('/user/active',{
+						fromId:this.userInfo.id,
+						toId:this.item.uid
+					})
+					this.isguanzhu=false;
+					uni.showToast({
+						title: '取消关注',
+					});
+				}else{
+					this.$http.post('/user/active',{
+						fromId:this.userInfo.id,
+						toId:this.item.uid
+					})
+					this.isguanzhu=true;
+					uni.showToast({
+						title: '关注成功',
+					});
+				}
+				uni.hideToast()
 			},
-			
+			onClick(){
+				if(!this.userInfo || !this.userInfo.id){
+					uni.showToast({
+						title:"你还未登录！或登录过有效期!",
+						icon:'none'
+					})
+					return
+				}
+				this.$http.post('topic/collect',{
+					...this.topicActive
+				})
+				this.collect = !this.collect
+				console.log(88)
+			},
 			// 顶踩
 			async caozuo(type){
 				if(!this.userInfo || !this.userInfo.id){
@@ -134,32 +183,19 @@
 								...this.topicActive,
 								tactive: 0
 							})
-						// this.$http.post('/topic/active',{
-						// 	tid:this.item.id,
-						// 	uid:2,
-						// 	tactive: 0
-						// }).then((data)=>{
 						this.infoNum.treadNum--;
 						this.infoNum.index=0;
-						// })
-						
 						return  
 					}
 					await this.$emit("likeOrTread",{
 							...this.topicActive,
 							tactive: 2
 						})
-					// this.$http.post('/topic/active',{
-					// 	tid:this.item.id,
-					// 	uid:2,
-					// 	tactive: 2
-					// }).then((data)=>{
 						this.infoNum.treadNum++;
 						if(this.infoNum.index==1){
 							this.infoNum.likeNum--;
 						}
 						this.infoNum.index=2;
-					// })
 						break;
 				}
 			},
@@ -175,13 +211,21 @@
 </script>
 
 <style scoped>
+	
 .index-list{
 	margin: 20upx;
 	border-radius: 30upx;
 	background-color: #FFFFFF;
 }
+.guanzhu{
+	    background-color: #FFFFFF;
+		color: #999999;
+	    padding: 0 20upx;
+	    font-size: 13px;
+}
 .index-list1>view:first-child{
 	margin-left: 10px;
+	height: 100upx;
 	color: #999999;
 }
 .index-list1>view:first-child image{

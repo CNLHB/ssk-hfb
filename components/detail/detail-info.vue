@@ -98,7 +98,13 @@
 				// })
 			},
 			guanzhu(){
-					console.log(this.userInfo.id,this.detail.uid)
+				if(!this.userInfo.id){
+					uni.showToast({
+						title:'你还未登录!',
+						icon:'none'
+					})
+					return 
+				}
 				if(this.isguanzhu){
 					this.$http.delete('/user/active',{
 						fromId:this.userInfo.id,

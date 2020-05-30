@@ -1,5 +1,5 @@
 <template>
-	<view class="user-list u-f-ac animated fadeIn fast"  @tap="gotoTopicInfo">
+	<view class="user-list u-f-ac animated fadeIn fast"  @tap.stop="gotoTopicInfo">
 		<image :src="item.userpic" mode="widthFix" lazy-load></image>
 		<view >
 			<view>{{item.username}}</view>
@@ -20,7 +20,12 @@
 		},
 		methods:{
 			gotoTopicInfo(){
-				 this.item.images = this.item.images.split(",")
+				 console.log(this.item.images)
+				 if(this.item.images==null){
+					 this.item.images=[]
+				 }else{
+					 this.item.images = this.item.images.split(",")
+				 }
 				uni.setStorageSync("topicDatail",JSON.stringify(this.item))
 				uni.navigateTo({
 					url: '../../pages/detail/detail',

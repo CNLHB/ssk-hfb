@@ -87,12 +87,16 @@
 					{ icon:"liulan",name:"浏览历史",clicktype:"navigateTo",url:"../../pages/user-history/user-history"},
 					{ icon:"huiyuanvip",name:"韩府认证",clicktype:"",url:"" },
 					{ icon:"keyboard",name:"审核历史",clicktype:"",url:"" },
+					{ icon:"dashang",name:"打赏我们",clicktype:"showImage",url:"" },
+					{ icon:"weixin",name:"联系我们",clicktype:"contactme",url:"" },
 				]
 			};
 		},
 		onNavigationBarButtonTap(e) {
 			if(this.userInfo.id){
 				if(e.index==0){
+					
+
 					uni.navigateTo({
 						url: '../user-set/user-set',
 					});
@@ -113,24 +117,38 @@
 			},
 			async initDat(){
 				if(this.userInfo&&this.userInfo.id){
-					let topicCount = await this.$http.get('topic/count')
-					let commCount = await this.$http.get('comment/count')
 					let userAccess = await this.$http.get('user/access')
 					this.homeinfo.totalnum = userAccess.allAcc
 					this.homeinfo.todaynum = userAccess.dayAcc
 					this.homedata[0].num = userAccess.topicCount
 					this.homedata[1].num = userAccess.commCount
+					this.homedata[2].num = userAccess.collCount
 					this.islogin = true
 				}
 			},
 			goToSpace(index){
-				if(index==0){
-					if(index==0){
-						uni.navigateTo({
-							url:'../../pages/user-space/user-space?uid=' + this.userInfo.id
-						})
-					}
-				}
+						console.log(index)
+						switch(index){
+							
+							case 0:
+								uni.navigateTo({
+									url:'../../pages/user-space/user-space?uid=' + this.userInfo.id
+								})
+								break;
+							case 1:
+								uni.navigateTo({
+									url:'../../pages/user-space/user-space?uid=' + this.userInfo.id
+								})
+								break;
+							case 2:
+							
+								uni.navigateTo({
+									url:'../../pages/user-collect/user-collect?uid=' + this.userInfo.id
+								})
+								break;
+								
+						}
+
 			}
 		}
 	}

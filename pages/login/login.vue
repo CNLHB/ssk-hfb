@@ -84,10 +84,10 @@
 		data() {
 			return {
 				status:false,//false代表账号密码登录，true代表手机验证码登录
-				disabled:true,
+				disabled:false,
 				loading:false,
-				username:"",
-				password:"",
+				username:"15363398328",
+				password:"123456",
 				phone:"",
 				checknum:"",
 				codetime:0,
@@ -231,7 +231,9 @@
 <style>
 @import "../../common/form.css";
 .login-font-color{ color: #BBBBBB; }
-.login-padding{ padding: 20upx 0; }
+.login-padding{ 
+	padding: 20upx 0;
+	 }
 .icon-guanbi{
 	position: fixed;
 	top: 60upx;
@@ -241,7 +243,10 @@
 	color: #332F0A;
 	z-index: 100;
 }
-.loginhead{ width: 100%; }
+.loginhead{ 
+	width: 100%; 
+	margin-bottom: 40upx;
+	}
 .other-login-title{
 	position: relative;
 }

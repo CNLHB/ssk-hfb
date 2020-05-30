@@ -1,7 +1,9 @@
 import request from "./request";
-let baseUrl=process.env.NODE_ENV === 'development'?"xxx":"xxx";
-let socketBaseUrl=process.env.NODE_ENV === 'development'?"xxx":"xxx";
+// let baseUrl=process.env.NODE_ENV === 'development'?"xxx":"xxx";
+// let socketBaseUrl=process.env.NODE_ENV === 'development'?"xxx":"xxx";
 
+let baseUrl=process.env.NODE_ENV === 'development'?"http://192.168.31.164:8081/":"http://api.hfb.xquery.cn/";
+let socketBaseUrl=process.env.NODE_ENV === 'development'?"ws://192.168.31.164:8081/":"ws://api.hfb.xquery.cn/";
 //可以new多个request来支持多个域名请求
 let $http = new request({
 	//接口请求地址

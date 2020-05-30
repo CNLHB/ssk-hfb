@@ -50,18 +50,18 @@
 		methods: {
 			async initData(){
 				if(this.userInfo.id){
-					let data = await this.$http.get("topic/history")
+					let data = await this.$http.get("topic/collect")
 					if(data&&data.length){
 						this.list = data.reverse()
 					}else{
 						this.list = []
-						this.loadtext= '浏览历史为空'
+						this.loadtext= '收藏为空'
 					}
 				}
 			},
 			onClick(item,index) {
 				this.$http.setLoading(false);
-				this.$http.delete('topic/history',{
+				this.$http.delete('topic/collect',{
 					ids: [item.id]
 				},{
 					"content-type":"application/x-www-form-urlencoded"
