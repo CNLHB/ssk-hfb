@@ -198,7 +198,6 @@
 					})
 					return
 				}
-				console.log(data)
 				this.$http.setLoading(false);
 				let msg =await this.$http.post("push/message",{
 					cId: this.cId,

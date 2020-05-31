@@ -7,21 +7,20 @@
 			let data;
 			let chatList;
 			try{
-				 data =JSON.parse(uni.getStorageSync('userInfo'))
 				 chatList =JSON.parse(uni.getStorageSync('chatList'))
 				 let res ={};
 				 if(uni.getStorageSync('token')){
 				 	res = await this.$http.post("auth/verify")
+					console.log(res)
 				 }
 				 if(res && res.status==404){
-				 	uni.clearStorageSync('userInfo')
 				 	uni.clearStorageSync('token')
 				 }else{
 				 	if(res.data&&res.data.token){
 				 		uni.setStorageSync('token',res.data.token)
-				 		
+				 		this.setUserInfo(res.data.userInfo)
 				 	}
-				 	this.setUserInfo(data||{})
+					
 				 	this.setChatList(chatList||[])
 				 }
 				 

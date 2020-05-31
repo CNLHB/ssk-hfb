@@ -85,8 +85,8 @@
 				],
 				list:[
 					{ icon:"liulan",name:"浏览历史",clicktype:"navigateTo",url:"../../pages/user-history/user-history"},
-					{ icon:"huiyuanvip",name:"韩府认证",clicktype:"",url:"" },
-					{ icon:"keyboard",name:"审核历史",clicktype:"",url:"" },
+					// { icon:"huiyuanvip",name:"韩府认证",clicktype:"",url:"" },
+					// { icon:"keyboard",name:"审核历史",clicktype:"",url:"" },
 					{ icon:"dashang",name:"打赏我们",clicktype:"showImage",url:"" },
 					{ icon:"weixin",name:"联系我们",clicktype:"contactme",url:"" },
 				]

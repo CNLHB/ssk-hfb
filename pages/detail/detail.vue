@@ -3,7 +3,6 @@
 		<detail-info 
 			@goToUserInfo="goToUserInfo"
 			:userInfo="userInfo"
-			:detail="detail"
 			:item="detail"></detail-info>
 
 		<view class="u-comment-title" :maskState="maskState">最新评论 {{comment.count}}</view>
@@ -58,17 +57,13 @@
 				},
 				detail:{},
 				maskState:false
+	
 			}
 		},
-		onLoad(e) {
+		onLoad(data) {
 			try{
-				let data = JSON.parse(uni.getStorageSync("topicDatail"))
-				this.initdata(data);
-				this.getcomment();
-				if(this.userInfo.id){
-					this.pushHistory(data)
-				}
-				
+				this.initData(data.id)
+				// let detail = JSON.parse(uni.getStorageSync("topicDatail"))
 			}catch(e){
 				
 			}
@@ -83,11 +78,32 @@
 			...mapState(['userInfo'])
 		},
 		methods: {
+			// 初始化数据
+			async initData(id){
+					// 修改窗口标题
+				uni.setNavigationBarTitle({ title: "详情"});
+				let detail = await this.$http.get('topic/detail/'+id)
+				if(detail.images==null||detail.images==''){
+					detail.images = []
+				}else{
+					detail.images = detail.images.split(",")
+				}
+				this.detail = detail
+				this.comment.count = detail.commentNum
+				
+				if(this.userInfo.id){
+					this.pushHistory(detail)
+				}
+				this.getcomment();
+			},
 			pushHistory(data){
 				this.$http.post('topic/history',{
 					cid:data.cid,
 					tid:data.id,
-					uid:this.userInfo.id
+					uid:this.userInfo.id,
+					title:data.title,
+					username:data.username,
+					userpic:data.userpic
 				})
 			},
 			togle(){
@@ -156,13 +172,7 @@
 				this.comment.count = arr.total;
 				this.detail.commentNum = arr.total
 			},
-			// 初始化数据
-			initdata(obj){
-				// 修改窗口标题
-				uni.setNavigationBarTitle({ title: "详情"});
-				this.detail = obj
-				this.comment.count = obj.commentNum
-			}
+
 		}
 	}
 </script>

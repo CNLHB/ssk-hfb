@@ -3,13 +3,15 @@
 		<uni-swipe-action>
 			<template v-for="(item ,index) in list" >
 				<uni-swipe-action-item :options="options" :key="index" @onClick="onClick(item,index)" >
-					<history-list :item="item" :key="index"></history-list>
+					<history-list :item="item" :key="index" @gotoTopicInfo="gotoTopicInfo(item)">
+						
+					</history-list>
 				</uni-swipe-action-item>
 			</template>
 
 		</uni-swipe-action>
 
-		<load-more :loadtext="loadtext"></load-more>
+		<load-more :loadtext="loadtext" ></load-more>
 	</view>
 </template>
 
@@ -69,8 +71,10 @@
 				this.$http.setLoading(true);
 				this.list.splice(index,1)
 			},
-			gotoTopicInfo(){
-				console.log(88)
+			gotoTopicInfo(item){
+				uni.navigateTo({
+					url: '../../pages/detail/detail?id='+item.tid,
+				});
 			}
 		}
 	}

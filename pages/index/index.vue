@@ -23,8 +23,10 @@
 							<block v-for="(item,index1) in items.list" :key="index1">
 									<index-list 
 									@likeOrTread="likeOrTread" 
+									@opendDetail="opendDetail"
 									:item="item" 
 									:userInfo="userInfo"
+									
 									:index="index1"></index-list>
 								</block>
 							 <load-more :loadtext="items.loadtext"></load-more>
@@ -200,7 +202,6 @@
 					title: '签到成功',
 				});
 			},
-			// 上拉加载
 			publish() {
 				console.log("publish")
 				// 打开发布页面
@@ -235,6 +236,12 @@
 			tabChange(e) {
 				this.tabIndex = e.detail.current;
 				this.requestData(this.tabBars[this.tabIndex].page,this.tabBars[this.tabIndex].id)
+			},
+			opendDetail(item){
+				uni.setStorageSync("topicDatail",JSON.stringify(item))
+				uni.navigateTo({
+					url: '../../pages/detail/detail?id='+item.id,
+				});
 			}
 		},
 	}

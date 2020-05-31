@@ -27,7 +27,7 @@
 							<input class="uni-input" placeholder-class="icon iconfont icon-sousuo topic-search" placeholder="搜索内容" />
 						</view>
 						<!-- 轮播图 -->
-						<swiper class="topic-swiper" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">
+						<swiper class="topic-swiper" :indicator-dots="true" :autoplay="true" :interval="3000" circular :duration="1000">
 							<block v-for="(item,index) in topic.swiper" :key="index">
 								<swiper-item>
 									<image :src="item.src" mode="widthFix" lazy-load></image>
@@ -95,13 +95,13 @@
 				},
 				topic: {
 					swiper: [{
-							src: "../../static/demo/banner2.jpg"
+							src: "../../static/demo/banner1.jpg"
 						},
 						{
 							src: "../../static/demo/banner2.jpg"
 						},
 						{
-							src: "../../static/demo/banner2.jpg"
+							src: "../../static/demo/banner3.jpg"
 						},
 					],
 					nav: [{
@@ -114,13 +114,13 @@
 							name: "打卡"
 						},
 						{
-							name: "情感"
+							name: "韩府"
 						},
 						{
-							name: "故事"
+							name: "二手"
 						},
 						{
-							name: "喜爱"
+							name: "周边"
 						},
 					],
 					list: [{

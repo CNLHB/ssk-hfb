@@ -174,10 +174,8 @@
 			},
 			gotoTopic(index){
 				let topicDetail = this.topicList[index];
-				topicDetail.images = topicDetail.images.split(",")
-				uni.setStorageSync("topicDatail",JSON.stringify(topicDetail))
 				uni.navigateTo({
-					url: '../../pages/detail/detail',
+					url: '../../pages/detail/detail?id='+topicDetail.id,
 				});
 			},
 			// 操作菜单显示隐藏

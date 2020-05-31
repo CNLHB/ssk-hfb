@@ -56,10 +56,10 @@
 				tabBars:[
 					{ name:"关注",id:"guanzhu" },
 					{ name:"推荐",id:"tuijian" },
-					{ name:"体育",id:"tiyu" 	  },
-					{ name:"热点",id:"redian"  },
-					{ name:"财经",id:"caijing" },
-					{ name:"娱乐",id:"yule"    },
+					{ name:"韩府",id:"hanfu" 	  },
+					{ name:"娱乐",id:"yule"  },
+					{ name:"二手",id:"ershou" },
+					{ name:"周边",id:"zhoubian"    },
 				],
 				newslist:[
 					{

@@ -335,6 +335,8 @@
 								"content-type":"application/x-www-form-urlencoded"
 							});
 							this.$http.setLoading(true);
+							this.setChatList([])
+							// uni.clearStorageSync("chatList")
 						}
 					}
 				})

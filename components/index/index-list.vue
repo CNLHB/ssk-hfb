@@ -138,7 +138,10 @@
 					return
 				}
 				this.$http.post('topic/collect',{
-					...this.topicActive
+					...this.topicActive,
+					title:this.item.title,
+					username:this.item.username,
+					userpic:this.item.userpic
 				})
 				this.collect = !this.collect
 				console.log(88)
@@ -201,9 +204,10 @@
 			},
 			// 进入详情页
 			opendetail(){
+				this.$emit("opendDetail",this.item)
 				uni.setStorageSync("topicDatail",JSON.stringify(this.item))
 				uni.navigateTo({
-					url: '../../pages/detail/detail',
+					url: '../../pages/detail/detail?id='+this.item.id,
 				});
 			}
 		}

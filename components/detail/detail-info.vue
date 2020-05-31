@@ -30,7 +30,6 @@
 					</block>
 				</view>
 				<!-- 视频 -->
-					<!-- :danmu-list="danmu_list" -->
 				<template v-if="item.urlType=='mp4'">
 					<video :src="item.images[0]" 
 					style="width: 100%;"
@@ -42,10 +41,10 @@
 				</template>
 				
 				<!-- 分享 -->
-<!-- 				<view class="common-list-share u-f-ac" v-if="item.share">
-					<image :src="item.share.titlepic" 
+<!-- 				<view class="common-list-share u-f-ac" v-if="item">
+					<image :src="item.images[0]" 
 					mode="widthFix" lazy-load></image>
-					<view>{{item.share.title}}</view>
+					<view>{{item.title}}</view>
 				</view> -->
 			</view>
 			<view class="u-f-ac u-f-jsb">
@@ -56,7 +55,8 @@
 					<view class="icon iconfont icon-pinglun1">
 					{{item.commentNum}}</view>
 					<view class="icon iconfont icon-dianzan1">
-					{{item.infoNum.likeNum}}</view>
+					{{item.infoNum?item.infoNum.likeNum:0}}
+					</view>
 				</view>
 			</view>
 		</view>
@@ -72,9 +72,10 @@
 			tagSexAge
 		},
 		props:{
-			item:Object,
-			userInfo:Object,
-			detail:Object
+			item:{
+				type:Object
+			},
+			userInfo:Object
 		},
 		data() {
 			return {
@@ -85,10 +86,12 @@
 		},
 		computed:{
 			createDate(){
-				let data = new Date(this.item.createTime).getTime();
 				
+				let data =this.item.createTime? new Date(this.item.createTime).getTime():+new Date;
 				return time.gettime.sumAge(data)
 			}
+		},
+		mounted(){
 		},
 		methods:{
 			goToUserInfo(item){
@@ -108,7 +111,7 @@
 				if(this.isguanzhu){
 					this.$http.delete('/user/active',{
 						fromId:this.userInfo.id,
-						toId:this.detail.uid
+						toId:this.item.uid
 					})
 					this.isguanzhu=false;
 					uni.showToast({
@@ -117,7 +120,7 @@
 				}else{
 					this.$http.post('/user/active',{
 						fromId:this.userInfo.id,
-						toId:this.detail.uid
+						toId:this.item.uid
 					})
 					this.isguanzhu=true;
 					uni.showToast({

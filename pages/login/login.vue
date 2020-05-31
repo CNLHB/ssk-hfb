@@ -186,7 +186,7 @@
 						return
 					}
 					try{
-						uni.setStorageSync('userInfo',JSON.stringify(data.data.userInfo));
+						// uni.setStorageSync('userInfo',JSON.stringify(data.data.userInfo));
 						uni.setStorageSync('token',data.data.token);
 					}catch(e){
 						
