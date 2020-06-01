@@ -3,20 +3,26 @@
 		<!-- 话题介绍 -->
 		<topic-info :item="topicInfo"></topic-info>
 		<!-- tabbar切换 -->
-		<swiper-tab-head 
+<!-- 		<swiper-tab-head 
 		:tabBars="tabBars" 
 		:tabIndex="tabIndex"
 		@tabtap="tabtap"
 		scrollItemStyle="width:50%;"
 		scrollStyle="border-bottom:0;">
-		</swiper-tab-head>
+		</swiper-tab-head> -->
 		<!-- 列表 -->
 		<view class="topic-detail-list">
 			<block v-for="(item,index) in tablist" :key="index">
 				<template v-if="tabIndex==index">
 					<!-- 列表 -->
 					<block v-for="(list,listindex) in item.list" :key="listindex">
-						<common-list :item="list" :index="listindex"></common-list>
+					<index-list
+					@likeOrTread="likeOrTread" 
+					@opendDetail="opendDetail"
+					:item="list" 
+					:userInfo="userInfo"
+					:index="listindex"></index-list>
+						<!-- <index-list :item="list" :index="listindex"></index-list> -->
 					</block>
 					<!-- 上拉加载 -->
 					<load-more :loadtext="item.loadtext"></load-more>
@@ -30,23 +36,31 @@
 <script>
 	import topicInfo from "../../components/topic/topic-info.vue";
 	import swiperTabHead from "../../components/index/swiper-tab-head.vue";
-	import commonList from "../../components/common/common-list.vue";
+	import indexList from "../../components/index/index-list.vue";
 	import loadMore from "../../components/common/load-more.vue";
+	import {mapState} from 'vuex'
 	export default {
 		components:{
 			topicInfo,
 			swiperTabHead,
-			commonList,
+			indexList,
 			loadMore
+		},
+		computed:{
+			...mapState(['userInfo'])
 		},
 		data() {
 			return {
 				topicInfo:{
-					titlepic:"../../static/demo/topicpic/13.jpeg",
-					title:"忆往事，敬余生",
-					desc:"我是描述",
-					totalnum:1000,
-					todaynum:1000,
+						cid: 3,
+						createTime: "2020-06-01T03:02:15.000+00:00",
+						description: "我是话题6的描述",
+						display: true,
+						id: 6,
+						title: "我是标题6",
+						titlePic: "http://image.xquery.cn/159098136077813.jpeg",
+						total: 0,
+						uid: 11
 				},
 				tabIndex:0,
 				tabBars:[
@@ -58,49 +72,29 @@
 						loadtext:"上拉加载更多",
 						list:[
 							// 文字
-							{
-								userpic:"../../static/demo/userpic/12.jpg",
-								username:"哈哈",
-								sex:0, //0 男 1 女
-								age:25,
-								isguanzhu:false,
-								title:"我是标题",
-								titlepic:"",
-								video:false,
-								share:false,
-								path:"深圳 龙岗",
-								sharenum:20,
-								commentnum:30,
-								goodnum:20
-							},
-
-
 						]
-					},
-					{
-						loadtext:"上拉加载更多",
-						list:[
-							// 文字
-							{
-								userpic:"../../static/demo/userpic/12.jpg",
-								username:"哈哈",
-								sex:0, //0 男 1 女
-								age:25,
-								isguanzhu:false,
-								title:"我是标题",
-								titlepic:"",
-								video:false,
-								share:false,
-								path:"深圳 龙岗",
-								sharenum:20,
-								commentnum:30,
-								goodnum:20
-							},
-
-						]
-					},
+					}
 				]
-			};
+			}
+		},
+		async onLoad(data){
+			let info = await this.$http.get('topic/title/'+data.id)
+			this.topicInfo = info
+			let list = await this.$http.get('topic/title/list/'+data.id)
+			if(list.code !== 10004){
+				list.forEach((item)=>{
+					if(item.images!=''){
+						item.images = item.images.split(",");
+					}else{
+						item.images =[]
+					}
+					
+				})
+				console.log(list)
+				this.tablist[0].list = list
+			}else{
+				this.tablist[this.tabIndex].loadtext="没有更多数据了";
+			}
 		},
 		// 上拉触底事件
 		onReachBottom() {
@@ -114,16 +108,8 @@
 		methods:{
 			// 上拉刷新
 			getdata(){
-				setTimeout(()=> {
-					// 获取数据
-					let arr=[
-			
-					];
-					// 赋值
-					this.tablist[this.tabIndex].list=arr;
 					// 关闭下拉刷新
 					uni.stopPullDownRefresh();
-				}, 2000);
 			},
 			// 上拉加载
 			loadmore(){
@@ -131,32 +117,23 @@
 				// 修改状态
 				this.tablist[this.tabIndex].loadtext="加载中...";
 				// 获取数据
-				setTimeout(()=> {
-					//获取完成
-					let obj={
-						userpic:"../../static/demo/userpic/12.jpg",
-						username:"哈哈",
-						sex:0, //0 男 1 女
-						age:25,
-						isguanzhu:false,
-						title:"我是标题",
-						titlepic:"../../static/demo/datapic/13.jpg",
-						video:false,
-						share:false,
-						path:"深圳 龙岗",
-						sharenum:20,
-						commentnum:30,
-						goodnum:20
-					};
-					this.tablist[this.tabIndex].list.push(obj);
 					this.tablist[this.tabIndex].loadtext="上拉加载更多";
-				}, 1000);
 				//this.tablist[this.tabIndex].loadtext="没有更多数据了";
 			},
 			// tabbar点击事件
 			tabtap(index){
 				this.tabIndex=index;
 			},
+			async likeOrTread(data){
+			
+				await this.$http.post('topic/active',data);
+			},
+			opendDetail(item){
+				uni.setStorageSync("topicDatail",JSON.stringify(item))
+				uni.navigateTo({
+					url: '../../pages/detail/detail?id='+item.id,
+				});
+			}
 		}
 	}
 </script>

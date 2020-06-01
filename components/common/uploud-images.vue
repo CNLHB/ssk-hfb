@@ -4,7 +4,7 @@
 			<view class="uni-uploader">
 				<view class="uni-uploader-head">
 					<view class="uni-uploader-title">点击可预览选好的图片</view>
-					<view class="uni-uploader-info">{{imageList.length}}/9</view>
+					<view class="uni-uploader-info">{{imageList.length}}/{{size}}</view>
 				</view>
 				<view class="uni-uploader-body">
 					<view class="uni-uploader__files">
@@ -36,6 +36,12 @@
 		['compressed', 'original']
 	]
 	export default {
+		props:{
+			size:{
+				type:Number,
+				default:9
+			}
+		},
 		data() {
 			return {
 				imageList: [],
@@ -49,7 +55,7 @@
 		},
 		methods:{
 			chooseImage: async function() {
-				if (this.imageList.length === 9) { return; }
+				if (this.imageList.length === this.size) { return; }
 				
 				uni.chooseImage({
 					sourceType: sourceType[this.sourceTypeIndex],

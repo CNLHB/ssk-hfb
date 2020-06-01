@@ -24,7 +24,21 @@
 				<button type="default" @tap="hidePopup">我知道了</button>
 			</view>
 		</uni-popup>
-		
+		<view class="wrap">
+			<uni-tag text="选择标签"
+				type="primary"
+				size="normal" :circle="true" @click="bindClick"></uni-tag>
+		</view>
+		<view class="wrap1">
+			<template v-for="(item,index) in selTitle" >
+			<view class="wrap2" :key="item.id"  @tap="delTitle(index)">
+				<uni-tag 
+					inverted="true"
+					:text="item.title" type="success" size="normal" :circle="true" ></uni-tag>
+			</view>
+			</template>
+
+		</view>
 	</view>
 </template>
 
@@ -33,12 +47,14 @@
 	import uniNavBar from "../../components/uni-nav-bar/uni-nav-bar.vue";
 	import uploudImages from "../../components/common/uploud-images.vue";
 	import uniPopup from "../../components/uni-popup/uni-popup.vue";
-	import {mapState} from 'vuex'
+	import uniTag from "@/components/uni-tag/uni-tag.vue"
+	import {mapState,mapMutations} from 'vuex'
 	export default {
 		components:{
 			uniNavBar,
 			uploudImages,
-			uniPopup
+			uniPopup,
+			uniTag
 		},
 		data() {
 			return {
@@ -64,9 +80,10 @@
 			changelook = data
 		},
 		computed:{
-			...mapState(['userInfo'])
+			...mapState(['userInfo', 'selTitle'])
 		},
 		methods:{
+			...mapMutations(['delSelTitle','resetSelTitle']),
 			// 保存为草稿
 			baocun(){
 				uni.showModal({
@@ -102,30 +119,42 @@
 					images.push(url);
 						console.log(i)
 				}
-
-				await this.$http.post("/topic",{
+				let ids = []
+				ids = this.selTitle.map((item=>{
+					return item.id
+				}))
+				let data = await this.$http.post("topic",{
 					uid:this.userInfo.id,
 					cid:this.cid,
 					title:this.text,
 					urlType:"img",
-					images: images.join(',')
+					images: images.join(','),
+					ids:ids
 				})
+				if(data.code==0){
+					this.resetSelTitle()
+					uni.showToast({
+						title: '发表成功',
+						icon:"success",
+						duration: 200,
+						success:()=>{
+							this.text = '',
+							this.files.length=0
+							this.imglist.length=0
+							
+							uni.navigateBack({
+								delta:10
+							})
+						}
+					});
+				}else{
+					uni.showToast({
+						title: '发表失败',
+						icon:"none",
 
-				
-				uni.showToast({
-					title: '发表成功',
-					icon:"success",
-					duration: 200,
-					success:()=>{
-						this.text = '',
-						this.files.length=0
-						this.imglist.length=0
-						
-						uni.navigateBack({
-							delta:10
-						})
-					}
-				});
+					});
+				}
+
 				
 			},
 			// 隐私
@@ -146,12 +175,21 @@
 			},
 			hidePopup(){
 				this.showpopup=false;
+			},
+			bindClick(){
+				console.log('选择标签')
+				uni.navigateTo({
+					url:'../select-title/select-title'
+				})
+			},
+			delTitle(index){
+				this.delSelTitle(index)
 			}
 		}
 	}
 </script>
 
-<style>
+<style scoped>
 .uni-textarea{
 	border: 1upx solid #EEEEEE;
 }
@@ -166,5 +204,19 @@
 	margin-top: 20upx;
 	background: #FFE934;
 	color: #171606;
+}
+.wrap{
+	padding: 20upx 50upx;
+	width: 200upx;
+}
+.wrap2{
+	padding: 20upx 0 0 50upx;
+}
+.wrap1{
+	display: flex;
+	justify-content: start;
+	flex-direction: row;
+	flex-wrap: wrap;
+	padding-right: 30upx;
 }
 </style>

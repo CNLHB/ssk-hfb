@@ -26,7 +26,6 @@
 									@opendDetail="opendDetail"
 									:item="item" 
 									:userInfo="userInfo"
-									
 									:index="index1"></index-list>
 								</block>
 							 <load-more :loadtext="items.loadtext"></load-more>
@@ -39,7 +38,16 @@
 				</swiper-item>
 			</swiper>
 		</view>
-
+		<view>
+			<uni-calendar 
+			:start-date="'2019-3-2'"
+			:end-date="'2019-5-20'"
+			@change="change"
+			ref="calendar"
+			:insert="false"
+			@confirm="confirm"
+			 />
+		</view>
 	</view>
 </template>
 
@@ -49,13 +57,15 @@
 	import swiperTabHead from "../../components/index/swiper-tab-head.vue";
 	import loadMore from "../../components/common/load-more.vue";
 	import noThing from "../../components/common/no-thing.vue";
+	import uniCalendar from '@/components/uni-calendar/uni-calendar.vue'
 	import {mapState, mapMutations} from "vuex"
 	export default {
 		components: {
 			indexList,
 			swiperTabHead,
 			loadMore,
-			noThing
+			noThing,
+			uniCalendar
 		},
 		data() {
 			return {
@@ -153,7 +163,7 @@
 					uni.showToast({
 						title: '签到成功',
 					});
-
+					// this.$refs.calendar.open();
 					break;
 			}
 		},
@@ -192,16 +202,6 @@
 					this.newslist[this.tabIndex].loadtext="没有更多数据了";
 				}
 			},
-			async likeOrTread(data){
-
-				await this.$http.post('topic/active',data);
-			},
-			checkIn() {
-				console.log("checkIn")
-				uni.showToast({
-					title: '签到成功',
-				});
-			},
 			publish() {
 				console.log("publish")
 				// 打开发布页面
@@ -237,11 +237,21 @@
 				this.tabIndex = e.detail.current;
 				this.requestData(this.tabBars[this.tabIndex].page,this.tabBars[this.tabIndex].id)
 			},
+			async likeOrTread(data){
+			
+				await this.$http.post('topic/active',data);
+			},
 			opendDetail(item){
 				uni.setStorageSync("topicDatail",JSON.stringify(item))
 				uni.navigateTo({
 					url: '../../pages/detail/detail?id='+item.id,
 				});
+			},
+			change(e) {
+				console.log(e);
+			},
+			confirm(e) {
+				console.log(e);
 			}
 		},
 	}

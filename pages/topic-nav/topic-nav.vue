@@ -54,153 +54,30 @@
 				swiperheight:500,
 				tabIndex:0,
 				tabBars:[
-					{ name:"关注",id:"guanzhu" },
-					{ name:"推荐",id:"tuijian" },
-					{ name:"韩府",id:"hanfu" 	  },
-					{ name:"娱乐",id:"yule"  },
-					{ name:"二手",id:"ershou" },
-					{ name:"周边",id:"zhoubian"    },
+					// { name:"关注",id:"guanzhu" },
+					// { name:"推荐",id:"tuijian" },
+					// { name:"韩府",id:"hanfu" 	  },
+					// { name:"娱乐",id:"yule"  },
+					// { name:"二手",id:"ershou" },
+					// { name:"周边",id:"zhoubian"    },
 				],
 				newslist:[
 					{
 						loadtext:"上拉加载更多",
 						list:[
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							},
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							},
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							},
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							},
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							},
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							}
+						
 						]
 					},
 					{
 						loadtext:"上拉加载更多",
 						list:[
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							},
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							},
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							},
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							},
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							},
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							}
+						
 						]
 					},
 					{
 						loadtext:"上拉加载更多",
 						list:[
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							},
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							},
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							},
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							},
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							},
-							{
-								titlepic:"../../static/demo/topicpic/13.jpeg",
-								title:"话题名称",
-								desc:"我是话题描述",
-								totalnum:50,
-								todaynum:10
-							}
+							
 						]
 					},
 					{
@@ -225,34 +102,56 @@
 					this.swiperheight=height;
 				}
 			});
+			this.initData(0)
 		},
 		methods:{
+			async initData(index,cid){
+				let tabBars = await  this.$http.get("topic/title/class")
+				this.tabBars = tabBars.map((item)=>{
+					return { name:item.title,id:item.id,page:1 }
+				})
+				await this.requestTopicTitle(index,1);
+
+				
+			},
+			async requestTopicTitle(index, page=1, cid=''){
+				let {items, page:newPage} = await this.$http.get(`topic/title?page=${page}&rows=10&cid=${cid}`)
+				console.log(newPage)
+				if(items.length == 0){
+					this.tabBars[index].page = newPage
+					this.newslist[index].loadtext="没有更多数据了";
+					return
+				}
+
+				let newdata = items
+				this.tabBars[index].page = newPage
+				this.newslist[index].list = this.newslist[index].list.concat(newdata)
+				this.newslist[index].loadtext="上拉加载更多";
+				if(items.length < 10){
+					this.newslist[index].loadtext="没有更多数据了";
+				}
+			},
 			loadmore(index){
 				if(this.newslist[index].loadtext!="上拉加载更多"){ return; }
 				// 修改状态
 				this.newslist[index].loadtext="加载中...";
 				// 获取数据
-				setTimeout(()=> {
-					//获取完成
-					let obj={
-						titlepic:"../../static/demo/topicpic/13.jpeg",
-						title:"话题名称",
-						desc:"我是话题描述",
-						totalnum:50,
-						todaynum:10
-					};
-					this.newslist[index].list.push(obj);
-					this.newslist[index].loadtext="上拉加载更多";
-				}, 1000);
+				
+				this.requestTopicTitle(index,this.tabBars[index].page+1,this.tabBars[index].id);
 				// this.newslist[index].loadtext="没有更多数据了";
 			},
 			// tabbar点击事件
 			tabtap(index){
 				this.tabIndex=index;
+				// this.requestTopicTitle(index,this.tabBars[index].page,this.tabBars[index].id);
+				
 			},
 			// 滑动事件
 			tabChange(e){
 				this.tabIndex=e.detail.current;
+				let index = this.tabIndex
+				this.requestTopicTitle(index,this.tabBars[index].page,this.tabBars[index].id);
+				console.log(this.tabBars[index])
 			}
 		}
 	}

@@ -24,18 +24,23 @@
 				:authInfo="userInfo"
 				></user-space-userinfo>
 		</template>
-		<block v-for="(item,index) in tablist" :key="index">
-			<template v-if="tabIndex==index+1">
-				<!-- 列表 -->
-				<block v-for="(list,listindex) in item.list" :key="listindex">
-					<card @gotoTopic="gotoTopic" :cardinfo="list" :index="listindex"></card>
-					<!-- <common-list :item="list" :index="listindex"></common-list> -->
-				</block>
-				<!-- 上拉加载 -->
-				<load-more :loadtext="item.loadtext"></load-more>
-			</template>
-		</block>
-		
+
+		<template v-if="tabIndex==1">
+			<!-- 话题列表 -->
+			<view class="topic-view">
+			<block v-for="(list,index1) in tablist[0].list" :key="index1">
+				<topic-list :item="list" :index="index1"></topic-list>
+			</block>	
+			</view>
+		</template>
+		<template v-if="tabIndex==2">
+			<!-- 列表 -->
+			<block v-for="(list,listindex) in tablist[1].list" :key="listindex">
+				<card @gotoTopic="gotoTopic" :cardinfo="list" :index="listindex"></card>
+			</block>
+			<!-- 上拉加载 -->
+		</template>
+
 		<!-- 操作菜单 -->
 		<user-space-popup :show="show" 
 		@hide="togleShow"
@@ -55,6 +60,7 @@
 	import loadMore from "../../components/common/load-more.vue";
 	import userSpacePopup from "../../components/user-space/user-space-popup.vue";
 	import {mapMutations, mapState} from 'vuex'
+	import topicList from "../../components/news/topic-list.vue";
 	import time from '../../common/time.js'
 	export default {
 		components:{
@@ -65,7 +71,8 @@
 			commonList,
 			loadMore,
 			userSpacePopup,
-			card
+			card,
+			topicList
 		},
 		computed:{
 			...mapState(['userInfo'])
@@ -135,7 +142,7 @@
 			async initData(id){
 				let {code,data} = await this.$http.get('user/willinfo/'+id);
 				let topicList = await this.$http.get('topic/list/'+id);
-				console.log(topicList)
+				let topicTitleList = await this.$http.get('topic/title/user/'+id);
 				this.topicList = topicList
 				if(topicList&&topicList.length){
 					let list = topicList.map((item)=>{
@@ -148,9 +155,10 @@
 						}
 					})
 					
-					this.tablist[0].list  =list
 					this.tablist[1].list  =list
 				}
+				
+				this.tablist[0].list  =topicTitleList
 				if(code==0&&data){
 				this.spacedata[0].num = data.likeNum>=1000?(data.likeNum/1000)+"k":data.likeNum
 				this.spacedata[1].num = data.attNum

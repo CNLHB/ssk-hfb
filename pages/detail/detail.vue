@@ -83,6 +83,7 @@
 					// 修改窗口标题
 				uni.setNavigationBarTitle({ title: "详情"});
 				let detail = await this.$http.get('topic/detail/'+id)
+				console.log(detail)
 				if(detail.images==null||detail.images==''){
 					detail.images = []
 				}else{

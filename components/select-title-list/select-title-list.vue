@@ -17,9 +17,7 @@
 		},
 		methods:{
 			opendetail(){
-				uni.navigateTo({
-					url: '../../pages/topic-detail/topic-detail?id='+this.item.id,
-				});
+				this.$emit("backAdd",this.item)
 			}
 		}
 	}

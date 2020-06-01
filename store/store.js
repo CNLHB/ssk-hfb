@@ -11,7 +11,8 @@ const store = new Vuex.Store({
 		isPaper:false,
 		msgPage:1,
 		msgIndex:-1,
-		currentChat:[]
+		currentChat:[],
+		selTitle:[]
 	},
 	getters:{
 		currentChatMsgs(state){
@@ -26,6 +27,12 @@ const store = new Vuex.Store({
 		}
 	},
 	mutations:{
+		addselTitle(state, obj){
+			state.selTitle.push(obj)
+		},
+		delSelTitle(state, index){
+			state.selTitle.splice(index,1)
+		},
 		setIndex(state, msgIndex){
 			state.msgIndex = msgIndex
 		},

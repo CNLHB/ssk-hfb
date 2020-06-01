@@ -1,11 +1,11 @@
 <template>
 	<view class="wrap-new">
 		<!-- 自定义导航栏 -->
-		
+
 		<news-nav-bar v-if="userInfo.id" :tabBars="tabBars" :tabIndex="tabIndex" @change-tab="changeTab">
 		</news-nav-bar>
-		
-	<view v-else class="head">
+
+		<view v-else class="head">
 		</view>
 		<view class="uni-tab-bar">
 			<swiper class="swiper-box" :style="{height:swiperheight+'px'}" :current="tabIndex" @change="tabChange">
@@ -24,7 +24,11 @@
 					<scroll-view scroll-y class="list">
 						<!-- 搜索框 -->
 						<view class="search-input">
-							<input class="uni-input" placeholder-class="icon iconfont icon-sousuo topic-search" placeholder="搜索内容" />
+							<input class="uni-input" 
+								confirm-type="search" 
+								@confirm="searchTitle"
+								@input="searchTitle"
+								placeholder-class="icon iconfont icon-sousuo topic-search" placeholder="搜索内容" />
 						</view>
 						<!-- 轮播图 -->
 						<swiper class="topic-swiper" :indicator-dots="true" :autoplay="true" :interval="3000" circular :duration="1000">
@@ -81,8 +85,7 @@
 				tabBars: [{
 						name: "关注",
 						id: "guanzhu"
-					}
-					,
+					},
 					{
 						name: "话题",
 						id: "topic"
@@ -93,6 +96,7 @@
 					page: 1,
 					list: []
 				},
+				timer:undefined,
 				topic: {
 					swiper: [{
 							src: "../../static/demo/banner1.jpg"
@@ -123,54 +127,12 @@
 							name: "周边"
 						},
 					],
-					list: [{
-							titlepic: "../../static/demo/topicpic/13.jpeg",
-							title: "话题名称",
-							desc: "我是话题描述",
-							totalnum: 50,
-							todaynum: 10
-						},
-						{
-							titlepic: "../../static/demo/topicpic/13.jpeg",
-							title: "话题名称",
-							desc: "我是话题描述",
-							totalnum: 50,
-							todaynum: 10
-						},
-						{
-							titlepic: "../../static/demo/topicpic/13.jpeg",
-							title: "话题名称",
-							desc: "我是话题描述",
-							totalnum: 50,
-							todaynum: 10
-						},
-						{
-							titlepic: "../../static/demo/topicpic/13.jpeg",
-							title: "话题名称",
-							desc: "我是话题描述",
-							totalnum: 50,
-							todaynum: 10
-						},
-						{
-							titlepic: "../../static/demo/topicpic/13.jpeg",
-							title: "话题名称",
-							desc: "我是话题描述",
-							totalnum: 50,
-							todaynum: 10
-						},
-						{
-							titlepic: "../../static/demo/topicpic/13.jpeg",
-							title: "话题名称",
-							desc: "我是话题描述",
-							totalnum: 50,
-							todaynum: 10
-						}
-					]
+					list: []
 				}
 			};
 		},
 		onShow() {
-			if(this.userInfo.id &&this.guanzhu.list.length==0){
+			if (this.userInfo.id && this.guanzhu.list.length == 0) {
 				this.requestData()
 				this.guanzhu.loadtext = ""
 			}
@@ -182,18 +144,53 @@
 					this.swiperheight = height;
 				}
 			});
-			if(this.userInfo.id){
+			this.initTopicTitle()
+			if (this.userInfo.id) {
 				this.requestData()
-			}else{
+			} else {
 				this.guanzhu.loadtext = "你还未登录呢!"
 			}
 		},
 		methods: {
+			async initData() {
+
+			},
+			async searchTitle(event){
+				if(event.target.value==''){
+					return
+				}
+				clearInterval(this.timer)
+				let key = event.target.value
+				if(event.type=="input"){
+					this.timer = setTimeout(()=>{
+						this.initTopicTitle(1,key)
+					},500)
+				}
+				if(event.type=="confirm"){
+					this.initTopicTitle(1,key)
+				}
+
+				console.log(event)
+			},
+			async initTopicTitle(page=1,search='') {
+				let {items} = await this.$http.get(`topic/title?page=${page}&rows=10&search=${search}`)
+				this.topic.list = items.map((item) => {
+					return {
+						titlepic: item.titlePic,
+						title: item.title,
+						desc: item.description,
+						totalnum: item.total,
+						todaynum: 10,
+						id:item.id
+					}
+				})
+			},
 			async requestData(GoPage) {
 				let currentPage = GoPage || this.guanzhu.page;
 				let data;
 				try {
 					data = await this.$http.get(`/topic/page?page=${currentPage}&rows=10`)
+
 				} catch (e) {
 					console.log(e)
 					return
@@ -239,7 +236,7 @@
 				}
 				// 修改状态
 				this.guanzhu.loadtext = "加载中...";
-				this.requestData(this.guanzhu.page+1)
+				this.requestData(this.guanzhu.page + 1)
 				// 获取数据
 				// this.guanzhu.loadtext="没有更多数据了";
 			}
@@ -249,13 +246,15 @@
 </script>
 
 <style scoped>
-    .head{
+	.head {
 		height: 100upx;
 		width: 100vw;
 	}
-	.wrap-new{
+
+	.wrap-new {
 		background-color: #F9F9F9;
 	}
+
 	.search-input {
 		padding: 20upx;
 	}
