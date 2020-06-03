@@ -3,7 +3,14 @@ import Vuex from 'vuex'
 import createLogger from 'vuex/dist/logger'
 Vue.use(Vuex)
 	
-	
+/**
+ * 		userInfo: 用户信息
+		chatList: 聊天列表
+		msgPage:1,	消息的索引
+		msgIndex:-1, 聊天界面索引
+		currentChat: 当前聊天信息
+		selTitle: 发布动态选择的标题
+ */	
 const store = new Vuex.Store({
 	state:{
 		userInfo:{},
@@ -28,10 +35,18 @@ const store = new Vuex.Store({
 	},
 	mutations:{
 		addselTitle(state, obj){
-			state.selTitle.push(obj)
+			let flag = state.selTitle.some((item)=>{
+				return item.id === obj.id
+			})
+			if(!flag){
+				state.selTitle.push(obj)
+			}
 		},
 		delSelTitle(state, index){
 			state.selTitle.splice(index,1)
+		},
+		resetSelTitle(state){
+			state.selTitle=[]
 		},
 		setIndex(state, msgIndex){
 			state.msgIndex = msgIndex
@@ -71,6 +86,7 @@ const store = new Vuex.Store({
 
 		},
 		sortChatList(state){
+			
 			state.chatList.sort((a,b)=>{
 				return b.afterTime - a.afterTime
 			})

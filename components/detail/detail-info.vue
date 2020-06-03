@@ -86,7 +86,7 @@
 		},
 		computed:{
 			createDate(){
-				
+				this.isguanzhu= this.item.isguanzhu
 				let data =this.item.createTime? new Date(this.item.createTime).getTime():+new Date;
 				return time.gettime.sumAge(data)
 			}
@@ -96,9 +96,6 @@
 		methods:{
 			goToUserInfo(item){
 				this.$emit("goToUserInfo",item)
-				// uni.navigateTo({
-				// 	url:'../../pages/user-space/user-space?uid='+this.item.id
-				// })
 			},
 			guanzhu(){
 				if(!this.userInfo.id){

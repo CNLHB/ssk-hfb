@@ -2,23 +2,10 @@
 	<view class="wrap-new">
 		<!-- 自定义导航栏 -->
 
-		<news-nav-bar v-if="userInfo.id" :tabBars="tabBars" :tabIndex="tabIndex" @change-tab="changeTab">
+		<news-nav-bar :tabBars="tabBars" :tabIndex="tabIndex" @change-tab="changeTab">
 		</news-nav-bar>
-
-		<view v-else class="head">
-		</view>
 		<view class="uni-tab-bar">
 			<swiper class="swiper-box" :style="{height:swiperheight+'px'}" :current="tabIndex" @change="tabChange">
-				<!-- 关注 -->
-				<swiper-item>
-					<scroll-view scroll-y class="list" @scrolltolower="loadmore()">
-						<block v-for="(item,index) in guanzhu.list" :key="index">
-							<index-list @likeOrTread="likeOrTread" :item="item" :userInfo="userInfo" :index="index"></index-list>
-						</block>
-						<!-- 上拉加载 -->
-						<load-more :loadtext="guanzhu.loadtext"></load-more>
-					</scroll-view>
-				</swiper-item>
 				<!-- 话题 -->
 				<swiper-item>
 					<scroll-view scroll-y class="list">
@@ -49,6 +36,19 @@
 						</view>
 					</scroll-view>
 				</swiper-item>
+				<!-- 关注 -->
+				<swiper-item>
+					<scroll-view scroll-y class="list" @scrolltolower="loadmore()">
+						<block v-for="(item,index) in guanzhu.list" :key="index">
+							<index-list @likeOrTread="likeOrTread" :item="item" :userInfo="userInfo" :index="index"></index-list>
+						</block>
+						<!-- 上拉加载 -->
+						<load-more :loadtext="guanzhu.loadtext"></load-more>
+					</scroll-view>
+				</swiper-item>
+
+			
+			
 			</swiper>
 		</view>
 
@@ -63,6 +63,8 @@
 	import loadMore from "../../components/common/load-more.vue";
 	import topicNav from "../../components/news/topic-nav.vue";
 	import topicList from "../../components/news/topic-list.vue";
+	import {getTopicTitleList, getTopicList} from '@/api/news.js'
+	import {giveLike} from '@/api/common.js'
 	import {
 		mapState
 	} from 'vuex'
@@ -82,13 +84,13 @@
 			return {
 				swiperheight: 500,
 				tabIndex: 0,
-				tabBars: [{
-						name: "关注",
-						id: "guanzhu"
-					},
+				tabBars: [
 					{
 						name: "话题",
 						id: "topic"
+					},{
+						name: "关注",
+						id: "guanzhu"
 					}
 				],
 				guanzhu: {
@@ -170,13 +172,16 @@
 					this.initTopicTitle(1,key)
 				}
 
-				console.log(event)
 			},
 			async initTopicTitle(page=1,search='') {
-				let {items} = await this.$http.get(`topic/title?page=${page}&rows=10&search=${search}`)
+				
+				let {items} = await getTopicTitleList(page,search)
+				if(!items){
+					return
+				}
 				this.topic.list = items.map((item) => {
 					return {
-						titlepic: item.titlePic,
+						titlePic: item.titlePic,
 						title: item.title,
 						desc: item.description,
 						totalnum: item.total,
@@ -189,10 +194,13 @@
 				let currentPage = GoPage || this.guanzhu.page;
 				let data;
 				try {
-					data = await this.$http.get(`/topic/page?page=${currentPage}&rows=10`)
-
+					data = await getTopicList(currentPage)
 				} catch (e) {
 					console.log(e)
+					return
+				}
+				if(data==null){
+					this.guanzhu.loadtext = "没有更多数据了";
 					return
 				}
 				let {
@@ -204,13 +212,6 @@
 					this.guanzhu.loadtext = "没有更多数据了";
 					return
 				}
-				items.forEach((item) => {
-					if (item.images != '') {
-						item.images = item.images.split(",");
-					} else {
-						item.images = []
-					}
-				})
 				this.guanzhu.page = page
 				this.guanzhu.list = this.guanzhu.list.concat(items)
 				if (items && items.length < 10) {
@@ -218,7 +219,7 @@
 				}
 			},
 			async likeOrTread(data) {
-				await this.$http.post('topic/active', data);
+				await giveLike(data)
 			},
 			// 点击切换
 			changeTab(index) {

@@ -136,15 +136,6 @@
 					return []
 				}
 			},
-			item:{
-				type: Object,
-				default () {
-					return {}
-				}
-			},
-			index:{
-				type: Number
-			},
 			/**
 			 * 禁用
 			 */

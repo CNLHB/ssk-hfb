@@ -31,7 +31,7 @@ export default class request {
 		return new Promise((resolve, reject) =>{
 			let  Authorization=uni.getStorageSync('token');
 			uni.uploadFile({
-				url:  this.baseUrl + url, //仅为示例，非真实的接口地址
+				url:  this.baseUrl + url, 
 				filePath: file.path,
 				header:{
 					Authorization
@@ -103,6 +103,13 @@ export default class request {
 					}
 		        });
 		    })
+	}
+	toast(text, duration, success) {
+		uni.showToast({
+			title: text || "出错啦~",
+			icon: success ? 'success' : 'none',
+			duration: duration || 2000
+		})
 	}
 }
 

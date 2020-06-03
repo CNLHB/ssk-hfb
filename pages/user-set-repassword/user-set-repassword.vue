@@ -20,6 +20,7 @@
 </template>
 
 <script>
+	import {reSetPassword} from '@/api/user-set-repassword.js'
 	export default {
 		data() {
 			return {
@@ -83,23 +84,19 @@
 				return true;
 			},
 			// 提交
-			submit(){
+			async submit(){
 				this.loading=true; this.disabled=true;
 				if(!this.check()){ this.loading=false; this.disabled=false; return; }
-				// 提交服务器
-				uni.showToast({
-					title: '提交服务器',
-					mask: false,
-					duration: 1500
-				});
-				this.$http.put('user/password',{
+				let res = await reSetPassword({
 					oldpassword: this.oldpassword,
 					newpassword:this.newpassword,
 					renewpassword:this.renewpassword,
-				},{
-					"content-type":"application/x-www-form-urlencoded"
-				}).then((res)=>{
+				})
 					if(res.code==0){
+						uni.showToast({
+							title:"密码修改成功",
+							icon:'none'
+						})
 						uni.navigateBack({
 							delta:1
 						})
@@ -109,7 +106,6 @@
 							icon:'none'
 						})
 					}
-				})
 				this.loading=false;
 				this.disabled=false;
 			}

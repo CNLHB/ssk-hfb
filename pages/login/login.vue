@@ -1,195 +1,158 @@
 <template>
-	<view>
-		<!-- 状态栏 -->
-		<uni-status-bar bgcolor="#FFE933"></uni-status-bar>
-		<!-- 关闭按钮 -->
-		<view class="icon iconfont icon-guanbi" @tap="back"></view>
-		<!-- 引入背景图 -->
-		<image class="loginhead" src="../../static/common/loginhead.png" mode="widthFix" lazy-load></image>
-		<!-- 输入框+按钮 -->
-		<view class="body">
-			
-			<!-- 账号密码登录 -->
-			<template v-if="!status">
-				<input type="text" v-model="username"
-				class="uni-input common-input"
-				placeholder="手机号" />
-				
-				<view class="login-input-box">
-					<input type="password" v-model="password"
-					
-					class="uni-input common-input forget-input"
-					placeholder="请输入密码" />
-					<view class="forget u-f-ajc login-font-color">忘记密码</view>
-				</view>
-			</template>
-			
-			
-			<!-- 手机验证码登录 -->
-			<template v-else>
-				<view class="login-input-box">
-					<view class="phone u-f-ajc">+86</view>
-					<input type="text" v-model="phone"
-					class="uni-input common-input phone-input"
-					placeholder="手机号" />
-				</view>
-				<view class="login-input-box">
-					<input type="text" v-model="checknum"
-					class="uni-input common-input forget-input"
-					placeholder="请输入验证码" />
-					<view class="forget u-f-ajc login-font-color yanzhengma"
-					@tap="getCheckNum">
-						<view class="u-f-ajc">{{!codetime?'获取验证码':codetime+' s'}}</view>
+	<view class="container">
+		<!-- #ifndef MP -->
+		<view class="tui-status-bar"></view>
+		<view class="tui-header">
+			<!-- <view>ThorUI组件库</view> -->
+			<tui-icon name="shut" :size="26" @click="back"></tui-icon>
+		</view>
+		<!-- #endif -->
+		<view class="tui-page-title">登录</view>
+		<view class="tui-form">
+			<view class="tui-view-input">
+				<tui-list-cell :hover="false" :lineLeft="false" backgroundColor="transparent">
+					<view class="tui-cell-input">
+						<tui-icon name="mobile" color="#6d7a87" :size="20"></tui-icon>
+
+						<input :adjust-position="false" :value="mobile" placeholder="请输入手机号" placeholder-class="tui-phcolor" type="number"
+						 maxlength="11" @input="inputMobile" />
+						<view class="tui-icon-close" v-show="mobile" @tap="clearInput(1)">
+							<tui-icon name="close-fill" :size="16" color="#bfbfbf"></tui-icon>
+						</view>
 					</view>
+				</tui-list-cell>
+				<tui-list-cell :hover="false" :lineLeft="false" backgroundColor="transparent">
+					<view class="tui-cell-input">
+						<tui-icon name="pwd" color="#6d7a87" :size="20"></tui-icon>
+						<input :adjust-position="false" :value="password" placeholder="请输入密码" :password="true" placeholder-class="tui-phcolor"
+						 type="text" maxlength="36" @input="inputPwd" />
+						<view class="tui-icon-close" v-show="password" @tap="clearInput(2)">
+							<tui-icon name="close-fill" :size="16" color="#bfbfbf"></tui-icon>
+						</view>
+					</view>
+				</tui-list-cell>
+			</view>
+			<view class="tui-cell-text">
+				<view class="tui-color-primary" hover-class="tui-opcity" :hover-stay-time="150" @tap="href(1)">忘记密码？</view>
+				<view hover-class="tui-opcity" :hover-stay-time="150">
+					没有账号？
+					<text class="tui-color-primary" @tap="href(2)">注册</text>
 				</view>
-			</template>
-			
-			
-			<button class="user-set-btn" 
-			:loading="loading" :class="{'user-set-btn-disable':disabled}" 
-			type="primary" @tap="submit" :disabled="disabled">登录</button>
+			</view>
+			<view class="tui-btn-box">
+				<tui-button @tap="submit" :disabledGray="true" :disabled="disabled" :shadow="true" shape="circle">登录</tui-button>
+			</view>
 		</view>
-		
-		<!-- 登录状态切换 -->
-		<view class="login-status u-f-ajc login-padding login-font-color" 
-		@tap="changeStatus">
-			{{status?'账号密码登录':'验证码登录'}}<view class="icon iconfont icon-jinru login-font-color"></view>
+		<view class="tui-login-way" v-if="!popupShow">
+			<view hover-class="tui-opcity" :hover-stay-time="150" @tap="showOtherLogin">其他方式登录</view>
 		</view>
-		
-		<!-- 第三方登陆 -->
-		<view class="other-login-title u-f-ajc login-padding login-font-color">第三方登录</view>
-		<other-login @goToHome="goToHome"></other-login>
-		
-		<!-- 协议 -->
-		<view class="login-rule u-f-ajc login-padding login-font-color">
-			<!-- 注册即代表您同意<view>《韩府帮协议》</view> -->
-			<navigator url="../register/register">还没账号去注册></navigator>
-		</view>
-		<view class="login-rule u-f-ajc login-padding login-font-color">
-			<view class="">默认账号：15363398328  密码：123456</view>
-		</view>
+		<tui-bottom-popup :mask="false" backgroundColor="transparent" :show="popupShow">
+			<view class="tui-auth-login">
+				<!-- #ifndef MP -->
+				<view class="tui-icon-platform" hover-class="tui-opcity" :hover-stay-time="150">
+					<image src="/static/images/share/icon_qq.png" class="tui-login-logo"></image>
+				</view>
+				<!-- #endif -->
+				<!-- #ifdef APP-PLUS || MP-WEIXIN || H5 -->
+				<view class="tui-icon-platform" hover-class="tui-opcity" :hover-stay-time="150">
+					<image src="/static/images/share/icon_wechat.png" class="tui-login-logo"></image>
+				</view>
+				<!-- #endif -->
+				<!-- #ifndef MP -->
+				<view class="tui-icon-platform" hover-class="tui-opcity" hover-stay-time="150">
+					<image src="/static/images/share/icon_sina.png" class="tui-login-logo"></image>
+				</view>
+				<!-- #endif -->
+			</view>
+		</tui-bottom-popup>
 	</view>
 </template>
 
 <script>
-	import uniStatusBar from "../../components/uni-status-bar/uni-status-bar.vue";
-	import otherLogin from "../../components/home/other-login.vue";
-	import {webUrl} from '../../common/config.js'
-	import {mapMutations} from 'vuex'
+	import {
+		mapMutations
+	} from 'vuex'
+	import {
+		sendLoginCode,
+		userLogin
+	} from '@/api/login.js'
 	export default {
-		components:{
-			uniStatusBar,
-			otherLogin
+		computed: {
+			disabled: function() {
+				let bool = true;
+				if (this.mobile && this.password) {
+					bool = false;
+				}
+				return bool;
+			}
 		},
 		data() {
 			return {
-				status:false,//false代表账号密码登录，true代表手机验证码登录
-				disabled:false,
-				loading:false,
-				username:"15363398328",
-				password:"123456",
-				phone:"",
-				checknum:"",
-				codetime:0,
-			}
+				status: false, //false代表账号密码登录，true代表手机验证码登录
+				mobile: '',
+				password: '',
+				popupShow: false
+			};
 		},
-		watch:{
-			username(val){
-				this.OnBtnChange();
-			},
-			password(val){
-				this.OnBtnChange();
-			},
-			phone(val){
-				this.OnBtnChange();
-			},
-			checknum(val){
-				this.OnBtnChange();
-			}
+		onLoad(options) {
+			setTimeout(() => {
+
+			}, 0);
 		},
 		methods: {
 			...mapMutations(['setUserInfo']),
-			goToHome(){
-				console.log(8)
-				uni.switchTab({
-					url:'../../pages/home/home'
+			back() {
+				uni.navigateBack();
+			},
+			inputMobile: function(e) {
+				this.mobile = e.detail.value;
+			},
+			inputPwd: function(e) {
+				this.password = e.detail.value;
+			},
+			clearInput(type) {
+				if (type == 1) {
+					this.mobile = '';
+				} else {
+					this.password = '';
+				}
+			},
+			href(type) {
+				let url = '../forgetPwd/forgetPwd';
+				if (type == 2) {
+					url = '../register/register';
+				}
+				uni.navigateTo({
+					url: url
 				})
+
+				// this.tui.href(url);
 			},
-			// 验证手机号码
-			isPhone(){
-				let mPattern = /^1[34578]\d{9}$/; 
-				return mPattern.test(this.phone);
-			},
-			// 获取验证码
-			async getCheckNum(){
-				if(this.codetime > 0){ return; }
-				// 验证手机号合法性
-				if(!this.isPhone()){
-					uni.showToast({
-						title: '请输入正确的手机号码',
-						icon:"none"
-					});
-					return;
-				}
-				// 请求服务器，发送验证码
-				let {code} =await this.$http.post('user/login/'+this.phone,)
-				console.log(code)
-				// 发送成功，开启倒计时
-				this.codetime=60;
-				let timer=setInterval(()=>{
-					this.codetime--;
-					if(this.codetime < 1){
-						clearInterval(timer);
-						this.codetime=0;
-					}
-				},1000);
-			},
-			// 初始化表单
-			initInput(){
-				this.username='';
-				this.password='';
-				this.phone='';
-				this.checknum='';
-			},
-			// 改变按钮状态
-			OnBtnChange(){
-				if( (this.username && this.password)||(this.phone && this.checknum) ){
-					this.disabled=false; return;
-				}
-				this.disabled=true;
-			},
-			// 切换登录状态
-			changeStatus(){
-				this.initInput();
-				this.status = !this.status;
-			},
-			// 返回上一步
-			back(){
-				uni.navigateBack({ delta: 1 });
-				console.log("返回上一步")
+			showOtherLogin() {
+				//打开后 不再关闭
+				this.popupShow = true;
 			},
 			// 提交登录
-			async submit(){
+			async submit() {
 				// 账号密码登录
-				if(!this.status){
-					console.log("提交登录")
-				 let data =await this.$http.post('user/login',{
-						phoneNumber: this.username,
+				if (!this.status) {
+					let data = await userLogin({
+						phoneNumber: this.mobile,
 						password: this.password
 					})
-					if(data.status==404){
+					if (data.status == 404) {
 						uni.showToast({
-							title:'账号或密码错误！',
-							icon:'none'
-							
+							title: '账号或密码错误！',
+							icon: 'none'
+
 						})
 						return
 					}
-					try{
-						// uni.setStorageSync('userInfo',JSON.stringify(data.data.userInfo));
-						uni.setStorageSync('token',data.data.token);
-					}catch(e){
-						
+					try {
+						uni.setStorageSync('userInfo', JSON.stringify(data.data.userInfo));
+						uni.setStorageSync('token', data.data.token);
+					} catch (e) {
+
 					}
 					this.setUserInfo(data.data.userInfo);
 					uni.switchTab({
@@ -197,102 +160,137 @@
 					});
 					return;
 				}
-				// 验证码登录
-				// 验证手机号合法性
-				if(!this.isPhone()){
-					uni.showToast({
-						title: '请输入正确的手机号码',
-						icon:"none"
-					});
-					return;
+			}
+			}
+		}
+</script>
+
+<style lang="scss">
+	.container {
+		.tui-status-bar {
+			width: 100%;
+			height: var(--status-bar-height);
+		}
+
+		.tui-header {
+			width: 100%;
+			padding: 40rpx;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			box-sizing: border-box;
+		}
+
+		.tui-page-title {
+			width: 100%;
+			font-size: 48rpx;
+			font-weight: bold;
+			color: $uni-text-color;
+			line-height: 42rpx;
+			padding: 40rpx;
+			box-sizing: border-box;
+		}
+
+		.tui-form {
+			padding-top: 50rpx;
+
+			.tui-view-input {
+				width: 100%;
+				box-sizing: border-box;
+				padding: 0 40rpx;
+
+				.tui-cell-input {
+					width: 100%;
+					display: flex;
+					align-items: center;
+					padding-top: 48rpx;
+					padding-bottom: $uni-spacing-col-base;
+
+					input {
+						flex: 1;
+						padding-left: $uni-spacing-row-base;
+					}
+
+					.tui-icon-close {
+						margin-left: auto;
+					}
 				}
-				let data =await this.$http.post('user/login/code',{
-					phone: this.phone,
-					code: this.checknum
-				},{
-					"content-type":"application/x-www-form-urlencoded"
-				})
-				try{
-					uni.setStorageSync('userInfo',JSON.stringify(data.data.userInfo));
-					uni.setStorageSync('token',data.data.token);
-				}catch(e){
-					
+			}
+
+			.tui-cell-text {
+				width: 100%;
+				padding: $uni-spacing-col-lg $uni-spacing-row-lg;
+				box-sizing: border-box;
+				font-size: $uni-font-size-sm;
+				color: $uni-text-color-grey;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+
+				.tui-color-primary {
+					color: $uni-color-primary;
 				}
-				this.setUserInfo(data.data.userInfo);
-				uni.switchTab({
-					url: '/pages/home/home'
-				});
-				return;
+			}
+
+			.tui-btn-box {
+				width: 100%;
+				padding: 0 $uni-spacing-row-lg;
+				box-sizing: border-box;
+				margin-top: 80rpx;
+			}
+		}
+
+		.tui-login-way {
+			width: 100%;
+			font-size: 26rpx;
+			color: $uni-color-primary;
+			display: flex;
+			justify-content: center;
+			position: fixed;
+			left: 0;
+			bottom: 80rpx;
+
+			view {
+				padding: 12rpx 0;
+			}
+		}
+
+		.tui-auth-login {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding-bottom: 80rpx;
+			padding-top: 20rpx;
+
+			.tui-icon-platform {
+				width: 90rpx;
+				height: 90rpx;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				position: relative;
+				margin-left: 40rpx;
+
+				&::after {
+					content: '';
+					position: absolute;
+					width: 200%;
+					height: 200%;
+					transform-origin: 0 0;
+					transform: scale(0.5, 0.5) translateZ(0);
+					box-sizing: border-box;
+					left: 0;
+					top: 0;
+					border-radius: 180rpx;
+					border: 1rpx solid $uni-text-color-placeholder;
+				}
+			}
+
+			.tui-login-logo {
+				width: 60rpx;
+				height: 60rpx;
 			}
 		}
 	}
-</script>
-
-<style>
-@import "../../common/form.css";
-.login-font-color{ color: #BBBBBB; }
-.login-padding{ 
-	padding: 20upx 0;
-	 }
-.icon-guanbi{
-	position: fixed;
-	top: 60upx;
-	left: 30upx;
-	font-size: 40upx;
-	font-weight: bold;
-	color: #332F0A;
-	z-index: 100;
-}
-.loginhead{ 
-	width: 100%; 
-	margin-bottom: 40upx;
-	}
-.other-login-title{
-	position: relative;
-}
-.other-login-title:before,.other-login-title:after{
-	content: "";
-	position: absolute;
-	background: #BBBBBB;
-	height: 1upx;
-	width: 100upx;
-	top: 50%;
-}
-.other-login-title:before{
-	left: 25%;
-}
-.other-login-title:after{
-	right: 25%;
-}
-.login-input-box{
-	position: relative;
-}
-.login-input-box .forget-input{
-	padding-right: 150upx;
-}
-.login-input-box .forget,.login-input-box .phone{
-	position: absolute;
-	top: 0;
-	height: 100%;
-	z-index: 100;
-}
-.login-input-box .forget{
-	width: 150upx;
-	right: 0;
-}
-.login-input-box .phone{
-	width:100upx;
-	left: 0;
-	font-weight: bold;
-}
-.login-input-box .phone-input{
-	padding-left: 100upx;
-}
-.yanzhengma view{
-	background: #EEEEEE;
-	border-radius: 10upx;
-	font-size: 25upx;
-	width: 150upx;
-	padding: 10upx 0;
-}
 </style>

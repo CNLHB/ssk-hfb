@@ -42,6 +42,7 @@
 	import noThing from "../../components/common/no-thing.vue";
 	import loadMore from "../../components/common/load-more.vue";
 	import topicList from "../../components/news/topic-list.vue";
+	import {getTopicTitleClass,getTopicTitleList} from '@/api/topic-nav.js'
 	export default {
 		components:{
 			swiperTabHead,
@@ -106,17 +107,13 @@
 		},
 		methods:{
 			async initData(index,cid){
-				let tabBars = await  this.$http.get("topic/title/class")
-				this.tabBars = tabBars.map((item)=>{
-					return { name:item.title,id:item.id,page:1 }
-				})
+				this.tabBars = await getTopicTitleClass()
 				await this.requestTopicTitle(index,1);
 
 				
 			},
 			async requestTopicTitle(index, page=1, cid=''){
-				let {items, page:newPage} = await this.$http.get(`topic/title?page=${page}&rows=10&cid=${cid}`)
-				console.log(newPage)
+				let {items, page:newPage} = await getTopicTitleList(page,cid)
 				if(items.length == 0){
 					this.tabBars[index].page = newPage
 					this.newslist[index].loadtext="没有更多数据了";

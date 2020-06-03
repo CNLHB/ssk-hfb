@@ -11,7 +11,7 @@
 						"searchInput": {
 							"align": "center",
 							"backgroundColor": "#F7F7F7",
-							"borderRadius": "4px",
+							"borderRadius": "8upx",
 							"placeholder": "韩府帮",
 							"placeholderColor": "#CCCCCC",
 							"disabled": true
@@ -23,7 +23,7 @@
 								"color": "#FF9619",
 								"colorPressed": "#BBBBBB",
 								"float": "left",
-								"fontSize": "22px",
+								"fontSize": "44upx",
 								"fontSrc": "/static/font/icon.ttf",
 								"text": "\ue609"
 							},
@@ -32,7 +32,7 @@
 								"color": "#000000",
 								"colorPressed": "#BBBBBB",
 								"float": "right",
-								"fontSize": "22px",
+								"fontSize": "44upx",
 								"fontSrc": "/static/font/icon.ttf",
 								"text": "\ue653"
 							}
@@ -62,7 +62,7 @@
 								"color": "#000000",
 								"colorPressed": "#BBBBBB",
 								"float": "left",
-								"fontSize": "22px",
+								"fontSize": "44upx",
 								"fontSrc": "/static/font/icon.ttf",
 								"text": "\ue845"
 							},
@@ -71,7 +71,7 @@
 								"color": "#000000",
 								"colorPressed": "#BBBBBB",
 								"float": "right",
-								"fontSize": "22px",
+								"fontSize": "44upx",
 								"fontSrc": "/static/font/icon.ttf",
 								"text": "\ue684"
 							}
@@ -106,7 +106,7 @@
 						"searchInput": {
 							"align": "center",
 							"backgroundColor": "#F7F7F7",
-							"borderRadius": "4px",
+							"borderRadius": "8upx",
 							"placeholder": "搜索韩府",
 							"placeholderColor": "#CCCCCC",
 							"disabled": false
@@ -118,7 +118,7 @@
 								"color": "#000000",
 								"colorPressed": "#BBBBBB",
 								"float": "right",
-								"fontSize": "16px",
+								"fontSize": "32upx",
 								"text": "取消"
 							}
 						]
@@ -182,7 +182,7 @@
 						"searchInput": {
 							"align": "left",
 							"backgroundColor": "#F7F7F7",
-							"borderRadius": "4px",
+							"borderRadius": "8upx",
 							"placeholder": "搜索韩府",
 							"placeholderColor": "#CCCCCC",
 							"disabled": false
@@ -194,7 +194,7 @@
 								"color": "#000000",
 								"colorPressed": "#BBBBBB",
 								"float": "right",
-								"fontSize": "16px",
+								"fontSize": "32upx",
 								"text": "取消"
 							}
 						]
@@ -213,7 +213,7 @@
 								"color": "#000000",
 								"colorPressed": "#BBBBBB",
 								"float": "right",
-								"fontSize": "22px",
+								"fontSize": "44upx",
 								"fontSrc": "/static/font/icon.ttf",
 								"text": "\ue628"
 							}
@@ -333,7 +333,7 @@
 						"searchInput": {
 							"align": "center",
 							"backgroundColor": "#F7F7F7",
-							"borderRadius": "4px",
+							"borderRadius": "8upx",
 							"placeholder": "搜索韩友",
 							"placeholderColor": "#CCCCCC",
 							"disabled": false
@@ -345,7 +345,7 @@
 								"color": "#000000",
 								"colorPressed": "#BBBBBB",
 								"float": "right",
-								"fontSize": "16px",
+								"fontSize": "32upx",
 								"text": "取消"
 							}
 						]
@@ -360,7 +360,21 @@
             "path" : "pages/select-title/select-title",
             "style" : {}
         }
+        ,{
+            "path" : "pages/forgetPwd/forgetPwd",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/test/test",
+            "style" : {}
+        }
     ],
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"tui-(.*)": "@/components/thorui/tui-$1/tui-$1.vue"
+		}
+	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "韩府帮",

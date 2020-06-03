@@ -1,33 +1,22 @@
 <template>
 	<view class="detail">
-		<detail-info 
-			@goToUserInfo="goToUserInfo"
-			:userInfo="userInfo"
-			:item="detail"></detail-info>
+		<detail-info @goToUserInfo="goToUserInfo" :userInfo="userInfo" :item="detail"></detail-info>
 
 		<view class="u-comment-title" :maskState="maskState">最新评论 {{comment.count}}</view>
 		<view class="uni-comment u-comment">
 			<block v-for="(item,index) in comment.list" :key="index">
-				<comment-list 
-					@comSubimt="comSubimt"
-					@comDelete="comDelete"
-					:userInfo="userInfo"
-					 :item="item" :index="index"></comment-list>
+				<comment-list @comSubimt="comSubimt" @comDelete="comDelete" :userInfo="userInfo" :item="item" :index="index"></comment-list>
 			</block>
 		</view>
-		
+
 		<view style="height: 120upx;"></view>
 
 		<!-- 输入框 -->
 		<user-chat-bottom @submit="submit"></user-chat-bottom>
-	
+
 		<!-- 分享 -->
 		<more-share :show="shareshow" @togle="togle"></more-share>
-		<pl-comment ref="plComment"
-				:maskState="maskState"
-				@toggleState="toggleState"
-		        :placeholder="'发布评论'" 
-		        @pubComment="pubComment"></pl-comment>
+		<pl-comment ref="plComment" :maskState="maskState" @toggleState="toggleState" :placeholder="'发布评论'" @pubComment="pubComment"></pl-comment>
 	</view>
 </template>
 
@@ -38,9 +27,20 @@
 	import commentList from "../../components/detail/comment-list.vue";
 	import userChatBottom from "../../components/user-chat/user-chat-bottom.vue";
 	import moreShare from "../../components/common/more-share.vue";
-	import {mapState, mapMutations} from "vuex"
+	import {
+		getTopicDetail,
+		pushHistory,
+		delComment,
+		addComment,
+		getCommentList
+	} from "@/api/detail.js";
+
+	import {
+		mapState,
+		mapMutations
+	} from "vuex"
 	export default {
-		components:{
+		components: {
 			detailInfo,
 			commentList,
 			userChatBottom,
@@ -49,127 +49,116 @@
 		},
 		data() {
 			return {
-				shareshow:false,
-				currentComm:{},
-				comment:{
-					count:0,
-					list:[]
+				shareshow: false,
+				currentComm: {},
+				comment: {
+					count: 0,
+					list: []
 				},
-				detail:{},
-				maskState:false
-	
+				detail: {},
+				maskState: false
+
 			}
 		},
 		onLoad(data) {
-			try{
+			try {
 				this.initData(data.id)
-				// let detail = JSON.parse(uni.getStorageSync("topicDatail"))
-			}catch(e){
-				
+			} catch (e) {
+
 			}
 		},
 		// 监听导航右边按钮
 		onNavigationBarButtonTap(e) {
-			if(e.index==0){
+			if (e.index == 0) {
 				this.togle();
 			}
 		},
-		computed:{
+		computed: {
 			...mapState(['userInfo'])
 		},
 		methods: {
 			// 初始化数据
-			async initData(id){
-					// 修改窗口标题
-				uni.setNavigationBarTitle({ title: "详情"});
-				let detail = await this.$http.get('topic/detail/'+id)
-				console.log(detail)
-				if(detail.images==null||detail.images==''){
-					detail.images = []
-				}else{
-					detail.images = detail.images.split(",")
-				}
+			async initData(id) {
+				// 修改窗口标题
+				uni.setNavigationBarTitle({
+					title: "详情"
+				});
+				let detail = await getTopicDetail(id)
 				this.detail = detail
 				this.comment.count = detail.commentNum
-				
-				if(this.userInfo.id){
-					this.pushHistory(detail)
+				if (this.userInfo.id) {
+					let opt = {
+						cid: detail.cid,
+						tid: detail.id,
+						uid: this.userInfo.id,
+						title: detail.title,
+						username: detail.username,
+						userpic: detail.userpic
+					}
+					pushHistory(opt)
 				}
 				this.getcomment();
 			},
-			pushHistory(data){
-				this.$http.post('topic/history',{
-					cid:data.cid,
-					tid:data.id,
-					uid:this.userInfo.id,
-					title:data.title,
-					username:data.username,
-					userpic:data.userpic
-				})
+			togle() {
+				this.shareshow = !this.shareshow
 			},
-			togle(){
-				this.shareshow=!this.shareshow
-			},
-			comSubimt(item){
+			comSubimt(item) {
 				this.currentComm = item
 				this.maskState = true
 			},
-			async comDelete(item){
-				let data =await this.$http.delete("comment/"+item.id);
+			async comDelete(item) {
+				delComment(item.id)
 				await this.getcomment();
 			},
-			pubComment(text){
-				if(text==""){
+			async pubComment(text) {
+				if (text == "") {
 					return
 				}
-				this.$http.post('comment',{
-					uid:this.userInfo.id,
-					parentId:this.currentComm.id,
-					tid:this.currentComm.tid,
+				await addComment({
+					uid: this.userInfo.id,
+					parentId: this.currentComm.id,
+					tid: this.currentComm.tid,
 					content: text
-				}).then(()=>{
-					this.getcomment()
-					this.maskState = !this.maskState
 				})
-				
-				
-			},
-			toggleState(){
+				await this.getcomment()
 				this.maskState = !this.maskState
 			},
-			submit(data){
-				if(!this.userInfo.id){
+			toggleState() {
+				this.maskState = !this.maskState
+			},
+			async submit(data) {
+				if (!this.userInfo.id) {
 					uni.showToast({
-						title:"你还未登录!",
-						icon:'none'
+						title: "你还未登录!",
+						icon: 'none'
 					})
 					return
 				}
-				if(data==''){
+				if (data == '') {
 					uni.showToast({
-						title:"评论不能为空",
-						icon:"none"
+						title: "评论不能为空",
+						icon: "none"
 					})
-					return ;
+					return;
 				}
-				this.$http.post('comment',{
-					uid:this.userInfo.id,
-					parentId:0,
-					tid:this.detail.id,
+				await addComment({
+					uid: this.userInfo.id,
+					parentId: 0,
+					tid: this.detail.id,
 					content: data
-				}).then(()=>{
-					this.getcomment()
 				})
+				await this.getcomment()
 			},
-			goToUserInfo(item){
+			goToUserInfo(item) {
 				uni.navigateTo({
-					url:'../../pages/user-space/user-space?uid='+item.uid
+					url: '../../pages/user-space/user-space?uid=' + item.uid
 				})
 			},
 			// 获取评论
-			async getcomment(){
-				let arr = await this.$http.get('comment/'+this.detail.id)
-				this.comment.list=arr.items;
+			async getcomment() {
+				let arr = await getCommentList(this.detail.id)
+				console.log(arr)
+				this.comment.list = arr.items;
 				this.comment.count = arr.total;
 				this.detail.commentNum = arr.total
 			},
@@ -179,14 +168,14 @@
 </script>
 
 <style>
+	/* 评论 */
+	.u-comment {
+		padding: 0 20upx;
+	}
 
-/* 评论 */	
-.u-comment{
-	padding: 0 20upx;
-}
-.u-comment-title{
-	padding: 20upx;
-	font-size: 30upx;
-	font-weight: bold;
-}
+	.u-comment-title {
+		padding: 20upx;
+		font-size: 30upx;
+		font-weight: bold;
+	}
 </style>

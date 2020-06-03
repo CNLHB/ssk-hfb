@@ -18,6 +18,7 @@
 	import indexList from "../../components/index/index-list.vue";
 	import noThing from "../../components/common/no-thing.vue";
 	import loadMore from "../../components/common/load-more.vue";
+	import {searchTopicList} from '@/api/search.js'
 	import {mapState} from 'vuex'
 	export default {
 		components:{
@@ -68,8 +69,7 @@
 				// 请求服务器 post keyword:this.searchtext
 				let data;
 				try{
-					data = await this.$http.get(`/topic/page?page=${this.page+1}&rows=50&search=${this.searchtext}`)
-					
+					data = await searchTopicList(this.page+1,this.searchtext)
 					if(data.items.length===0){
 						this.issearch=true;
 						this.loadtext="没有更多数据了";

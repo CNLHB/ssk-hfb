@@ -42,16 +42,14 @@
 <style>
 	
 	.low{
-		margin-left: 5px;
+		margin-left: 10upx;
 	}
 
 	.father-box {
 		background-color: #FFFFFF;
 		box-shadow: #C8C7CC;
 		min-height: 400upx;
-		width: 90%;
-		margin: 20upx auto;
-		border: 1px solid #999999;
+		margin: 20upx 0;
 		border-radius: 20upx;
 	}
 

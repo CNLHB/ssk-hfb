@@ -26,26 +26,32 @@
 
 <script>
 	let changelook = ['韩府', '娱乐', "二手", "周边"];
-	let changelookId=[{
-					name: '韩府',
-					id:3,
-				},
-				{
-					name: '娱乐',
-					id:7,
-				},
-				{
-					name: '二手',
-					id:6,
-				},
-				{
-					name: '周边',
-					id:7,
-				},
+	let changelookId = [{
+			name: '韩府',
+			id: 3,
+		},
+		{
+			name: '娱乐',
+			id: 7,
+		},
+		{
+			name: '二手',
+			id: 6,
+		},
+		{
+			name: '周边',
+			id: 7,
+		},
 	]
 	import uniNavBar from "../../components/uni-nav-bar/uni-nav-bar.vue";
 	import uploudImages from "../../components/common/uploud-images.vue";
 	import uniPopup from "../../components/uni-popup/uni-popup.vue";
+	import {
+		getCategory,
+		addTopicTitle,
+		uploadFile
+	} from "@/api/add-title.js";
+
 	import {
 		mapState
 	} from 'vuex'
@@ -58,12 +64,12 @@
 		data() {
 			return {
 				isget: false,
-				size:1,
+				size: 1,
 				showpopup: false,
 				yinsi: "韩府",
-				cid: 3,
+				cid: 1,
 				text: "",
-				description:'',
+				description: '',
 				imglist: [],
 				files: []
 			};
@@ -79,7 +85,7 @@
 			}
 		},
 		async onLoad() {
-			let data = await this.$http.get('category/list')
+			let data = await getCategory()
 			changelook = data
 		},
 		computed: {
@@ -113,21 +119,17 @@
 			},
 			// 发布
 			async submit() {
-				console.log("发布")
 				if (this.text == '' && this.files.length == 0) {
 					return
 				}
-				let url = await this.$http.uploudFile("/upload/cloud", this.files[0])
-
-				await this.$http.post("topic/title", {
+				let url = await uploudFile(this.files[0])
+				addTopicTitle({
 					uid: this.userInfo.id,
 					cid: this.cid,
 					title: this.text,
 					description: this.description,
 					titlePic: url
 				})
-
-
 				uni.showToast({
 					title: '发表成功',
 					icon: "success",
@@ -156,8 +158,6 @@
 			uploud(arr, files) {
 				this.imglist = arr;
 				this.files = files
-
-				console.log(this.imglist)
 			},
 			hidePopup() {
 				this.showpopup = false;

@@ -18,6 +18,7 @@
 
 <script>
 	import topicList from "../../components/select-title-list/select-title-list.vue";
+	import {getTopicTitleClass,getTopicTitleList} from '@/api/search-title.js'
 	import {mapMutations} from 'vuex'
 	export default {
 		components:{
@@ -43,11 +44,10 @@
 				this.loadnItems()
 			},
 			async loadnavBars(){
-				let navBars = await  this.$http.get("topic/title/class")
-				this.flist = navBars
+				this.flist = await getTopicTitleClass()
 			},
 			async loadnItems(cid=''){
-				let {items, page:newPage} = await this.$http.get(`topic/title?page=${1}&rows=10&cid=${cid}`)
+				let {items, page:newPage} = await getTopicTitleList(1,cid)
 				this.tlist = items
 			},
 			//一级分类点击

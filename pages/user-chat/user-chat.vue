@@ -27,7 +27,7 @@
 	import time from "../../common/time.js";
 	import userChatList from "../../components/user-chat/user-chat-list.vue";
 	import {mapState,mapMutations,mapGetters} from 'vuex'
-	import $http from '../../config/requestConfig.js';
+	import {pushMessage,createChat} from '@/api/user-chat.js'
 	import Vue from 'vue'
 	export default {
 		components:{
@@ -75,7 +75,6 @@
 			}
 			 this.fid = data.fid
 			 let fid = data.fid
-			// console.log(this.currentChatMsgs)
 			let flag = true
 			if(!data.index&&!!fid){
 				for(let i =0;i<this.chatList.length;i++){
@@ -88,7 +87,7 @@
 				}
 				if(flag){
 					this.fid = fid
-					let chat = await this.$http.post('chat',{
+					let chat = await createChat({
 						fromId: this.userInfo.id,
 						toId:parseInt(fid),
 					})
@@ -134,9 +133,7 @@
 				} catch (e) { }
 			},
 			scrollTopHandle(){
-				console.log(88)
 				if (this.triggered) {
-					console.log(this.triggered)
 					setTimeout(()=>{
 						if(this.msgPage>(this.currentChatMsgs.length/20)){
 							uni.showToast({
@@ -148,7 +145,6 @@
 					},200)
 					return;
 				}
-				console.log(this.triggered)
 				this.triggered = true;
 				this.setMsgPage()
 			},
@@ -198,15 +194,12 @@
 					})
 					return
 				}
-				this.$http.setLoading(false);
-				let msg =await this.$http.post("push/message",{
+				let msg =await pushMessage({
 					cId: this.cId,
 					fromId: this.userInfo.id,
 					toId: this.fid,
 					message: data
-				})
-				this.$http.setLoading(true);
-				console.log(msg)
+				}) 
 				if(msg.code&&msg.code!=0){
 					uni.showToast({
 						title:'消息发送失败!',

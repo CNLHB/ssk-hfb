@@ -17,7 +17,15 @@
 		<view class="uni-tab-bar">
 			<swiper class="swiper-box" :style="{height:swiperheight+'px'}" :current="tabIndex" @change="tabChange">
 				<swiper-item v-for="(items,index) in newslist" :key="index">
-					<scroll-view scroll-y class="list" @scrolltolower="loadmore(index)">
+					<scroll-view scroll-y class="list"
+					refresher-enabled
+					:refresher-triggered="refreshing"
+					refresher-background="#fafafa"
+					enable-back-to-top
+					:refresher-threshold="100"
+					@refresherrefresh="onrefresh"
+					 @scrolltolower="loadmore(index)"
+					 >
 						<!-- 图文列表 -->
 						<template v-if="items.list.length>0">
 							<block v-for="(item,index1) in items.list" :key="index1">
@@ -58,6 +66,8 @@
 	import loadMore from "../../components/common/load-more.vue";
 	import noThing from "../../components/common/no-thing.vue";
 	import uniCalendar from '@/components/uni-calendar/uni-calendar.vue'
+	import {getTopicList} from '@/api/index.js'
+	import {giveLike} from '@/api/common.js'
 	import {mapState, mapMutations} from "vuex"
 	export default {
 		components: {
@@ -71,6 +81,7 @@
 			return {
 				swiperheight: 500,
 				tabIndex: 1,
+				refreshing: false,
 				shoNo:false,
 				tabBars: [
 					{
@@ -140,10 +151,11 @@
 				}
 			});
 			 this.requestData()
+			 
 			
 		},
 		onShow() {
-			// this.requestData()
+			this.requestData()
 		},
 		// 监听搜索框点击事件
 		onNavigationBarSearchInputClicked() {
@@ -176,8 +188,7 @@
 				let type = Gotype || this.tabBars[this.tabIndex].id;
 				let data;
 				try{
-
-					data = await this.$http.get(`/topic/page?page=${currentPage}&type=${type}&rows=10`)
+					data = await getTopicList(currentPage, type)
 				}catch(e){
 					console.log(e)
 					return 
@@ -188,14 +199,6 @@
 					this.newslist[this.tabIndex].loadtext="没有更多数据了";
 					return 
 				}
-				items.forEach((item)=>{
-					if(item.images!=''){
-						item.images = item.images.split(",");
-					}else{
-						item.images =[]
-					}
-					
-				})
 				this.tabBars[this.tabIndex].page=page
 				this.newslist[this.tabIndex].list=this.newslist[this.tabIndex].list.concat(items)
 				if(items&&items.length <10){
@@ -215,7 +218,13 @@
 					url: '../search/search',
 				});
 			},
-
+			onrefresh(){
+                if (this.refreshing) return;
+                this.refreshing = true;
+                setTimeout(() => {
+                    this.refreshing = false;
+                }, 3000)
+			},
 			loadmore(index) {
 				if (this.newslist[index].loadtext != "上拉加载更多") {
 					return;
@@ -224,7 +233,6 @@
 				this.newslist[index].loadtext = "加载中...";
 				// 获取数据
 				this.requestData(this.tabBars[this.tabIndex].page+1)
-				// this.newslist[index].loadtext = "";
 				
 				
 			},
@@ -238,11 +246,9 @@
 				this.requestData(this.tabBars[this.tabIndex].page,this.tabBars[this.tabIndex].id)
 			},
 			async likeOrTread(data){
-			
-				await this.$http.post('topic/active',data);
+				giveLike(data)
 			},
 			opendDetail(item){
-				uni.setStorageSync("topicDatail",JSON.stringify(item))
 				uni.navigateTo({
 					url: '../../pages/detail/detail?id='+item.id,
 				});

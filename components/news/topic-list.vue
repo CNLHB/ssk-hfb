@@ -31,8 +31,8 @@
 	border-bottom: 1upx solid #EEEEEE;
 }
 .topic-list image{
-	width: 150upx;
-	height: 150upx;
+	width: 150upx!important;
+	height: 150upx!important;;
 	border-radius:10upx;
 	margin-right: 20upx;
 }

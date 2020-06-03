@@ -48,6 +48,9 @@
 		},
 		methods:{
 			comment(item){
+				if(this.item.uid==this.userInfo.id){
+					return
+				}
 				this.$emit("comSubimt",item)
 			},
 			deleteCom(item){

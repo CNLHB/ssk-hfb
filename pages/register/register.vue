@@ -1,275 +1,244 @@
 <template>
 	<view class="container">
-		<view class="left-bottom-sign"></view>
-		<view class="back-btn yticon icon-zuojiantou-up" @click="navBack"><</view>
-		<view class="right-top-sign"></view>
-		<!-- 设置白色背景防止软键盘把下部绝对定位元素顶上来盖住输入框等 -->
-		<view class="wrapper">
-			<view class="left-top-sign">LOGIN</view>
-			<view class="welcome">
-				欢迎注册！
-			</view>
-			<view class="input-content">
-				<view class="input-item">
-					<text class="tit">手机号码</text>
-					<input type="number" :value="mobile" placeholder="请输入手机号码" maxlength="11" data-key="mobile" @input="inputChange" />
-				</view>
-				<view class="input-item">
-					<text class="tit">密码</text>
-					<input type="mobile" value="" placeholder="8-18位不含特殊字符的数字、字母组合" placeholder-class="input-empty" maxlength="20"
-					 password data-key="password" @input="inputChange" @confirm="toLogin" />
-				</view>
-				
-			</view>
-			<button class="confirm-btn" @click="toLogin" :disabled="logining">注册</button>
-
+		<view class="tui-status-bar"></view>
+		<view class="tui-header">
+			<!-- <view>ThorUI组件库</view> -->
+			<tui-icon name="shut" :size="26" @click="back"></tui-icon>
 		</view>
-
+		<!-- #endif -->
+		<view class="tui-page-title">注册</view>
+		<view class="tui-form">
+			<view class="tui-view-input">
+				<tui-list-cell :hover="false" :lineLeft="false" backgroundColor="transparent">
+					<view class="tui-cell-input">
+						<tui-icon name="mobile" color="#6d7a87" :size="20"></tui-icon>
+						<input :value="mobile" placeholder="请输入手机号" placeholder-class="tui-phcolor" type="number" maxlength="11" @input="inputMobile" />
+						<view class="tui-icon-close" v-show="mobile" @tap="clearInput(1)">
+							<tui-icon name="close-fill" :size="16" color="#bfbfbf"></tui-icon>
+						</view>
+					</view>
+				</tui-list-cell>
+				<tui-list-cell :hover="false" :lineLeft="false" backgroundColor="transparent">
+					<view class="tui-cell-input">
+						<tui-icon name="shield" color="#6d7a87" :size="20"></tui-icon>
+						<input placeholder="请输入验证码" placeholder-class="tui-phcolor" type="text" maxlength="6" @input="inputCode" />
+						<view @tap="getCheckNum" class="tui-btn-send" :class="{ 'tui-gray': isSend }" :hover-class="isSend ? '' : 'tui-opcity'"
+						 :hover-stay-time="150">{{ btnSendText }}</view>
+					</view>
+				</tui-list-cell>
+				<tui-list-cell :hover="false" :lineLeft="false" backgroundColor="transparent">
+					<view class="tui-cell-input">
+						<tui-icon name="pwd" color="#6d7a87" :size="20"></tui-icon>
+						<input :value="password" placeholder="请输入密码" :password="true" placeholder-class="tui-phcolor" type="text"
+						 maxlength="40" @input="inputPwd" />
+						<view class="tui-icon-close" v-show="password" @tap="clearInput(2)">
+							<tui-icon name="close-fill" :size="16" color="#bfbfbf"></tui-icon>
+						</view>
+					</view>
+				</tui-list-cell>
+			</view>
+			<view class="tui-btn-box">
+				<tui-button @tap="toLogin" :disabledGray="true" :disabled="disabled" :shadow="true" shape="circle">注册</tui-button>
+			</view>
+			<view class="tui-cell-text">
+				注册代表同意
+				<view class="tui-color-primary" hover-class="tui-opcity" :hover-stay-time="150" @tap="protocol">韩府帮用户服务协议、隐私政策</view>
+			</view>
+		</view>
 	</view>
 </template>
 
 <script>
 	import {
+		userRegisterPhone,
+		getCode
+	} from '@/api/register.js'
+	import {
 		mapMutations
 	} from 'vuex';
-
 	export default {
+		computed: {
+			disabled: function() {
+				let bool = true;
+				if (this.mobile && this.code && this.password) {
+					bool = false;
+				}
+				return bool;
+			}
+		},
 		data() {
 			return {
 				mobile: '',
 				password: '',
-				logining: false
-			}
-		},
-		onLoad() {
-
+				code: '',
+				isSend: false,
+				btnSendText: '获取验证码' //倒计时格式：(60秒)
+			};
 		},
 		methods: {
-			inputChange(e) {
-				const key = e.currentTarget.dataset.key;
-				this[key] = e.detail.value;
-			},
-			navBack() {
-				uni.navigateBack();
-			},
-			toRegist() {
-				this.$api.msg('去注册');
-			},
 			// 验证手机号码
 			isPhone(phone) {
 				let mPattern = /^1[34578]\d{9}$/;
 				return mPattern.test(phone);
 			},
-			async formSubmit(e) {
-				var me = this;
-				var username = e.detail.value.username;
-				if (!this.isPhone(username)) {
+			back() {
+				uni.navigateBack();
+			},
+			inputCode(e) {
+				this.code = e.detail.value;
+			},
+			inputMobile: function(e) {
+				this.mobile = e.detail.value;
+			},
+			inputPwd: function(e) {
+				this.password = e.detail.value;
+			},
+			clearInput(type) {
+				if (type == 1) {
+					this.mobile = '';
+				} else {
+					this.password = '';
+				}
+			},
+			protocol() {
+				this.tui.href("/pages/doc/protocol/protocol")
+			},
+			async getCheckNum() {
+				if (this.btnSendText > 0) {
+					return;
+				}
+				// 验证手机号合法性
+				if (!this.isPhone(this.mobile)) {
 					uni.showToast({
 						title: '请输入正确的手机号码',
 						icon: "none"
 					});
 					return;
 				}
-				var password = e.detail.value.password;
-				if (password.length < 6) {
+				// 请求服务器，发送验证码
+				let {
+					code
+				} = await getCode(this.mobile)
+				this.isSend = true,
+				// 发送成功，开启倒计时
+				this.btnSendText = 60;
+				let timer = setInterval(() => {
+					this.btnSendText--;
+					if (this.btnSendText < 1) {
+						clearInterval(timer);
+						this.btnSendText = '获取验证码';
+						this.isSend = true
+					}
+				}, 1000);
+			},
+			async toLogin() {
+				if (!this.isPhone(this.mobile)) {
 					uni.showToast({
-						title: '密码强度太低',
+						title: "请输入正确的手机号",
 						icon: "none"
 					});
 					return
 				}
-				var confirmPassword = e.detail.value.confirmPassword;
-
-				if (password != '' && password === confirmPassword) {
-					let data = await this.$http.post('user/register', {
-						userName: username,
-						phoneNumber: username,
-						confirmPassword: confirmPassword,
-						password: password
-					})
-					console.log(data)
-					if (data.status >= 400) {
-						console.error("错误提示")
-						uni.showToast({
-							title: data.massage,
-							icon: 'none',
-							fail: (e) => {
-								console.error(e)
-							}
-						})
-
-					} else {
-						console.error("跳转页面")
-						uni.navigateTo({
-							url: '../login/login'
-						})
-					}
-
-				} else {
+				let data = await userRegisterPhone({
+					phone: this.mobile,
+					code: this.code,
+					password: this.password
+				})
+				if (!data || (data && data.code == 10004)) {
+					let msg = data.message
 					uni.showToast({
-						title: '两次密码不一致',
+						title: msg,
 						icon: "none"
 					});
+					return
 				}
-
-			}
+				uni.redirectTo({
+					url: '../login/login'
+				})
+				return;
+			},
 		}
-
-	}
+	};
 </script>
 
-<style lang='scss'>
-	page {
-		background: #fff;
-	}
+<style lang="scss" scoped>
 	.container {
-		position: relative;
-		width: 100vw;
-		height: 100vh;
-		overflow: hidden;
-		background: #fff;
-	}
-
-	.wrapper {
-		position: relative;
-		z-index: 90;
-		background: #fff;
-		padding-bottom: 40upx;
-	}
-
-	.back-btn {
-		position: absolute;
-		left: 40upx;
-		z-index: 9999;
-		/* padding-top: 50upx; */
-		top: 40upx;
-		font-size: 40upx;
-		color: #303133;
-	}
-
-	.left-top-sign {
-		font-size: 120upx;
-		color: #f8f8f8;
-		position: relative;
-		left: -16upx;
-	}
-
-	.right-top-sign {
-		position: absolute;
-		top: 80upx;
-		right: -30upx;
-		z-index: 95;
-
-		&:before,
-		&:after {
-			display: block;
-			content: "";
-			width: 400upx;
-			height: 80upx;
-			background: #b4f3e2;
-		}
-
-		&:before {
-			transform: rotate(50deg);
-			border-radius: 0 50px 0 0;
-		}
-
-		&:after {
-			position: absolute;
-			right: -198upx;
-			top: 0;
-			transform: rotate(-50deg);
-			border-radius: 50px 0 0 0;
-			/* background: pink; */
-		}
-	}
-
-	.left-bottom-sign {
-		position: absolute;
-		left: -270upx;
-		bottom: -320upx;
-		border: 100upx solid #d0d1fd;
-		border-radius: 50%;
-		padding: 180upx;
-	}
-
-	.welcome {
-		position: relative;
-		left: 50upx;
-		top: -90upx;
-		font-size: 46upx;
-		color: #555;
-		text-shadow: 1px 0px 1px rgba(0, 0, 0, .3);
-	}
-
-	.input-content {
-		padding: 0 60upx;
-	}
-
-	.input-item {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		justify-content: center;
-		padding: 0 30upx;
-		background: #f8f6fc;
-		height: 120upx;
-		border-radius: 4px;
-		margin-bottom: 50upx;
-
-		&:last-child {
-			margin-bottom: 0;
-		}
-
-		.tit {
-			height: 50upx;
-			line-height: 56upx;
-			font-size: 24upx+2upx;
-			color: #606266;
-		}
-
-		input {
-			height: 60upx;
-			font-size: 28upx + 2upx;
-			color: #303133;
+		.tui-page-title {
 			width: 100%;
+			font-size: 48rpx;
+			font-weight: bold;
+			color: $uni-text-color;
+			line-height: 42rpx;
+			padding: 110rpx 40rpx 40rpx 40rpx;
+			box-sizing: border-box;
 		}
-	}
-
-	.confirm-btn {
-		width: 630upx;
-		height: 76upx;
-		line-height: 76upx;
-		border-radius: 50px;
-		margin-top: 70upx;
-		background: #fa436a;
-		color: #fff;
-		font-size: 32upx;
-
-		&:after {
-			border-radius: 100px;
+		.tui-header {
+			width: 100%;
+			padding: 40rpx;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			box-sizing: border-box;
 		}
-	}
+		.tui-form {
+			padding-top: 50rpx;
 
-	.forget-section {
-		font-size: 24upx+2upx;
-		color: #4399fc;
-		text-align: center;
-		margin-top: 40upx;
-	}
+			.tui-view-input {
+				width: 100%;
+				box-sizing: border-box;
+				padding: 0 40rpx;
 
-	.register-section {
-		position: absolute;
-		left: 0;
-		bottom: 50upx;
-		width: 100%;
-		font-size: 24upx+2upx;
-		color: #606266;
-		text-align: center;
+				.tui-cell-input {
+					width: 100%;
+					display: flex;
+					align-items: center;
+					padding-top: 48rpx;
+					padding-bottom: $uni-spacing-col-base;
 
-		text {
-			color: #4399fc;
-			margin-left: 10upx;
+					input {
+						flex: 1;
+						padding-left: $uni-spacing-row-base;
+					}
+
+					.tui-icon-close {
+						margin-left: auto;
+					}
+
+					.tui-btn-send {
+						width: 156rpx;
+						text-align: right;
+						flex-shrink: 0;
+						font-size: $uni-font-size-base;
+						color: $uni-color-primary;
+					}
+
+					.tui-gray {
+						color: $uni-text-color-placeholder;
+					}
+				}
+			}
+
+			.tui-cell-text {
+				width: 100%;
+				padding: 40rpx $uni-spacing-row-lg;
+				box-sizing: border-box;
+				font-size: $uni-font-size-sm;
+				color: $uni-text-color-grey;
+				display: flex;
+				align-items: center;
+
+				.tui-color-primary {
+					color: $uni-color-primary;
+					padding-left: $uni-spacing-row-sm;
+				}
+			}
+
+			.tui-btn-box {
+				width: 100%;
+				padding: 0 $uni-spacing-row-lg;
+				box-sizing: border-box;
+				margin-top: 80rpx;
+			}
 		}
 	}
 </style>

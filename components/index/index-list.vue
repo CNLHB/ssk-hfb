@@ -7,13 +7,28 @@
 				lazy-load></image>
 				{{item.username}}
 			</view>
-			<view v-if="!isguanzhu" @tap="guanzhu"
-				class="icon iconfont icon-zengjia guanzhu">关注</view>
-			<view v-else @tap="guanzhu"
-			class="icon iconfont guanzhu">取消关注</view>
+
+			<template v-if="!isme">
+				<view v-if="!isguanzhu" @tap="guanzhu"
+					class="icon iconfont icon-zengjia guanzhu">关注</view>
+				<view v-else @tap="guanzhu"
+				class="icon iconfont guanzhu">取消关注</view>
+			</template>
+
 			
 		</view>
-		<view class="index-list2" @tap="opendetail">{{item.title}}</view>
+		<view class="index-list2" @tap="opendetail">
+			
+			<view style="color: #007AFF;">
+				<template v-for="title in item.lable">
+					#{{title.title}}# &nbsp
+				</template>
+			</view> 
+			
+			<view>
+				{{item.title}}
+			</view>
+			</view>
 		<view class="index-list3 u-f-ajc" @tap="opendetail">
 			<!-- 图片 -->
 			<template v-if="item.images.length>0">
@@ -53,10 +68,7 @@
 					<view class="icon iconfont icon-pinglun1"></view>
 					{{item.commentNum}}
 				</view>
-<!-- 				<view class="u-f-ac">
-					<view class="icon iconfont icon-zhuanfa"></view>
-					{{item.sharenum}}
-				</view> -->
+
 			</view>
 		</view>
 	</view>
@@ -78,6 +90,7 @@
 				isguanzhu: this.item.isguanzhu,
 				collect: this.item.collect,
 				infoNum:this.item.infoNum,
+				isme: this.userInfo.id==this.item.uid,
 				topicActive:{
 					uid:this.userInfo.id,
 					tid:this.item.id,
@@ -144,7 +157,6 @@
 					userpic:this.item.userpic
 				})
 				this.collect = !this.collect
-				console.log(88)
 			},
 			// 顶踩
 			async caozuo(type){

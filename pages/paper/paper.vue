@@ -7,8 +7,9 @@
 		<!-- 小纸条列表 -->
 		<uni-swipe-action>
 			<block v-for="(item,index) in chatList" :key="index">
-				<uni-swipe-action-item :options="options" @onClick="onClick(item,index)" >
+				<uni-swipe-action-item :options="options" @onClick="onClick(item,index)">
 					<paper-list @readMsg="readMsg" :item="item" :index="index"></paper-list>
+					
 				</uni-swipe-action-item>
 			</block>
 		</uni-swipe-action>
@@ -31,6 +32,13 @@
 		mapState,
 		mapGetters
 	} from 'vuex'
+	import {
+		getChatList,
+		deleteChat,
+		updateChat,
+		createSocket,
+		readChatMsg
+	} from '@/api/paper.js'
 	import Vue from 'vue'
 	export default {
 		components: {
@@ -41,18 +49,17 @@
 			uniSwipeActionItem
 		},
 		computed: {
-			...mapState(['chatList', 'msgIndex', 'userInfo', 'isPaper']),
+			...mapState(['chatList', 'msgIndex', 'userInfo']),
 			...mapGetters(['currentChatMsgs'])
 		},
 
 		data() {
 			return {
 				show: false,
-				socketTask: null,
-				is_open_socket: false,
+				socketTask: undefined,
 				loadtext: "",
 				list: [],
-				$is_open_socket_paper: false,
+				$is_open_socket:false,
 				options: [
 					// {
 					//     text: '置顶',
@@ -73,18 +80,15 @@
 		onShow() {
 			this.connectSocketInit();
 			if (this.userInfo.id) {
-				this.getChatList()
+				this.initData()
 				this.loadtext = ''
 			}
 
 		},
 		// 监听下拉刷新
 		async onPullDownRefresh() {
-			
 			if (this.userInfo.id) {
-				await this.getChatList()
-
-
+				await this.initData()
 			} else {
 				this.loadtext = '你还未登录呢!'
 			}
@@ -120,10 +124,6 @@
 					break;
 			}
 		},
-		onHide() {
-			this.$is_open_socket_paper = false
-
-		},
 		beforeDestroy() {
 			this.closeSocket();
 		},
@@ -138,88 +138,33 @@
 				'addChatMessage',
 				'addNoreadMessage'
 			]),
-			async getChatList() {
-				this.$http.setLoading(false);
-				let data = await this.$http.get('chat/list');
-				this.$http.setLoading(true);
-				if (data && data.length) {
-					let chatList = data.map((item) => {
-						let count = item.messages.reduce((prev, item) => {
-							if (item.status == 0 && item.toId == this.userInfo.id) {
-								return prev + 1
-							} else {
-								return prev
-							}
-						}, 0)
-						let fid = this.userInfo.id == item.fromId ? item.toId : item.fromId
-						let len = item.messages.length - 1
-						let sendTime = item.messages[len] ?
-							time.gettime.gettime(item.messages[len].sendTime) :
-							time.gettime.gettime(new Date())
-						let message = item.messages[len] ? item.messages[len].message :
-							''
-						let msgList = item.messages.map((mItem) => {
-							return {
-								id: mItem.id,
-								isme: mItem.fromId == this.userInfo.id,
-								uid: mItem.fromId == this.userInfo.id ?mItem.toId : mItem.fromId ,
-								userpic: mItem.fromId == this.userInfo.id ? this.userInfo.authorUrl : item.userpic,
-								type: "text",
-								message: mItem.message,
-								time: time.gettime.gettime(mItem.sendTime),
-								gstime: time.gettime.getChatTime(mItem.sendTime),
-								status: mItem.status,
-							}
-						})
-						return {
-							id: item.id,
-							fid: fid,
-							fromId: item.fromId,
-							toId: item.toId,
-							afterTime: +new Date(item.afterTime),
-							userpic: item.userpic,
-							username: item.username,
-							time: sendTime,
-							message: message,
-							noreadnum: count,
-							messages: msgList
-						}
-					})
-					this.setChatList(chatList);
-					this.sortChatList()
-					uni.setStorageSync('chatList', JSON.stringify(this.chatList))
-				}
+			async initData() {
+				let chatList = await getChatList(this.userInfo)
+				this.setChatList(chatList);
+				this.sortChatList()
+				uni.setStorageSync('chatList', JSON.stringify(this.chatList))
 
 			},
-			onClick(item,index) {
-				this.$http.setLoading(false);
-				this.$http.delete('chat',{
-					cids: [item.id]
-				},{
-					"content-type":"application/x-www-form-urlencoded"
-				});
-				this.$http.setLoading(true);
+			onClick(item, index) {
+				deleteChat(item.id)
 				this.delChatList(index)
 
 			},
 			async connectSocketInit() {
 				let uid = this.userInfo.id
-				if (!uid || Vue.prototype.$is_open_socket) {
+				if (!uid || this.$is_open_socket) {
 					return
 				}
 				// 创建一个this.socketTask对象【发送、接收、关闭socket都由这个对象操作】
 				if (uid) {
-					this.$http.websocket('POST', "msg/" + 88)
-					Vue.prototype.$socket = await this.$http.websocket('POST', "msg/" + uid)
-					// 消息的发送和接收必须在正常连接打开中,才能发送或接收【否则会失败】
-					Vue.prototype.$socket.onOpen((res) => {
+					this.socketTask = await createSocket(uid)
+					this.socketTask.onOpen((res) => {
 						console.log("WebSocket连接正常打开中...！");
-
-						Vue.prototype.$is_open_socket = true;
-						if (Vue.prototype.$is_open_socket) {
-							Vue.prototype.$socket.onMessage(async (res) => {
+						this.$is_open_socket = true;
+						if (this.$is_open_socket) {
+							this.socketTask.onMessage(async (res) => {
 								if (res.data === "连接成功") {
-										console.log("连接成功")
+									console.log("连接成功")
 									return
 								}
 								console.log("收到消息并追加")
@@ -227,7 +172,7 @@
 								try {
 									data = JSON.parse(res.data);
 								} catch (e) {
-
+					
 								}
 								let index = -1;
 								for (let i = 0; i < this.chatList.length; i++) {
@@ -237,28 +182,21 @@
 									}
 								}
 								if (index != -1 && this.msgIndex == index) {
-									this.$http.setLoading(false);
-									this.$http.put('chat/read', {
-										mids: [data.id]
-									}, {
-										"content-type": "application/x-www-form-urlencoded"
-									})
-									this.$http.setLoading(true);
+									updateChat(data.id)
 								}
-								this.getChatList()
-
-
+								this.initData()
+					
 							});
 						}
 					})
 					// 这里仅是事件监听【如果socket关闭了会执行】
-					Vue.prototype.$socket.onClose(() => {
-						Vue.prototype.$is_open_socket = false
+					this.socketTask.onClose(() => {
+						this.$is_open_socket = false
 						console.log("已经被关闭了")
 					})
-					Vue.prototype.$socket.onError((e) => {
+					this.socketTask.onError((e) => {
 						console.log("失败了")
-						Vue.prototype.$is_open_socket = false
+						this.$is_open_socket = false
 						console.log(e)
 					})
 				}
@@ -266,9 +204,10 @@
 			// 关闭websocket【离开这个页面的时候执行关闭】
 			closeSocket() {
 				if (this.is_open_socket) {
-					Vue.prototype.$socket.close({
+					this.socketTask.close({
 						success(res) {
-							this.is_open_socket = false;
+							this.$is_open_socket = false;
+							this.socketTask = undefined
 							console.log("关闭成功", res)
 						},
 						fail(err) {
@@ -283,7 +222,6 @@
 					return
 				}
 				if (this.chatList[index].noreadnum == 0) {
-					console.log(this.chatList[index])
 					return
 				}
 				let msgs = this.currentChatMsgs.filter((item => {
@@ -296,11 +234,7 @@
 				let mids = msgs.map((item => {
 					return item.id
 				}));
-				this.$http.put('chat/read', {
-					mids: mids
-				}, {
-					"content-type": "application/x-www-form-urlencoded"
-				})
+				readChatMsg(mids)
 				this.updateMsg(index)
 
 			},
@@ -316,27 +250,19 @@
 			clear() {
 				console.log("清除列表");
 				uni.showModal({
-					title:"提示",
-					content:"是否清除列表",
-					cancelText:"取消",
-					success:async (e)=> {
-						if(e.confirm==true){
-							let cids= this.chatList.map((item)=>{
+					title: "提示",
+					content: "是否清除列表",
+					cancelText: "取消",
+					success: async (e) => {
+						if (e.confirm == true) {
+							let cids = this.chatList.map((item) => {
 								return item.id
 							})
-							if(cids.length==0){
+							if (cids.length == 0) {
 								return
 							}
 							this.setChatList([])
-							this.$http.setLoading(false);
-							await this.$http.delete('chat',{
-								cids: cids
-							},{
-								"content-type":"application/x-www-form-urlencoded"
-							});
-							this.$http.setLoading(true);
-							this.setChatList([])
-							// uni.clearStorageSync("chatList")
+							deleteChat(cids)
 						}
 					}
 				})

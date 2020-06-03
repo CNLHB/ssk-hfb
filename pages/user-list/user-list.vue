@@ -49,6 +49,7 @@
 	import userList from "../../components/user-list/user-list.vue";
 	import loadMore from "../../components/common/load-more.vue";
 	import noThing from "../../components/common/no-thing.vue";
+	import {userAtt, getUserAttList, getUserFansList,getUserEachList} from '@/api/user-list.js'
 	import {mapState} from 'vuex'
 	export default {
 		components:{
@@ -127,70 +128,24 @@
 				this.tabIndex=e.detail.current;
 			},
 			async attActive(index,item){
-				this.$http.setLoading(false)
-				let data = await this.$http.post('user/active',{
+				let data = await userAtt({
 					fromId: this.userInfo.id,
 					toId: item.id
 				})
-				this.$http.setLoading(true)
 				if(data&&data.code==0){
 					this.initData()
 				}
 			},
 			async initData(){
-				this.$http.setLoading(false)
-				let  attData =await this.$http.get("user/att/list")
-				let  fansData =await this.$http.get("user/fans/list")
-				let  eachData =await this.$http.get("user/each/list")
-				this.$http.setLoading(true)
-				if(attData&&attData.length){
-					this.tabBars[1].num = attData.length
-					this.newslist[1].list = attData.map((item)=>{
-						return	{
-								id:item.id,
-								userpic:item.authorUrl,
-								username:item.userName,
-								// age:21,
-								sex:item.gender,
-								isguanzhu:true
-						}
-					})
-				
-			}
-			if(eachData&&eachData.length){
+				let  attData = await getUserAttList()
+				let  eachData = await getUserEachList()
+				let  fansData =await getUserFansList(eachData)
 				this.tabBars[0].num = eachData.length
-				
-				this.newslist[0].list = eachData.map((item)=>{
-					return	{
-							id:item.id,
-							userpic:item.authorUrl,
-							username:item.userName,
-							// age:21,
-							sex:item.gender,
-							isguanzhu:true
-					}
-				})
-			}
-			if(fansData&&fansData.length){
+				this.tabBars[1].num = attData.length
 				this.tabBars[2].num = fansData.length
-				
-				this.newslist[2].list = fansData.map((item)=>{
-					let isguanzhu = false;
-					if(eachData&&eachData.length){
-						isguanzhu = eachData.some((eItem)=>{
-							return item.id ==eItem.id
-						})
-					}
-					return	{
-							id:item.id,
-							userpic:item.authorUrl,
-							username:item.userName,
-							// age:21,
-							sex:item.gender,
-							isguanzhu:isguanzhu
-					}
-				})
-			}
+				this.newslist[0].list = eachData
+				this.newslist[1].list = attData
+				this.newslist[2].list = fansData
 			}
 		}
 	}

@@ -1,35 +1,45 @@
 <template>
 	<view>
-		<uni-swipe-action>
-			<template v-for="(item ,index) in list" >
-				<uni-swipe-action-item :options="options" :key="index" @onClick="onClick(item,index)" >
+<!-- 		<uni-swipe-action>
+			<template v-for="(item ,index) in list">
+				<uni-swipe-action-item :options="options" :key="index" @onClick="onClick(item,index)">
 					<history-list :item="item" :key="index" @gotoTopicInfo="gotoTopicInfo(item)">
-						
+
 					</history-list>
 				</uni-swipe-action-item>
 			</template>
 
-		</uni-swipe-action>
-
-		<load-more :loadtext="loadtext" ></load-more>
+		</uni-swipe-action> -->
+		<view class="" @tap="showDitu">
+			clikc
+		</view>
+		<load-more :loadtext="loadtext"></load-more>
 	</view>
 </template>
 
 <script>
-		import historyList from '../../components/history-list/history-list.vue'
-		import loadMore from "../../components/common/load-more.vue";
-		import uniSwipeAction from '@/components/uni-swipe-action/uni-swipe-action.vue'
-		import uniSwipeActionItem from '@/components/uni-swipe-action-item/uni-swipe-action-item.vue'
-	import {mapState} from 'vuex'
+	import historyList from '../../components/history-list/history-list.vue'
+	import loadMore from "../../components/common/load-more.vue";
+	import uniSwipeAction from '@/components/uni-swipe-action/uni-swipe-action.vue'
+	import uniSwipeActionItem from '@/components/uni-swipe-action-item/uni-swipe-action-item.vue'
+	import {
+		mapState
+	} from 'vuex'
+	import {getTopicHistory, deleteHistory} from '@/api/user-history.js'
 	export default {
-		components: {historyList,loadMore,uniSwipeAction,uniSwipeActionItem},
-		computed:{
+		components: {
+			historyList,
+			loadMore,
+			uniSwipeAction,
+			uniSwipeActionItem
+		},
+		computed: {
 			...mapState(['userInfo'])
 		},
 		data() {
 			return {
-				list:[],
-				loadtext:'',
+				list: [],
+				loadtext: '',
 				options: [
 					// {
 					//     text: '置顶',
@@ -50,31 +60,48 @@
 			this.initData()
 		},
 		methods: {
-			async initData(){
-				if(this.userInfo.id){
-					let data = await this.$http.get("topic/history")
-					if(data&&data.length){
-						this.list = data.reverse()
-					}else{
-						this.list = []
-						this.loadtext= '浏览历史为空'
+			async initData() {
+				if (this.userInfo.id) {
+					let data = await getTopicHistory()
+					if (data.length==0) {
+						this.loadtext = '浏览历史为空'
 					}
+					 this.list = data
 				}
 			},
-			onClick(item,index) {
+			onClick(item, index) {
 				this.$http.setLoading(false);
-				this.$http.delete('topic/history',{
-					ids: [item.id]
-				},{
-					"content-type":"application/x-www-form-urlencoded"
-				});
-				this.$http.setLoading(true);
-				this.list.splice(index,1)
+				deleteHistory(item.id)
+				this.list.splice(index, 1)
 			},
-			gotoTopicInfo(item){
+			gotoTopicInfo(item) {
 				uni.navigateTo({
-					url: '../../pages/detail/detail?id='+item.tid,
+					url: '../../pages/detail/detail?id=' + item.tid,
 				});
+			},
+			showDitu(){
+				console.log(88)
+				uni.getLocation({
+				    type: 'wgs84',
+				    success: function (res) {
+				        console.log('当前位置的经度：' + res.longitude);
+				        console.log('当前位置的纬度：' + res.latitude);
+				    },
+					fail(e){
+							console.log(e)
+					},
+					complete(){
+						
+					}
+				});
+				// uni.chooseLocation({
+				//     success: function (res) {
+				//         console.log('位置名称：' + res.name);
+				//         console.log('详细地址：' + res.address);
+				//         console.log('纬度：' + res.latitude);
+				//         console.log('经度：' + res.longitude);
+				//     }
+				// });
 			}
 		}
 	}

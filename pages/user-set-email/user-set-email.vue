@@ -23,6 +23,7 @@
 
 <script>
 	import {mapState} from 'vuex'
+	import {bindEmail,getEmailCode} from '@/api/user-set-email.js'
 	export default {
 		computed:{
 			...mapState(['userInfo'])
@@ -72,11 +73,7 @@
 					return false;
 				}
 				// 请求服务器，发送验证码
-				let data =await this.$http.post('user/email',{
-					email: this.email
-				},{
-					"content-type":"application/x-www-form-urlencoded"
-				})
+				let data =await  getEmailCode(this.email)
 				
 				console.log(data)
 				// 发送成功，开启倒计时
@@ -119,16 +116,14 @@
 				return true;
 			},
 			// 提交
-			submit(){
+			async submit(){
 				this.loading=true; this.disabled=true;
 				if(!this.check()){ this.loading=false; this.disabled=false; return; }
 				// 提交服务器
-				this.$http.post('user/email',{
+				let res = await bindEmail({
 					email: this.email,
 					code: this.password
-				},{
-					"content-type":"application/x-www-form-urlencoded"
-				}).then(res=>{
+				})
 					if(res.code==0){
 						uni.showToast({
 							title:"邮箱绑定成功",
@@ -137,8 +132,13 @@
 						uni.navigateBack({
 							delta:1
 						})
+					}else{
+						uni.showToast({
+							title:"邮箱绑定失败",
+							icon:'success'
+						})
+						return 
 					}
-				})
 				this.loading=false; this.disabled=false;
 			}
 		}

@@ -12,6 +12,7 @@
 <script>
 	import userList from "../../components/user-list/user-list.vue";
 	import {mapState} from 'vuex'
+		import {userAtt, searchUserList} from '@/api/user-search.js'
 	export default {
 		comments: {
 			userList
@@ -60,12 +61,10 @@
 		},
 		methods: {
 			async attActive(index,item){
-				this.$http.setLoading(false)
-				let data = await this.$http.post('user/active',{
+				let data = await userAtt({
 					fromId: this.userInfo.id,
 					toId: item.id
 				})
-				this.$http.setLoading(true)
 				if(data&&data.code==0){
 					this.list[index].isguanzhu = !this.list[index].isguanzhu
 				}
@@ -73,18 +72,8 @@
 			// 搜索事件
 			async getdata(text) {
 				// 请求服务器 post keyword:this.searchtext
-				let data = await this.$http.get('user/list?search=' + text)
-				if(data&&data.length){
-					this.list = data.map((item)=>{
-						return {
-							id:item.id,
-							userpic:item.authorUrl,
-							username:item.userName,
-							sex:item.gender,
-							isguanzhu:item.isguanzhu
-						}
-					})
-				}
+				let data = await searchUserList(text)
+				this.list = data
 				console.log(data)
 
 			},

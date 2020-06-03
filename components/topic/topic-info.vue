@@ -48,8 +48,8 @@
 	position: relative;
 }
 .topic-info-t>image{
-	width: 150upx;
-	height: 150upx;
+	width: 150upx!important;
+	height: 150upx!important;
 	border-radius: 20upx;
 	position: absolute;
 	top: -75upx;

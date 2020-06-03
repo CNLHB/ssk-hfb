@@ -38,6 +38,9 @@
 	import swiperTabHead from "../../components/index/swiper-tab-head.vue";
 	import indexList from "../../components/index/index-list.vue";
 	import loadMore from "../../components/common/load-more.vue";
+	import {getTopicTitleById, getTopicTitleList} from '@/api/topic-detail.js'
+	import { giveLike } from '@/api/common.js'
+	
 	import {mapState} from 'vuex'
 	export default {
 		components:{
@@ -78,19 +81,10 @@
 			}
 		},
 		async onLoad(data){
-			let info = await this.$http.get('topic/title/'+data.id)
+			let info = await getTopicTitleById(data.id) 
 			this.topicInfo = info
-			let list = await this.$http.get('topic/title/list/'+data.id)
+			let list = await getTopicTitleList(data.id) 
 			if(list.code !== 10004){
-				list.forEach((item)=>{
-					if(item.images!=''){
-						item.images = item.images.split(",");
-					}else{
-						item.images =[]
-					}
-					
-				})
-				console.log(list)
 				this.tablist[0].list = list
 			}else{
 				this.tablist[this.tabIndex].loadtext="没有更多数据了";
@@ -125,11 +119,9 @@
 				this.tabIndex=index;
 			},
 			async likeOrTread(data){
-			
-				await this.$http.post('topic/active',data);
+				await giveLike(data) 
 			},
 			opendDetail(item){
-				uni.setStorageSync("topicDatail",JSON.stringify(item))
 				uni.navigateTo({
 					url: '../../pages/detail/detail?id='+item.id,
 				});

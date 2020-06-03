@@ -2,7 +2,7 @@
 	<view>
 		<!-- 自定义导航栏 -->
 		<uni-nav-bar :statusBar="true" rightText="发布" leftText="返回" @click-left="back" @click-right="submit">
-			
+
 			<view class="u-f-ajc" @tap="changelook">
 				{{yinsi}}
 				<view class="icon iconfont icon-xialazhankai"></view>
@@ -11,7 +11,7 @@
 		<!-- 多行输入框 -->
 		<view class="uni-textarea">
 			<textarea v-model="text" placeholder="说一句话吧~" />
-		</view>
+			</view>
 		<!-- 上传多图 -->
 		<uploud-images @uploud="uploud"></uploud-images>
 		<!-- 弹出公告 -->
@@ -48,6 +48,8 @@
 	import uploudImages from "../../components/common/uploud-images.vue";
 	import uniPopup from "../../components/uni-popup/uni-popup.vue";
 	import uniTag from "@/components/uni-tag/uni-tag.vue"
+	import {getCategory, uploudFile, addTopic} from "@/api/add-input.js"
+	
 	import {mapState,mapMutations} from 'vuex'
 	export default {
 		components:{
@@ -76,7 +78,7 @@
 			}
 		},
 		async onLoad() {
-			let data = await this.$http.get('/category/list')
+			let data = await getCategory()
 			changelook = data
 		},
 		computed:{
@@ -115,15 +117,14 @@
 				}
 				let images = []
 				for(let i=0;i<this.files.length;i++){
-					let url = await this.$http.uploudFile("/upload/cloud",this.files[i])
+					let url = await uploudFile(this.files[i])
 					images.push(url);
-						console.log(i)
 				}
 				let ids = []
 				ids = this.selTitle.map((item=>{
 					return item.id
 				}))
-				let data = await this.$http.post("topic",{
+				 let data = await addTopic({
 					uid:this.userInfo.id,
 					cid:this.cid,
 					title:this.text,
@@ -141,7 +142,6 @@
 							this.text = '',
 							this.files.length=0
 							this.imglist.length=0
-							
 							uni.navigateBack({
 								delta:10
 							})
@@ -149,9 +149,17 @@
 					});
 				}else{
 					uni.showToast({
-						title: '发表失败',
-						icon:"none",
-
+						title: '发表成功',
+						icon:"success",
+						duration: 200,
+						success:()=>{
+							this.text = '',
+							this.files.length=0
+							this.imglist.length=0
+							uni.navigateBack({
+								delta:10
+							})
+						}
 					});
 				}
 
@@ -170,14 +178,11 @@
 			uploud(arr, files){
 				this.imglist=arr;
 				this.files = files
-				
-				console.log(this.imglist)
 			},
 			hidePopup(){
 				this.showpopup=false;
 			},
 			bindClick(){
-				console.log('选择标签')
 				uni.navigateTo({
 					url:'../select-title/select-title'
 				})

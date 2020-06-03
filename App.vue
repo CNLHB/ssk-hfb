@@ -8,21 +8,21 @@
 			let chatList;
 			try{
 				 chatList =JSON.parse(uni.getStorageSync('chatList'))
-				 let res ={};
-				 if(uni.getStorageSync('token')){
-				 	res = await this.$http.post("auth/verify")
-					console.log(res)
-				 }
-				 if(res && res.status==404){
-				 	uni.clearStorageSync('token')
-				 }else{
-				 	if(res.data&&res.data.token){
-				 		uni.setStorageSync('token',res.data.token)
-				 		this.setUserInfo(res.data.userInfo)
-				 	}
+				 // let res ={};
+				 // if(uni.getStorageSync('token')){
+				 // 	res = await this.$http.post("auth/verify")
+					// console.log(res)
+				 // }
+				 // if(res && res.status==404){
+				 // 	uni.clearStorageSync('token')
+				 // }else{
+				 // 	if(res.data&&res.data.token){
+				 // 		uni.setStorageSync('token',res.data.token)
+				 // 		this.setUserInfo(res.data.userInfo)
+				 // 	}
 					
 				 	this.setChatList(chatList||[])
-				 }
+				 // }
 				 
 			}catch(e){
 			
@@ -33,6 +33,20 @@
 		},
 		async onShow () {
 			console.log('App Show')
+			let res ={};
+			if(uni.getStorageSync('token')){
+				res = await this.$http.post("auth/verify")
+								console.log(res)
+			}
+			if(res && res.status==404){
+				uni.clearStorageSync('token')
+			}else{
+				if(res.data&&res.data.token){
+					uni.setStorageSync('token',res.data.token)
+					this.setUserInfo(res.data.userInfo)
+				}
+								
+			}
 
 		},
 		onHide: function () {

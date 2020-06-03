@@ -1,6 +1,8 @@
 <template>
 	<view class="body">
-		
+		<tui-image-cropper 
+			v-if="cropper" @cropper="sucessCropper"
+			 :imageUrl="caijian" :height="height" :width="height"></tui-image-cropper>
 		<view class="user-set-userinfo-list u-f-ac u-f-jsb">
 			<view>头像</view>
 			<view class="u-f-ac" @tap="changeimg">
@@ -68,6 +70,8 @@
 	let job=['秘密','IT','老师',"学生"];
 	import {mapState, mapMutations} from 'vuex'
 	import mpvueCityPicker from "../../components/mpvue-citypicker/mpvueCityPicker.vue";
+	import {uploudFile} from '@/api/add-input.js'
+	import {updateUserInfo,getUserInfo } from '@/api/user-set-userinfo.js'
 	export default {
 		components:{
 			mpvueCityPicker
@@ -76,13 +80,17 @@
 		data() {
 			return {
 				userpic:"",
+				cropper: false,
+				caijian: "",
 				username:"",
 				sex:"",
 				job:"",
 				birthday:"",
 				cityPickerValueDefault: [0, 0, 1],
 				pickerText: '',
-				authorFile: undefined
+				authorFile: undefined,
+				height: 100,
+				width: 100
 			}
 		},
 		onBackPress() {
@@ -135,10 +143,17 @@
 					count:1,
 					sizeType:['compressed'],
 					success: (res) => {
+						this.caijian = res.tempFiles[0].path
 						this.userpic = res.tempFiles[0].path
 						this.authorFile = res.tempFiles[0]
+						// this.cropper = true
 					}
 				})
+				
+				
+			},
+			sucessCropper(e){
+				console.log(e)
 			},
 			// 单列选择
 			changeOne(val){
@@ -174,7 +189,7 @@
 			async submit(){
 				let url = this.userpic;
 				if(this.authorFile!=undefined){
-					 url = await this.$http.uploudFile('upload/cloud', this.authorFile)
+					 url =uploudFile(this.authorFile)
 				}
 				
 				let data = {
@@ -185,9 +200,9 @@
 					birthday:this.birthday,
 					address: this.pickerText,
 				}
-				let res = await this.$http.put("user/info",data)
+				let res = await updateUserInfo(data)
 				if(res.code==0){
-					let data = await this.$http.get("user/info")
+					let data = await getUserInfo("user/info")
 					if(data.code==0){
 						this.setUserInfo(data.data.userInfo)
 						uni.setStorageSync('token',data.data.token)

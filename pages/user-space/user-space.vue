@@ -17,6 +17,7 @@
 		scrollItemStyle="width:33.33%;"
 		scrollStyle="border-bottom:0;">
 		</swiper-tab-head>
+		<view style="margin-bottom: 5upx;"></view>
 		<template v-if="tabIndex==0">
 			<!-- 主页 -->
 			<user-space-userinfo 
@@ -28,16 +29,18 @@
 		<template v-if="tabIndex==1">
 			<!-- 话题列表 -->
 			<view class="topic-view">
-			<block v-for="(list,index1) in tablist[0].list" :key="index1">
+			<block v-for="(list,index1) in titleList" :key="index1">
 				<topic-list :item="list" :index="index1"></topic-list>
 			</block>	
 			</view>
 		</template>
 		<template v-if="tabIndex==2">
 			<!-- 列表 -->
-			<block v-for="(list,listindex) in tablist[1].list" :key="listindex">
+			<view class="topic-list">
+			<block v-for="(list,listindex) in topicList" :key="listindex">
 				<card @gotoTopic="gotoTopic" :cardinfo="list" :index="listindex"></card>
 			</block>
+			</view>
 			<!-- 上拉加载 -->
 		</template>
 
@@ -62,6 +65,7 @@
 	import {mapMutations, mapState} from 'vuex'
 	import topicList from "../../components/news/topic-list.vue";
 	import time from '../../common/time.js'
+	import {saveUserAccess,getUserWillinfo,getTopicListByUid,getTopicTitleByUid} from '@/api/user-space.js'
 	export default {
 		components:{
 			userSpaceHead,
@@ -81,7 +85,7 @@
 			this.info.id = data.uid
 			this.initData(data.uid)
 			if(data.uid!=this.userInfo.id){
-				this.$http.post('user/access',{
+				saveUserAccess({
 					fromId:this.userInfo.id?this.userInfo.id:(+new Date+"").slice(5),
 					toId: data.uid
 				})
@@ -104,6 +108,7 @@
 					path:"",
 				},
 				topicList:[],
+				titleList:[],
 				spacedata:[
 					{ name:"获赞", num:0 },
 					{ name:"关注", num:0 },
@@ -140,25 +145,13 @@
 		},
 		methods: {
 			async initData(id){
-				let {code,data} = await this.$http.get('user/willinfo/'+id);
-				let topicList = await this.$http.get('topic/list/'+id);
-				let topicTitleList = await this.$http.get('topic/title/user/'+id);
-				this.topicList = topicList
-				if(topicList&&topicList.length){
-					let list = topicList.map((item)=>{
-						return{
-							"authImg": item.userpic,
-							"authName": item.username,
-							"createTime": time.gettime.gettime(item.createTime),
-							"content": item.title,
-							"tag":item.cName
-						}
-					})
-					
-					this.tablist[1].list  =list
+				let {code,data} = await getUserWillinfo(id);
+				let topicList = await getTopicListByUid(id);
+				let topicTitleList = await getTopicTitleByUid(id);
+				if(Array.isArray(topicTitleList)){
+					this.titleList = topicTitleList
 				}
-				
-				this.tablist[0].list  =topicTitleList
+				this.topicList = topicList
 				if(code==0&&data){
 				this.spacedata[0].num = data.likeNum>=1000?(data.likeNum/1000)+"k":data.likeNum
 				this.spacedata[1].num = data.attNum
@@ -223,7 +216,15 @@
 
 <style>
 .user-space-margin{
-	margin: 15upx 0;
+	margin: 10upx 10upx 0  10upx;
+}
+.topic-view{
+	padding: 20upx;
+}
+.topic-list{
+	box-sizing: border-box;
+	background-color: #F9F9F9;
+	padding: 5upx 20upx 0 30upx;
 }
 .user-space-data{
 	background: #FFFFFF;
