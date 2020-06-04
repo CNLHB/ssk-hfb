@@ -5,7 +5,6 @@
 			<!-- <view>ThorUI组件库</view> -->
 			<tui-icon name="shut" :size="26" @click="back"></tui-icon>
 		</view>
-		<!-- #endif -->
 		<view class="tui-page-title">注册</view>
 		<view class="tui-form">
 			<view class="tui-view-input">
