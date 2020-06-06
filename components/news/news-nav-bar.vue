@@ -15,11 +15,11 @@
 				</block>
 			</view>
 			<!-- 右边 -->
-			<block slot="right">
+<!-- 			<block slot="right">
 				<view class="nav-right u-f-ajc">
 					<view class="icon iconfont icon-bianji1"></view>
 				</view>
-			</block>
+			</block> -->
 		</uni-nav-bar>
 	</view>
 </template>

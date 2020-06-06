@@ -8,7 +8,7 @@
 				</block>
 				<load-more :loadtext="loadtext"></load-more>
 			</template>
-			<template v-else-if="issearch && list.length<1">
+			<template v-else-if=" list.length<1">
 				<no-thing></no-thing>
 			</template>
 		</view>
@@ -93,7 +93,7 @@
 				// 修改状态
 				this.loadtext="加载中...";
 				// 获取数据
-				 this.getdata()
+				this.getdata()
 				
 			},
 		}
@@ -103,7 +103,6 @@
 <style scoped>
 
 	.search-view{
-		height: 100vh;
 		background-color: #F9F9F9;
 		padding-top: 2upx;
 	}

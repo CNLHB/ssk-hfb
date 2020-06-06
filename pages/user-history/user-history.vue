@@ -1,18 +1,18 @@
 <template>
 	<view>
-<!-- 		<uni-swipe-action>
+		<uni-swipe-action>
 			<template v-for="(item ,index) in list">
 				<uni-swipe-action-item :options="options" :key="index" @onClick="onClick(item,index)">
 					<history-list :item="item" :key="index" @gotoTopicInfo="gotoTopicInfo(item)">
-
 					</history-list>
 				</uni-swipe-action-item>
 			</template>
-
-		</uni-swipe-action> -->
-		<view class="" @tap="showDitu">
+			
+		</uni-swipe-action>
+		<no-thing v-if="list.length==0"></no-thing>
+<!-- 		<view class="" @tap="showDitu">
 			clikc
-		</view>
+		</view> -->
 		<load-more :loadtext="loadtext"></load-more>
 	</view>
 </template>
@@ -25,13 +25,15 @@
 	import {
 		mapState
 	} from 'vuex'
+		import noThing from "../../components/common/no-thing.vue";
 	import {getTopicHistory, deleteHistory} from '@/api/user-history.js'
 	export default {
 		components: {
 			historyList,
 			loadMore,
 			uniSwipeAction,
-			uniSwipeActionItem
+			uniSwipeActionItem,
+			noThing
 		},
 		computed: {
 			...mapState(['userInfo'])

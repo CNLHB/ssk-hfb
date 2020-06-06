@@ -5,8 +5,8 @@
 	flex-shrink: 0;
 }
 .common-list-l image{
-	width: 90upx;
-	height: 90upx;
+	width: 90upx!important;
+	height: 90upx!important;
 	border-radius:100%;
 }
 .common-list-r{

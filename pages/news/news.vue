@@ -4,6 +4,7 @@
 
 		<news-nav-bar :tabBars="tabBars" :tabIndex="tabIndex" @change-tab="changeTab">
 		</news-nav-bar>
+		<tui-fab bgColor="#FFE933" :width="98" :height="98" :bottom="150" :right="50" @click="publish"></tui-fab>
 		<view class="uni-tab-bar">
 			<swiper class="swiper-box" :style="{height:swiperheight+'px'}" :current="tabIndex" @change="tabChange">
 				<!-- 话题 -->
@@ -40,8 +41,11 @@
 				<swiper-item>
 					<scroll-view scroll-y class="list" @scrolltolower="loadmore()">
 						<block v-for="(item,index) in guanzhu.list" :key="index">
-							<index-list @likeOrTread="likeOrTread" :item="item" :userInfo="userInfo" :index="index"></index-list>
+							<index-list 
+								@opendDetail="opendDetail"
+								@likeOrTread="likeOrTread" :item="item" :userInfo="userInfo" :index="index"></index-list>
 						</block>
+						<no-thing v-if="guanzhu.list.length==0"></no-thing>
 						<!-- 上拉加载 -->
 						<load-more :loadtext="guanzhu.loadtext"></load-more>
 					</scroll-view>
@@ -63,6 +67,7 @@
 	import loadMore from "../../components/common/load-more.vue";
 	import topicNav from "../../components/news/topic-nav.vue";
 	import topicList from "../../components/news/topic-list.vue";
+	import noThing from '@/components/common/no-thing.vue'
 	import {getTopicTitleList, getTopicList} from '@/api/news.js'
 	import {giveLike} from '@/api/common.js'
 	import {
@@ -75,7 +80,8 @@
 			loadMore,
 			topicNav,
 			topicList,
-			indexList
+			indexList,
+			noThing
 		},
 		computed: {
 			...mapState(['userInfo'])
@@ -157,6 +163,14 @@
 			async initData() {
 
 			},
+			publish(){
+				this.$http.href('../add-title/add-title')
+			},
+			opendDetail(item){
+				uni.navigateTo({
+					url: '../../pages/detail/detail?id='+item.id,
+				});
+			},
 			async searchTitle(event){
 				if(event.target.value==''){
 					return
@@ -184,7 +198,7 @@
 						titlePic: item.titlePic,
 						title: item.title,
 						desc: item.description,
-						totalnum: item.total,
+						total: item.total,
 						todaynum: 10,
 						id:item.id
 					}

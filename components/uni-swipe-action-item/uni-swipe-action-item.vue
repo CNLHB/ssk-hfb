@@ -26,7 +26,7 @@
 			<view ref="selector-button-hock" class="uni-swipe_button-group selector-query-hock move-hock" :style="{width:right+'px'}">
 				<view ref="button-hock" v-for="(item,index) in options" :key="index" :style="{
 		  backgroundColor: item.style && item.style.backgroundColor ? item.style.backgroundColor : '#C7C6CD',left: right+'px'}"
-				 class="uni-swipe_button " @click.stop="onClick(index,item)"><text class="uni-swipe_button-text" :style="{color: item.style && item.style.color ? item.style.color : '#FFFFFF',fontSize: item.style && item.style.fontSize ? item.style.fontSize : '16px'}">{{ item.text }}</text></view>
+				 class="uni-swipe_button " @tap.stop="onClick(index,item)"><text class="uni-swipe_button-text" :style="{color: item.style && item.style.color ? item.style.color : '#FFFFFF',fontSize: item.style && item.style.fontSize ? item.style.fontSize : '16px'}">{{ item.text }}</text></view>
 			</view>
 			<view ref='selector-content-hock' class="uni-swipe_move-box selector-query-hock">
 				<view class="uni-swipe_box">

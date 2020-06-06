@@ -1,135 +1,133 @@
 <template>
-	<view>
-		<!-- 自定义导航栏 -->
-		<uni-nav-bar :statusBar="true" rightText="发布" leftText="返回" @click-left="back" @click-right="submit">
-
-			<view class="u-f-ajc" @tap="changelook">
-				{{yinsi}}
-				<view class="icon iconfont icon-xialazhankai"></view>
-			</view>
-		</uni-nav-bar>
-		<!-- 多行输入框 -->
-		<view class="uni-textarea">
-			<textarea v-model="text" placeholder="说一句话吧~" />
-			</view>
-		<!-- 上传多图 -->
-		<uploud-images @uploud="uploud"></uploud-images>
-		<!-- 弹出公告 -->
-		<uni-popup :show="showpopup" position="middle" mode="fixed" @hidePopup="hidePopup">
-			<view class="gonggao">
-				<view class="u-f-ajc">
-					<image src="../../static/common/addinput.png" mode="widthFix"></image>
+	<view class="container">
+		<tui-navigation-bar backgroundColor="255,255,255" :isFixed="false" :isOpcity="false">
+			<view class="tui-content-box">
+				<view class="tui-avatar-box" @tap="back">
+					<tui-icon name="back" color="#FFE933" :size="64"></tui-icon>
 				</view>
-				<view>涉及黄色，政治，广告及骚扰信息</view>
-				<button type="default" @tap="hidePopup">我知道了</button>
+				<view class="tui-search-box">
+					<view class="tui-search-text">发布动态</view>
+				</view>
+				<view class="tui-notice-box" @tap="submit">
+					<text class="tui-add-text">发布</text>
+				</view>
 			</view>
-		</uni-popup>
-		<view class="wrap">
-			<uni-tag text="选择标签"
-				type="primary"
-				size="normal" :circle="true" @click="bindClick"></uni-tag>
-		</view>
-		<view class="wrap1">
-			<template v-for="(item,index) in selTitle" >
-			<view class="wrap2" :key="item.id"  @tap="delTitle(index)">
-				<uni-tag 
-					inverted="true"
-					:text="item.title" type="success" size="normal" :circle="true" ></uni-tag>
-			</view>
+		</tui-navigation-bar>
+
+		<view class="select-topic-class" @tap="selTopicClass">
+			<template v-if="category.title!=null">
+				<view class="select-title">
+					{{category.title}}
+				</view>
+				<view class="select-desc" @tap.stop="delTitleClass">
+					<tui-icon name="shut"  :size="48"></tui-icon>
+				</view>
+			</template>
+			<template v-else>
+				<view class="select-title">
+					选择分类
+				</view>
+				<view class="select-desc">
+					<text> 发布到指定分类更多人看到哦~</text>
+					<tui-icon name="arrowright" color="#FFE933" :size="64"></tui-icon>
+				</view>
 			</template>
 
+		</view>
+		<view v-if="selTitle.title" class="topic-tilte">
+			#{{selTitle.title}}#
+		</view>
+		<view class="add-topic-text">
+			<textarea :value="text"  @input="inputChange" focus placeholder="选择发布的图片和输入想要发布的文字~" />
+		</view>
+		<view class="tui-box-upload">
+			<tui-upload :showTitle="true" @selTitle="selTitleHandle" :serverUrl="serverUrl" @complete="result" @remove="remove"></tui-upload>
+		</view>
+			
 		</view>
 	</view>
 </template>
 
 <script>
-	let changelook= ['韩府', '娱乐',"二手","周边"];
-	import uniNavBar from "../../components/uni-nav-bar/uni-nav-bar.vue";
-	import uploudImages from "../../components/common/uploud-images.vue";
-	import uniPopup from "../../components/uni-popup/uni-popup.vue";
-	import uniTag from "@/components/uni-tag/uni-tag.vue"
-	import {getCategory, uploudFile, addTopic} from "@/api/add-input.js"
-	
+	//实际使用需要传入上传地址，以及上传接口返回数据进行调整组件
 	import {mapState,mapMutations} from 'vuex'
+	import {getCategory, uploudFile, addTopic} from "@/api/add-input.js"
+	import {baseUrl} from '@/api/common.js'
 	export default {
-		components:{
-			uniNavBar,
-			uploudImages,
-			uniPopup,
-			uniTag
-		},
 		data() {
 			return {
-				isget:false,
-				showpopup:false,
-				yinsi:"韩府",
-				cid:1,
-				text:"",
-				imglist:[],
-				files: []
-			};
-		},
-		onBackPress() {
-			// 如果有值
-			if(!this.text && this.imglist.length<1){ return; }
-			if(!this.isget){
-				this.baocun();
-				return true;
+				imageData: [],
+				//上传地址
+				serverUrl: baseUrl+"upload/cloud",
+				text: '',
+				top: 0, //标题图标距离顶部距离
+				opcity: 0,
+				scrollTop: 0.5,
+				placeholder: 'sssxxx',
+				titleClass:''
 			}
 		},
-		async onLoad() {
-			let data = await getCategory()
-			changelook = data
-		},
 		computed:{
-			...mapState(['userInfo', 'selTitle'])
+			...mapState(['userInfo', 'selTitle','category'])
 		},
-		methods:{
-			...mapMutations(['delSelTitle','resetSelTitle']),
-			// 保存为草稿
-			baocun(){
-				uni.showModal({
-					content: '是否要保存为草稿？',
-					cancelText: '不保存',
-					confirmText: '保存',
-					success: res => {
-						if(res.confirm){
-							console.log("保存")
-						}else{
-							console.log("不保存")
-						}
-						this.isget=true;
-						uni.navigateBack({
-							delta: 1
-						});
-					},
-				});
+		methods: {
+			...mapMutations(['delSelTitle','resetSelTitle', 'delCategory']),
+			result(e) {
+				console.log(e)
+				this.imageData = e.imgArr;
+
 			},
-			// 返回
-			back(){
-				uni.navigateBack({ delta: 1 });
+			remove(e) {
+				//移除图片
+				let index = e.index
 			},
-			// 发布
+			initNavigation(e) {
+				this.opcity = e.opcity;
+				this.top = e.top;
+			},
+			opcityChange(e) {
+				this.opcity = e.opcity;
+			},
+			back() {
+				uni.navigateBack();
+			},
+			inputChange(event){
+				this.text = event.detail.value
+				console.log(this.text)
+			},
+			skipToSearch(index) {
+				console.log(index)
+				this.$http.href("../../pages/search/search")
+			},
+			selTopicClass() {
+				// this.titleClass = '韩府'
+				this.$http.href('../select-category/select-category?topic=1')
+			},
+			delTitleClass(){
+				this.delCategory()
+			},
+			selTitleHandle(){
+				this.$http.href('../select-title/select-title')
+			},		// 发布
 			async submit(){
 				console.log("发布")
-				if(this.text==''&&this.files.length==0){
+				if(this.text==''&&this.imageData.length==0){
+					this.$http.toast("内容为空！")
 					return
 				}
-				let images = []
-				for(let i=0;i<this.files.length;i++){
-					let url = await uploudFile(this.files[i])
-					images.push(url);
+				if(!this.userInfo.id){
+					this.$http.href("../login/login")
 				}
 				let ids = []
-				ids = this.selTitle.map((item=>{
-					return item.id
-				}))
+				if(this.selTitle.id){
+					ids.push(this.selTitle.id)
+				}
 				 let data = await addTopic({
 					uid:this.userInfo.id,
-					cid:this.cid,
+					cid:this.category.id?this.category.id:0,
 					title:this.text,
 					urlType:"img",
-					images: images.join(','),
+					images: this.imageData.join(','),
 					ids:ids
 				})
 				if(data.code==0){
@@ -140,8 +138,7 @@
 						duration: 200,
 						success:()=>{
 							this.text = '',
-							this.files.length=0
-							this.imglist.length=0
+							this.imageData.length=0
 							uni.navigateBack({
 								delta:10
 							})
@@ -154,8 +151,8 @@
 						duration: 200,
 						success:()=>{
 							this.text = '',
-							this.files.length=0
-							this.imglist.length=0
+							this.imageData.length=0
+							this.text=''
 							uni.navigateBack({
 								delta:10
 							})
@@ -165,63 +162,174 @@
 
 				
 			},
-			// 隐私
-			changelook(){
-				uni.showActionSheet({
-					itemList:changelook.map((item)=>item.name),
-					success: (res)=> {
-						this.yinsi=changelook[res.tapIndex].name
-						this.cid =changelook[res.tapIndex].id
-					}
-				});
-			},
-			uploud(arr, files){
-				this.imglist=arr;
-				this.files = files
-			},
-			hidePopup(){
-				this.showpopup=false;
-			},
-			bindClick(){
-				uni.navigateTo({
-					url:'../select-title/select-title'
-				})
-			},
-			delTitle(index){
-				this.delSelTitle(index)
-			}
+
+		},
+		onPageScroll(e) {
+			this.scrollTop = e.scrollTop;
 		}
 	}
 </script>
 
-<style scoped>
-.uni-textarea{
-	border: 1upx solid #EEEEEE;
-}
-.gonggao{
-	width: 500upx;
-}
-.gonggao image{
-	width: 75%;
-	margin-bottom: 20upx;
-}
-.gonggao button{
-	margin-top: 20upx;
-	background: #FFE934;
-	color: #171606;
-}
-.wrap{
-	padding: 20upx 50upx;
-	width: 200upx;
-}
-.wrap2{
-	padding: 20upx 0 0 50upx;
-}
-.wrap1{
-	display: flex;
-	justify-content: start;
-	flex-direction: row;
-	flex-wrap: wrap;
-	padding-right: 30upx;
-}
+<style>
+	page {
+		background-color: #fff;
+
+	}
+
+	.container {
+		padding: 0upx 0 120upx 0;
+		box-sizing: border-box;
+		position: relative;
+	}
+
+	.header {
+		padding: 80upx 90upx 60upx 90upx;
+		box-sizing: border-box;
+	}
+
+	.title {
+		font-size: 34upx;
+		color: #333;
+		font-weight: 500;
+	}
+
+	.sub-title {
+		font-size: 24upx;
+		color: #7a7a7a;
+		padding-top: 18upx;
+	}
+
+	.tui-box-upload {
+		padding-left: 25upx;
+		margin-bottom: 90upx;
+		box-sizing: border-box;
+	}
+
+	.tui-title {
+		width: 100%;
+		padding: 50upx 30upx 30upx;
+		box-sizing: border-box;
+		font-weight: bold;
+	}
+
+	.tui-header-bg {
+		width: 100%;
+		margin: 0;
+	}
+
+	.tui-header-img {
+		width: 100%;
+		height: 440upx;
+		display: block;
+	}
+
+	.tui-header-icon {
+		width: 100%;
+		position: fixed;
+		top: 0;
+		padding: 0 12upx;
+		display: flex;
+		align-items: center;
+		height: 64upx;
+		transform: translateZ(0);
+		z-index: 99999;
+		box-sizing: border-box;
+	}
+
+	.tui-content-box {
+		width: 100%;
+		height: 88upx;
+		padding: 0 30upx;
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.tui-avatar-box {
+		width: 60upx;
+		height: 60upx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+	}
+
+	.tui-avatar {
+		width: 56upx;
+		height: 56upx;
+		border-radius: 50%;
+	}
+
+	.tui-search-box {
+		height: 64upx;
+		margin: 0 28upx;
+		border-radius: 36upx;
+		font-size: 36upx;
+		padding: 0 24upx;
+		box-sizing: border-box;
+		color: #bfbfbf;
+		display: flex;
+		align-items: center;
+		font-weight: 700;
+		color: #000000;
+	}
+
+	.select-topic-class {
+		height: 72upx;
+		margin: 20upx 20upx;
+		border-radius: 10upx;
+		background-color: #f1f1f1;
+		padding: 0 24upx;
+		box-sizing: border-box;
+		color: #bfbfbf;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.select-title {
+		color: #000000;
+		font-size: 34upx;
+		font-weight: 700;
+	}
+	.select-desc {
+		display: flex;
+		align-items: center;
+	}
+	.add-topic-text{
+		box-sizing: border-box;
+		width: 100%;
+		padding-top: 10upx;
+		padding-left: 45upx;
+	}
+	.tui-bg-white {
+		background-color: #ffffff !important;
+	}
+
+	.tui-search-text {
+		padding-left: 10upx;
+	}
+
+	.tui-add-text {
+		color: #000000;
+		padding: 10upx 30upx;
+		font-size: 28upx;
+		box-sizing: border-box;
+		font-weight: 700;
+		border-radius: 40upx;
+		background-color: #FFE933;
+	}
+	.topic-tilte{
+		padding: 10upx 40upx;
+		box-sizing: border-box;
+		font-weight: 700;
+		color:#5677fc;
+	}
+	.tui-notice-box {
+		position: relative;
+		flex-shrink: 0;
+		font-size: 44upx;
+		color: #fff;
+	}
 </style>

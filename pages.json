@@ -6,38 +6,39 @@
 				"app-plus": {
 					"scrollIndicator": "none", //隐藏滚动条
 					"bounce": "none", //关闭反弹效果
-					"titleNView": {
-						// 搜索框配置
-						"searchInput": {
-							"align": "center",
-							"backgroundColor": "#F7F7F7",
-							"borderRadius": "8upx",
-							"placeholder": "韩府帮",
-							"placeholderColor": "#CCCCCC",
-							"disabled": true
-						},
-						//配置按钮
-						"buttons": [
-							// 左边
-							{
-								"color": "#FF9619",
-								"colorPressed": "#BBBBBB",
-								"float": "left",
-								"fontSize": "44upx",
-								"fontSrc": "/static/font/icon.ttf",
-								"text": "\ue609"
-							},
-							// 右边
-							{
-								"color": "#000000",
-								"colorPressed": "#BBBBBB",
-								"float": "right",
-								"fontSize": "44upx",
-								"fontSrc": "/static/font/icon.ttf",
-								"text": "\ue653"
-							}
-						]
-					}
+					"titleNView": false//禁用原生导航栏
+					// "titleNView": {
+					// 	// 搜索框配置
+					// 	"searchInput": {
+					// 		"align": "center",
+					// 		"backgroundColor": "#F7F7F7",
+					// 		"borderRadius": "8upx",
+					// 		"placeholder": "韩府帮",
+					// 		"placeholderColor": "#CCCCCC",
+					// 		"disabled": true
+					// 	},
+					// 	//配置按钮
+					// 	"buttons": [
+					// 		// 左边
+					// 		{
+					// 			"color": "#FF9619",
+					// 			"colorPressed": "#BBBBBB",
+					// 			"float": "left",
+					// 			"fontSize": "44upx",
+					// 			"fontSrc": "/static/font/icon.ttf",
+					// 			"text": "\ue609"
+					// 		},
+					// 		// 右边
+					// 		{
+					// 			"color": "#000000",
+					// 			"colorPressed": "#BBBBBB",
+					// 			"float": "right",
+					// 			"fontSize": "44upx",
+					// 			"fontSrc": "/static/font/icon.ttf",
+					// 			"text": "\ue653"
+					// 		}
+					// 	]
+					// }
 				}
 			}
 		}, {
@@ -56,6 +57,7 @@
 				"navigationBarTitleText": "消息",
 				"app-plus": {
 					"titleNView": {
+						"titleSize":"32upx",
 						"buttons": [
 							// 左边
 							{
@@ -83,12 +85,15 @@
 			"path": "pages/home/home",
 			"style": {
 				"navigationBarTitleText": "我的",
+				"enablePullDownRefresh": true, //开启下拉刷新功能
 				"app-plus": {
 					"scrollIndicator": "none",
 					"bounce": "none",
 					"titleNView": {
+						"titleSize":"32upx",
 						"buttons": [{
-							"type": "menu"
+							"type": "menu",
+							"fontSize":"44upx"
 						}]
 					}
 				}
@@ -164,7 +169,8 @@
 					"titleNView": {
 						"type": "transparent", //渐变
 						"buttons": [{
-							"type": "menu"
+							"type": "menu",
+							"fontSize":"32upx"
 						}]
 					}
 				}
@@ -238,7 +244,12 @@
 		}, {
 			"path": "pages/user-set/user-set",
 			"style": {
-				"navigationBarTitleText": "设置"
+				"navigationBarTitleText": "设置",
+				"app-plus":{
+					"titleNView":{
+						"titleSize":"32upx"
+					}
+				}
 			}
 		}, {
 			"path": "pages/user-set-repassword/user-set-repassword",
@@ -368,7 +379,30 @@
             "path" : "pages/test/test",
             "style" : {}
         }
+        ,{
+            "path" : "pages/select-category/select-category",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/check-in/check-in",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/user-face/user-face",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/user-comment/user-comment",
+			"style": {
+				"navigationBarTitleText": "我的评论"
+			}
+        }
     ],
+	"permission": {
+	    "scope.userLocation": {
+	      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+	    }
+	  },
 	"easycom": {
 		"autoscan": true,
 		"custom": {
@@ -380,6 +414,7 @@
 		"navigationBarTitleText": "韩府帮",
 		"navigationBarBackgroundColor": "#FFFFFF",
 		"backgroundColor": "#FFFFFF"
+
 	},
 	"tabBar": {
 		"color": "#B5B5B5",

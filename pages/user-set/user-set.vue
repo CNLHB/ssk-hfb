@@ -3,6 +3,7 @@
 		<block v-for="(item,index) in list" :key="index">
 			<home-list-item 
 			:item="item"
+			:userInfo="userInfo"
 			:index="index"></home-list-item>
 		</block>
 		<button class="user-set-btn" type="primary" @tap="showActive">退出登陆</button>

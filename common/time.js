@@ -47,11 +47,11 @@ const gettime = {
 		} else if(cha < 518400){
 			// 隔天 显示日期+时间
 			// return this.dateFormat(new Date(shorttime),"{Mon}月{DD}日 ");
-			return this.dateFormat(new Date(shorttime),"{Mon}月{DD}日 {A} {t}:{ii}");
+			return this.dateFormat(new Date(shorttime),"{Mon}月{DD}日 ");
 		} else {
 			// 隔年 显示完整日期+时间
 			// return this.dateFormat(new Date(shorttime),"{Y}-{MM}-{DD} {A} {t}:{ii}");
-			return this.dateFormat(new Date(shorttime),"{Y}-{MM}-{DD} {A} {t}:{ii}");
+			return this.dateFormat(new Date(shorttime),"{Y}-{MM}-{DD}");
 		}
 	},
 	

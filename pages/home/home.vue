@@ -17,7 +17,7 @@
 		<home-data @goToSpace="goToSpace"  :homedata="homedata"></home-data>
 		<!-- 广告位 -->
 		<view class="home-adv u-f-ajc animated fadeIn fast">
-			<image src="../../static/demo/demo20.jpg" mode="widthFix" lazy-load></image>
+			<image src="../../static/demo/demo20.jpg"  class="guanggao" lazy-load></image>
 		</view>
 		<!-- 功能列表 -->
 		<view class="home-list">
@@ -75,6 +75,18 @@
 		},
 		async mounted() {
 			this.initDat()
+			if (this.userInfo.id) {
+				this.homeinfo.userpic = this.userInfo.authorUrl
+				this.homeinfo.username = this.userInfo.userName
+				if (!this.islogin) {
+					this.initDat()
+				}
+			} else {
+				this.homedata[0].num = 0
+				this.homedata[1].num = 0
+				this.homedata[2].num = 0
+				this.islogin = false
+			}
 		},
 		data() {
 			return {
@@ -86,7 +98,7 @@
 					todaynum: 0,
 				},
 				homedata: [
-					// { name:"帖子", num:0 },
+					// { name:"话题", num:0 },
 					{
 						name: "动态",
 						num: 0
@@ -123,6 +135,11 @@
 				]
 			};
 		},
+		// 监听下拉刷新
+		async onPullDownRefresh() {
+			await this.initDat()
+			uni.stopPullDownRefresh();
+		},
 		onNavigationBarButtonTap(e) {
 			if (this.userInfo.id) {
 				if (e.index == 0) {
@@ -131,10 +148,9 @@
 					});
 				}
 			} else {
-				uni.showToast({
-					title: "你还未登录呢",
-					icon: 'none'
-				})
+					uni.navigateTo({
+						url: '../login/login',
+					});
 			}
 
 		},
@@ -156,38 +172,20 @@
 				}
 			},
 			goToSpace(index) {
+				// if(this.userInfo.id){
+				// 	this.$http.href('../login/login')
+				// }
 				switch (index) {
 
 					case 0:
-						if (this.userInfo.id) {
-							uni.navigateTo({
-								url: '../../pages/user-space/user-space?uid=' + this.userInfo.id
-							})
-						} else {
-							uni.showToast({
-								title: "你还未登录呢",
-								icon: 'none'
-							})
-						}
-
+							this.$http.href('../../pages/user-space/user-space?uid=' + this.userInfo.id)
 						break;
 					case 1:
-						uni.navigateTo({
-							url: '../../pages/user-space/user-space?uid=' + this.userInfo.id
-						})
+						this.$http.href('../../pages/user-comment/user-comment?uid=' + this.userInfo.id)
+
 						break;
 					case 2:
-						if (this.userInfo.id) {
-							uni.navigateTo({
-								url: '../../pages/user-collect/user-collect?uid=' + this.userInfo.id
-							})
-						} else {
-							uni.showToast({
-								title: "你还未登录呢",
-								icon: 'none'
-							})
-						}
-
+						this.$http.href('../../pages/user-collect/user-collect?uid=' + this.userInfo.id)
 						break;
 
 				}
@@ -209,5 +207,8 @@
 	.home-adv>image {
 		border-radius: 20upx;
 		height: 150upx;
+	}
+	.guanggao{
+		width: 100%;
 	}
 </style>

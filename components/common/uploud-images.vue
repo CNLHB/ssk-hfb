@@ -55,19 +55,26 @@
 		},
 		methods:{
 			chooseImage: async function() {
-				if (this.imageList.length === this.size) { return; }
+				if (this.imageList.length >= this.size) { 
+					this.$http.toast("最多能选择九张图片!")
+					return; 
+					}
 				
 				uni.chooseImage({
 					sourceType: sourceType[this.sourceTypeIndex],
 					sizeType: sizeType[this.sizeTypeIndex],
-					count: this.imageList.length + this.count[this.countIndex] > 9 ? 9 - this.imageList.length : this.count[this.countIndex],
+					count: 9,
 					success: (res) => {
 						console.log(res.tempFiles)
 
 						let urls = res.tempFiles.map((item)=>{
+							if(this.imageList.length < this.size){
+								this.imageList.push(item.path)
+							}
 							return item.path
 						})
-						this.imageList = this.imageList.concat(urls);
+
+						// this.imageList = this.imageList.concat(urls);
 						this.$emit('uploud',this.imageList,res.tempFiles)
 					},
 					fail: (err) => {

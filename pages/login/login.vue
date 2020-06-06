@@ -4,7 +4,7 @@
 		<view class="tui-status-bar"></view>
 		<view class="tui-header">
 			<!-- <view>ThorUI组件库</view> -->
-			<tui-icon name="shut" :size="26" @click="back"></tui-icon>
+			<tui-icon name="shut" :size="52" @click="back"></tui-icon>
 		</view>
 		<!-- #endif -->
 		<view class="tui-page-title">登录</view>
@@ -17,7 +17,7 @@
 						<input :adjust-position="false" :value="mobile" placeholder="请输入手机号" placeholder-class="tui-phcolor" type="number"
 						 maxlength="11" @input="inputMobile" />
 						<view class="tui-icon-close" v-show="mobile" @tap="clearInput(1)">
-							<tui-icon name="close-fill" :size="16" color="#bfbfbf"></tui-icon>
+							<tui-icon name="close-fill" :size="32" color="#bfbfbf"></tui-icon>
 						</view>
 					</view>
 				</tui-list-cell>
@@ -27,7 +27,7 @@
 						<input :adjust-position="false" :value="password" placeholder="请输入密码" :password="true" placeholder-class="tui-phcolor"
 						 type="text" maxlength="36" @input="inputPwd" />
 						<view class="tui-icon-close" v-show="password" @tap="clearInput(2)">
-							<tui-icon name="close-fill" :size="16" color="#bfbfbf"></tui-icon>
+							<tui-icon name="close-fill" :size="32" color="#bfbfbf"></tui-icon>
 						</view>
 					</view>
 				</tui-list-cell>
@@ -89,8 +89,8 @@
 		data() {
 			return {
 				status: false, //false代表账号密码登录，true代表手机验证码登录
-				mobile: '',
-				password: '',
+				mobile: '15812942054',
+				password: '123456',
 				popupShow: false
 			};
 		},
@@ -174,7 +174,7 @@
 
 		.tui-header {
 			width: 100%;
-			padding: 40rpx;
+			padding: 20rpx;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;

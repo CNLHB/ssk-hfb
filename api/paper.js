@@ -4,12 +4,12 @@ import {
 	headerForm
 } from './common.js'
 export const getChatList = async (userInfo) => {
-	axios.setLoading(true);
+	axios.setLoading(false);
 	let data = await axios.get('chat/list');
 	if(data&&data.length==0){
 		return []
 	}
-	axios.setLoading(false);
+	axios.setLoading(true);
 	if (data && data.length) {
 		let chatList = data.map((item) => {
 			let count = item.messages.reduce((prev, item) => {

@@ -2,10 +2,10 @@
 	<view
 		class="tui-navigation-bar"
 		:class="{ 'tui-bar-line': opcity > 0.85 && splitLine, 'tui-navbar-fixed': isFixed }"
-		:style="{ height: height + 'px', backgroundColor: `rgba(${backgroundColor},${opcity})` }"
+		:style="{ height: height + 'upx', backgroundColor: `rgba(${backgroundColor},${opcity})` }"
 	>
 		<view class="tui-status-bar" :style="{ height: statusBarHeight + 'px' }" v-if="isImmersive"></view>
-		<view class="tui-navigation_bar-title" :style="{ opacity: opcity, color: color, paddingTop: top - statusBarHeight + 'px' }" v-if="title && !isCustom">{{ title }}</view>
+		<view class="tui-navigation_bar-title" :style="{ opacity: opcity, color: color, paddingTop: top - statusBarHeight + 'upx' }" v-if="title && !isCustom">{{ title }}</view>
 		<slot />
 	</view>
 </template>
@@ -60,7 +60,7 @@ export default {
 		//是否沉浸式
 		isImmersive: {
 			type: Boolean,
-			default: true
+			default: false
 		},
 		isFixed: {
 			type: Boolean,
@@ -78,7 +78,7 @@ export default {
 		return {
 			width: 375, //header宽度
 			left: 375, //小程序端 左侧距胶囊按钮距离
-			height: 44, //header高度
+			height: 88, //header高度
 			top: 0,
 			scrollH: 0, //滚动总高度,计算opcity
 			opcity: 0, //0-1
@@ -138,6 +138,7 @@ export default {
 <style scoped>
 .tui-navigation-bar {
 	width: 100%;
+	display: inline-block;
 }
 .tui-navbar-fixed {
 	position: fixed;
@@ -150,12 +151,12 @@ export default {
 }
 .tui-navigation_bar-title {
 	width: 100%;
-	font-size: 17px;
-	line-height: 17px;
+	font-size: 34upx;
+	line-height: 64upx;
 	/* #ifndef APP-PLUS */
 	font-weight: 500;
 	/* #endif */
-	height: 32px;
+	height: 64upx;
 	display: flex;
 	align-items: center;
 	justify-content: center;

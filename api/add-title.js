@@ -9,6 +9,6 @@ export const uploudFile = async (file) => {
 	return url
 }
 export const addTopicTitle = async (data) => {
-	let result = await axios.post("topic", data)
+	let result = await axios.post("topic/title", data)
 	return result
 }

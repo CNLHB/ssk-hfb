@@ -11,7 +11,7 @@ export const pushMessage = async (data) => {
 	axios.setLoading(true);
 	return result
 }
-export const createChat = async (page=1,cid='') => {
+export const createChat = async (data) => {
 	let result = await axios.post('chat',data)
 	return result
 }

@@ -20,7 +20,7 @@ export function injectXHR() {
                 let duration = Date.now() - startTime;
                 let status = this.status;//200 500
                 let statusText = this.statusText;// OK Server Error
-                tracker.send({
+				console.log({
                     kind: 'stability',
                     type: 'xhr',
                     eventType: type,//load error abort
@@ -29,7 +29,20 @@ export function injectXHR() {
                     duration,//持续时间
                     response: this.response ? JSON.stringify(this.response) : '',//响应体
                     params: body || ''
-                });
+                })
+				if(type=="error"){
+					tracker.send({
+					    kind: 'stability',
+					    type: 'xhr',
+					    eventType: type,//load error abort
+					    pathname: this.logData.url,//请求路径
+					    status: status + '-' + statusText,//状态码
+					    duration,//持续时间
+					    response: this.response ? JSON.stringify(this.response) : '',//响应体
+					    params: body || ''
+					});
+				}
+
             }
             this.addEventListener('load', handler('load'), false);
             this.addEventListener('error', handler('error'), false);

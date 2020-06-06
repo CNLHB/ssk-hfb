@@ -38,6 +38,8 @@
 
 <style>
 .uni-swiper-tab{
+	box-sizing: border-box;
+	width: 100%;
 	background-color: #FFFFFF;
 	border-bottom: 1upx solid #EEEEEE;
 }

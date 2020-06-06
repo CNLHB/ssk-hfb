@@ -15,6 +15,18 @@
 				<view class="tui-upload-icon tui-icon-plus"></view>
 			</view>
 		</view>
+		<view class="bottom-menu">
+			<view class="menu-item" @tap="chooseImage">
+				<tui-icon name="pic" class="icon-height"  :size="48"></tui-icon>
+				<text class="menu-item-text">相册</text>
+			</view>
+			
+			<view v-if="showTitle" class="menu-item" @tap="selTitle">
+				<tui-icon name="add" class="icon-height"   :size="44"></tui-icon>
+				<text class="menu-item-text">话题</text>
+				
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -28,6 +40,10 @@
 				default () {
 					return []
 				}
+			},
+			showTitle:{
+				type: Boolean,
+				default: false
 			},
 			//禁用删除
 			forbidDel: {
@@ -156,7 +172,12 @@
 							console.log(res)
 							if (res.statusCode == 200) {
 								//返回结果 此处需要按接口实际返回进行修改
-								let d = JSON.parse(res.data.replace(/\ufeff/g, "") || "{}")
+
+								let d = {}
+								if(res.data){
+									d.code=200
+									d.url= res.data
+								}
 								//判断code，以实际接口规范判断
 								if (d.code % 100 === 0) {
 									// 上传成功 d.url 为上传后图片地址，以实际接口返回为准
@@ -187,6 +208,9 @@
 					index: index
 				})
 				this.change()
+			},
+			selTitle(){
+				this.$emit("selTitle")
 			},
 			previewImage: function(index) {
 				if (!this.imageList.length) return;
@@ -337,5 +361,35 @@
 
 	.tui-btn-hover {
 		opacity: 0.8;
+	}
+	.bottom-menu{
+		position: fixed;
+		display: flex;
+		height: 100upx;
+		padding: 10upx 20upx;
+		justify-content: start;
+		box-sizing: border-box;
+		background-color: #F9F9F9;
+		border-top: 2upx solid #F4F4F4;
+		margin-left: -20upx;
+		width: 100vw;
+		bottom: 0;
+		z-index: 888;
+	}
+	.menu-item{
+		display: flex;
+		line-height: none;
+		flex-direction: column;
+		/* justify-content: start; */
+		align-items: center;
+		padding-left: 40upx;
+	}
+	.icon-height{
+		height: 40upx;
+		line-height: 40upx;
+	}
+	.menu-item-text{
+		font-size: 28upx;
+		transform: scale(0.8);
 	}
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<text class="tui-icon-class tui-icon" :class="'tui-icon-' + name" :style="{ color: color, fontSize: size + 'px', fontWeight: bold ? 'bold' : 'normal',margin:margin }"
+	<text class="tui-icon-class tui-icon" :class="'tui-icon-' + name" :style="{ color: color, fontSize: size + 'upx', fontWeight: bold ? 'bold' : 'normal',margin:margin }"
 	 @tap="handleClick"></text>
 
 </template>

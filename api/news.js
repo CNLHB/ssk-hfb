@@ -12,7 +12,7 @@ export const getTopicList = async (currentPage = 1) => {
 	}
 	if (data && data.items && data.items.length)
 		data.items.forEach((item) => {
-			if (item.images != '') {
+			if (item.images != null && item.images!='') {
 				item.images = item.images.split(",");
 			} else {
 				item.images = []

@@ -19,7 +19,8 @@ const store = new Vuex.Store({
 		msgPage:1,
 		msgIndex:-1,
 		currentChat:[],
-		selTitle:[]
+		selTitle:{},
+		category:{}
 	},
 	getters:{
 		currentChatMsgs(state){
@@ -34,19 +35,20 @@ const store = new Vuex.Store({
 		}
 	},
 	mutations:{
+		addCategory(state, obj){
+			state.category = obj
+		},
+		delCategory(state, ){
+			state.category={}
+		},
 		addselTitle(state, obj){
-			let flag = state.selTitle.some((item)=>{
-				return item.id === obj.id
-			})
-			if(!flag){
-				state.selTitle.push(obj)
-			}
+			state.selTitle = obj
 		},
 		delSelTitle(state, index){
-			state.selTitle.splice(index,1)
+			state.selTitle={}
 		},
 		resetSelTitle(state){
-			state.selTitle=[]
+			state.selTitle={}
 		},
 		setIndex(state, msgIndex){
 			state.msgIndex = msgIndex
@@ -86,7 +88,6 @@ const store = new Vuex.Store({
 
 		},
 		sortChatList(state){
-			
 			state.chatList.sort((a,b)=>{
 				return b.afterTime - a.afterTime
 			})

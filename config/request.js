@@ -32,11 +32,10 @@ export default class request {
 			let  Authorization=uni.getStorageSync('token');
 			uni.uploadFile({
 				url:  this.baseUrl + url, 
-				filePath: file.path,
+				filePath: file,
 				header:{
 					Authorization
 				},
-				file:file,
 				name: 'file',
 				success: (res) => {
 					resolve(res.data)
@@ -108,8 +107,21 @@ export default class request {
 		uni.showToast({
 			title: text || "出错啦~",
 			icon: success ? 'success' : 'none',
-			duration: duration || 2000
+			duration: duration || 2000,
 		})
+	}
+	href(url,type){
+		let token=uni.getStorageSync('token');
+		if(token){
+			uni.navigateTo({
+				url
+			})
+		}else{
+			uni.navigateTo({
+				url: '../../pages/login/login'
+			})
+		}
+
 	}
 }
 

@@ -76,8 +76,7 @@
 			loadMore,
 			userSpacePopup,
 			card,
-			topicList
-		},
+			topicList		},
 		computed:{
 			...mapState(['userInfo'])
 		},
@@ -148,6 +147,7 @@
 				let {code,data} = await getUserWillinfo(id);
 				let topicList = await getTopicListByUid(id);
 				let topicTitleList = await getTopicTitleByUid(id);
+				
 				if(Array.isArray(topicTitleList)){
 					this.titleList = topicTitleList
 				}

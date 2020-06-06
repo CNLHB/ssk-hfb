@@ -13,7 +13,7 @@
 				</uni-swipe-action-item>
 			</block>
 		</uni-swipe-action>
-
+		<no-thing v-if="chatList.length==0"></no-thing>
 		<!-- 按组使用 -->
 		<!-- 上拉加载 -->
 		<load-more :loadtext="loadtext"></load-more>
@@ -25,6 +25,7 @@
 	import loadMore from "../../components/common/load-more.vue";
 	import paperLeftPopup from "../../components/paper/paper-left-popup.vue";
 	import time from '../../common/time.js'
+			import noThing from "../../components/common/no-thing.vue";
 	import uniSwipeAction from '@/components/uni-swipe-action/uni-swipe-action.vue'
 	import uniSwipeActionItem from '@/components/uni-swipe-action-item/uni-swipe-action-item.vue'
 	import {
@@ -46,7 +47,8 @@
 			loadMore,
 			paperLeftPopup,
 			uniSwipeAction,
-			uniSwipeActionItem
+			uniSwipeActionItem,
+			noThing
 		},
 		computed: {
 			...mapState(['chatList', 'msgIndex', 'userInfo']),
@@ -90,7 +92,7 @@
 			if (this.userInfo.id) {
 				await this.initData()
 			} else {
-				this.loadtext = '你还未登录呢!'
+				this.loadtext = ''
 			}
 			uni.stopPullDownRefresh();
 		},
@@ -98,25 +100,13 @@
 			this.loadmore();
 		},
 		async onLoad() {
-			if (this.userInfo.id) {} else {
-				this.loadtext = "你还未登录呢!"
-			}
+
 		},
 		// 监听导航按钮点击事件
 		onNavigationBarButtonTap(e) {
 			switch (e.index) {
 				case 0:
-					if (this.userInfo.id) {
-						uni.navigateTo({
-							url: '../user-list/user-list',
-						});
-					} else {
-						uni.showToast({
-							title: "你还未登录呢！",
-							icon: 'none'
-						})
-					}
-
+					this.$http.href("../user-list/user-list")
 					this.hidepopup();
 					break;
 				case 1:

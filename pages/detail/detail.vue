@@ -1,22 +1,25 @@
 <template>
 	<view class="detail">
-		<detail-info @goToUserInfo="goToUserInfo" :userInfo="userInfo" :item="detail"></detail-info>
+		<detail-info @goToUserInfo="goToUserInfo" :userInfo="userInfo" @comSubimt="comSubimt" :infoNum="infoNum" :item="detail"></detail-info>
 
 		<view class="u-comment-title" :maskState="maskState">最新评论 {{comment.count}}</view>
 		<view class="uni-comment u-comment">
 			<block v-for="(item,index) in comment.list" :key="index">
 				<comment-list @comSubimt="comSubimt" @comDelete="comDelete" :userInfo="userInfo" :item="item" :index="index"></comment-list>
 			</block>
+			<template v-if="comment.list.length==0">
+				<view>还没有评论,快来说两句~</view>
+			</template>
 		</view>
 
 		<view style="height: 120upx;"></view>
 
 		<!-- 输入框 -->
 		<user-chat-bottom @submit="submit"></user-chat-bottom>
-
+		<t-rt-popup :itemList="itemList" ref="rtBubble" @click="itemClick"></t-rt-popup>
 		<!-- 分享 -->
 		<more-share :show="shareshow" @togle="togle"></more-share>
-		<pl-comment ref="plComment" :maskState="maskState" @toggleState="toggleState" :placeholder="'发布评论'" @pubComment="pubComment"></pl-comment>
+		<pl-comment ref="plComment" :maskState="maskState" @toggleState="toggleState" :placeholder="placeText" @pubComment="pubComment"></pl-comment>
 	</view>
 </template>
 
@@ -27,6 +30,7 @@
 	import commentList from "../../components/detail/comment-list.vue";
 	import userChatBottom from "../../components/user-chat/user-chat-bottom.vue";
 	import moreShare from "../../components/common/more-share.vue";
+	import tRtPopup from '@/components/views/t-rt-popup/t-rt-popup';
 	import {
 		getTopicDetail,
 		pushHistory,
@@ -41,6 +45,7 @@
 	} from "vuex"
 	export default {
 		components: {
+			tRtPopup,
 			detailInfo,
 			commentList,
 			userChatBottom,
@@ -51,11 +56,28 @@
 			return {
 				shareshow: false,
 				currentComm: {},
+				placeText: "请输入评论",
 				comment: {
 					count: 0,
 					list: []
 				},
+				itemList: [{
+						title: '首页',
+						icon: 'home'
+					},
+					{
+						title: '收藏',
+						icon: 'star'
+					},
+					{
+						title: '分享',
+						icon: 'partake'
+					}
+				],
 				detail: {},
+				infoNum:{
+					
+				},
 				maskState: false
 
 			}
@@ -69,9 +91,10 @@
 		},
 		// 监听导航右边按钮
 		onNavigationBarButtonTap(e) {
-			if (e.index == 0) {
-				this.togle();
-			}
+			this.rtBubble()
+			// if (e.index == 0) {
+			// 	this.togle();
+			// }
 		},
 		computed: {
 			...mapState(['userInfo'])
@@ -85,6 +108,7 @@
 				});
 				let detail = await getTopicDetail(id)
 				this.detail = detail
+				this.infoNum = detail.infoNum
 				this.comment.count = detail.commentNum
 				if (this.userInfo.id) {
 					let opt = {
@@ -98,16 +122,57 @@
 					pushHistory(opt)
 				}
 				this.getcomment();
+				this.$nextTick(()=>{
+					this.detail = detail
+				})
 			},
 			togle() {
 				this.shareshow = !this.shareshow
 			},
+			itemClick(e) {
+				switch(e.index){
+					case 0: 
+						uni.switchTab({
+							url:'../index/index'
+						})
+					break;
+					case 1:
+						
+					break;
+					case 2:
+					
+					break;
+				}
+				let text = ["首页", "收藏", "分享"][e.index];
+				this.$http.toast(`您点击了：${text}`);
+			},
+			onClick(){
+				if(!this.userInfo || !this.userInfo.id){
+					uni.showToast({
+						title:"你还未登录！或登录过有效期!",
+						icon:'none'
+					})
+					return
+				}
+				this.$http.post('topic/collect',{
+					...this.topicActive,
+					title:this.item.title,
+					username:this.item.username,
+					userpic:this.item.userpic
+				})
+				this.collect = !this.collect
+			},
+			rtBubble() {
+				this.$refs.rtBubble.toggle();
+			},
 			comSubimt(item) {
 				this.currentComm = item
+				console.log(item)
+				this.placeText = `回复  ${item.username}:`
 				this.maskState = true
 			},
 			async comDelete(item) {
-				delComment(item.id)
+				await delComment(item.id)
 				await this.getcomment();
 			},
 			async pubComment(text) {
@@ -128,17 +193,15 @@
 			},
 			async submit(data) {
 				if (!this.userInfo.id) {
-					uni.showToast({
-						title: "你还未登录!",
-						icon: 'none'
-					})
+					this.$http.toast("你还未登录！")
+					return
+				}
+				if(this.detail.uid==this.userInfo.id){
+					this.$http.toast("自己就不用评论了趴！")
 					return
 				}
 				if (data == '') {
-					uni.showToast({
-						title: "评论不能为空",
-						icon: "none"
-					})
+					this.$http.toast("评论不能为空！")
 					return;
 				}
 				await addComment({
@@ -147,9 +210,10 @@
 					tid: this.detail.id,
 					content: data
 				})
-				await this.getcomment()
+				this.getcomment()
 			},
 			goToUserInfo(item) {
+				
 				uni.navigateTo({
 					url: '../../pages/user-space/user-space?uid=' + item.uid
 				})
@@ -157,7 +221,6 @@
 			// 获取评论
 			async getcomment() {
 				let arr = await getCommentList(this.detail.id)
-				console.log(arr)
 				this.comment.list = arr.items;
 				this.comment.count = arr.total;
 				this.detail.commentNum = arr.total

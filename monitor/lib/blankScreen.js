@@ -1,7 +1,7 @@
 import tracker from '../utils/tracker';
 import onload from '../utils/onload';
 export function blankScreen() {
-    let wrapperElements = ['html', 'body', '#container', '.content'];
+    let wrapperElements = ['html', 'body'];
     let emptyPoints = 0;
     function getSelector(element) {
         if (element.id) {

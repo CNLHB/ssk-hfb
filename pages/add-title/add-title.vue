@@ -1,200 +1,333 @@
 <template>
-	<view>
-		<!-- 自定义导航栏 -->
-		<uni-nav-bar :statusBar="true" rightText="发布" leftText="返回" @click-left="back" @click-right="submit">
-
-			<view class="u-f-ajc" @tap="changelook">
-				{{yinsi}}
-				<view class="icon iconfont icon-xialazhankai"></view>
+	<view class="container">
+		<tui-navigation-bar backgroundColor="255,255,255" :isFixed="false" :isOpcity="false">
+			<view class="tui-content-box">
+				<view class="tui-avatar-box" @tap="back">
+					<tui-icon name="back" color="#FFE933" :size="64"></tui-icon>
+				</view>
+				<view class="tui-search-box">
+					<view class="tui-search-text">发布话题</view>
+				</view>
+				<view class="tui-notice-box" @tap="submit">
+					<text class="tui-add-text">发布</text>
+				</view>
 			</view>
-		</uni-nav-bar>
-		<!-- 多行输入框 -->
+		</tui-navigation-bar>
 
-		<view class="uni-textarea">
-			<input type="text" v-model="text" placeholder="标题" />
-			<!-- <textarea v-model="text" placeholder="说一句话吧~" /> -->
-		</view>
-		<view class="uni-textarea">
-			<input type="text" v-model="description" placeholder="描述" />
-			<!-- <textarea v-model="text" placeholder="说一句话吧~" /> -->
-		</view>
-		<!-- 上传多图 -->
-		<uploud-images @uploud="uploud" :size="size"></uploud-images>
+		<view class="select-topic-class" @tap="selTopicClass">
+			<template v-if="category.title!=null">
+				<view class="select-title">
+					{{category.title}}
+				</view>
+				<view class="select-desc" @tap.stop="delTitleClass">
+					<tui-icon name="shut"  :size="48"></tui-icon>
+				</view>
+			</template>
+			<template v-else>
+				<view class="select-title">
+					选择分类
+				</view>
+				<view class="select-desc">
+					<text> 发布到指定分类更多人看到哦~</text>
+					<tui-icon name="arrowright" color="#FFE933" :size="64"></tui-icon>
+				</view>
+			</template>
 
+		</view>
+		
+		<view class="add-topic-text">
+			<textarea :value="title"  @input="inputChangeTitle" :maxlength="15"  focus placeholder="请输入15字以内的话题~" />
+		</view>
+		<view class="add-topic-text">
+			<textarea :value="text"  @input="inputChangeDesc" focus placeholder="请输入150字以内的话题描述~" />
+		</view>
+		<view class="tui-box-upload">
+			<tui-upload 
+				:showTitle="false"
+				@selTitle="selTitleHandle"
+				 :limit="1" :serverUrl="serverUrl" @complete="result" @remove="remove"></tui-upload>
+		</view>
+			
+		</view>
 	</view>
 </template>
 
 <script>
-	let changelook = ['韩府', '娱乐', "二手", "周边"];
-	let changelookId = [{
-			name: '韩府',
-			id: 3,
-		},
-		{
-			name: '娱乐',
-			id: 7,
-		},
-		{
-			name: '二手',
-			id: 6,
-		},
-		{
-			name: '周边',
-			id: 7,
-		},
-	]
-	import uniNavBar from "../../components/uni-nav-bar/uni-nav-bar.vue";
-	import uploudImages from "../../components/common/uploud-images.vue";
-	import uniPopup from "../../components/uni-popup/uni-popup.vue";
+	//实际使用需要传入上传地址，以及上传接口返回数据进行调整组件
+	import {mapState,mapMutations} from 'vuex'
 	import {
 		getCategory,
 		addTopicTitle,
-		uploadFile
 	} from "@/api/add-title.js";
-
-	import {
-		mapState
-	} from 'vuex'
+		import {baseUrl} from '@/api/common.js'
 	export default {
-		components: {
-			uniNavBar,
-			uploudImages,
-			uniPopup
-		},
 		data() {
 			return {
-				isget: false,
-				size: 1,
-				showpopup: false,
-				yinsi: "韩府",
-				cid: 1,
-				text: "",
-				description: '',
-				imglist: [],
-				files: []
-			};
-		},
-		onBackPress() {
-			// 如果有值
-			if (!this.text && this.imglist.length < 1) {
-				return;
-			}
-			if (!this.isget) {
-				this.baocun();
-				return true;
+				imageData: [],
+				//上传地址
+				serverUrl: baseUrl+"upload/cloud",
+				text: '',
+				top: 0, //标题图标距离顶部距离
+				opcity: 0,
+				scrollTop: 0.5,
+				placeholder: '',
+				title: ''
 			}
 		},
-		async onLoad() {
-			let data = await getCategory()
-			changelook = data
-		},
-		computed: {
-			...mapState(['userInfo'])
+		computed:{
+			...mapState(['userInfo', 'selTitle','category'])
 		},
 		methods: {
-			// 保存为草稿
-			baocun() {
-				uni.showModal({
-					content: '是否要保存为草稿？',
-					cancelText: '不保存',
-					confirmText: '保存',
-					success: res => {
-						if (res.confirm) {
-							console.log("保存")
-						} else {
-							console.log("不保存")
-						}
-						this.isget = true;
-						uni.navigateBack({
-							delta: 1
-						});
-					},
-				});
+			...mapMutations(['delSelTitle','resetSelTitle','delCategory']),
+			result(e) {
+				this.imageData = e.imgArr;
 			},
-			// 返回
+			remove(e) {
+				//移除图片
+				let index = e.index
+			},
+			initNavigation(e) {
+				this.opcity = e.opcity;
+				this.top = e.top;
+			},
+			opcityChange(e) {
+				this.opcity = e.opcity;
+			},
 			back() {
-				uni.navigateBack({
-					delta: 1
-				});
+				uni.navigateBack();
 			},
-			// 发布
-			async submit() {
-				if (this.text == '' && this.files.length == 0) {
+			inputChangeDesc(event){
+				this.text = event.detail.value
+			},
+			inputChangeTitle(event){
+				this.title = event.detail.value
+			},
+			skipToSearch(index) {
+				console.log(index)
+				this.$http.href("../../pages/search/search")
+			},
+			delTitleClass(){
+				this.delCategory()
+			},
+			selTopicClass() {
+				this.$http.href('../select-category/select-category?title=1')
+			},
+			selTitleHandle(){
+				this.$http.href('../select-title/select-title')
+			},		// 发布
+			async submit(){
+				console.log("发布")
+				if(this.text==''&&this.imageData.length==0){
+					this.$http.toast("内容为空！")
 					return
 				}
-				let url = await uploudFile(this.files[0])
-				addTopicTitle({
-					uid: this.userInfo.id,
-					cid: this.cid,
-					title: this.text,
-					description: this.description,
-					titlePic: url
+
+				 let data = await addTopicTitle({
+					uid:this.userInfo.id,
+					cid:this.category.id?this.category.id:0,
+					title: this.title,
+					description: this.text,
+					urlType:"img",
+					titlePic: this.imageData[0]?this.imageData[0]:''
 				})
-				uni.showToast({
-					title: '发表成功',
-					icon: "success",
-					duration: 200,
-					success: () => {
-						this.text = '',
-							this.files.length = 0
-						this.imglist.length = 0
+				if(data.code==0){
+					uni.showToast({
+						title: '发表成功',
+						icon:"success",
+						duration: 200,
+						success:()=>{
+							this.text = '',
+							this.imageData.length=0
+							uni.navigateBack()
+						}
+					});
+				}else{
+					uni.showToast({
+						title: '发表失败',
+						icon:'none',
+						duration: 200,
+						success:()=>{
+							this.imageData.length=0
+							this.text=''
+							uni.navigateBack()
+						}
+					});
+				}
 
-						uni.navigateBack({
-							delta: 10
-						})
-					}
-				});
+				
+			},
 
-			},
-			changelook() {
-				uni.showActionSheet({
-					itemList: changelook.map((item) => item.name),
-					success: (res) => {
-						this.yinsi = changelook[res.tapIndex].name
-						this.cid = changelookId[res.tapIndex].id
-					}
-				});
-			},
-			uploud(arr, files) {
-				this.imglist = arr;
-				this.files = files
-			},
-			hidePopup() {
-				this.showpopup = false;
-			}
+		},
+		onPageScroll(e) {
+			this.scrollTop = e.scrollTop;
 		}
 	}
 </script>
 
 <style>
-	.uni-textarea {
-		overflow: hidden;
-		height: 88upx;
-		margin: 0;
-		font-family: Arial, Helvetica, sans-serif;
-		line-height: 56upx;
-		border-radius: 0;
-		resize: none;
-		display: block;
-		margin: 10upx 10upx;
-		padding: 12upx 70upx 12upx 12upx;
-		font-size: 18px;
-		border-bottom: 1upx solid #7c7c95;
+	page {
+		background-color: #fff;
+
+	}
+
+	.container {
+		padding: 0upx 0 120upx 0;
+		box-sizing: border-box;
+		position: relative;
+	}
+
+	.header {
+		padding: 80upx 90upx 60upx 90upx;
 		box-sizing: border-box;
 	}
 
-	.gonggao {
-		width: 500upx;
+	.title {
+		font-size: 34upx;
+		color: #333;
+		font-weight: 500;
 	}
 
-	.gonggao image {
-		width: 75%;
-		margin-bottom: 20upx;
+	.sub-title {
+		font-size: 24upx;
+		color: #7a7a7a;
+		padding-top: 18upx;
 	}
 
-	.gonggao button {
-		margin-top: 20upx;
-		background: #FFE934;
-		color: #171606;
+	.tui-box-upload {
+		padding-left: 25upx;
+		margin-bottom: 90upx;
+		box-sizing: border-box;
+	}
+
+	.tui-title {
+		width: 100%;
+		padding: 50upx 30upx 30upx;
+		box-sizing: border-box;
+		font-weight: bold;
+	}
+
+	.tui-header-bg {
+		width: 100%;
+		margin: 0;
+	}
+
+	.tui-header-img {
+		width: 100%;
+		height: 440upx;
+		display: block;
+	}
+
+	.tui-header-icon {
+		width: 100%;
+		position: fixed;
+		top: 0;
+		padding: 0 12upx;
+		display: flex;
+		align-items: center;
+		height: 64upx;
+		transform: translateZ(0);
+		z-index: 99999;
+		box-sizing: border-box;
+	}
+
+	.tui-content-box {
+		width: 100%;
+		height: 88upx;
+		padding: 0 30upx;
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.tui-avatar-box {
+		width: 60px;
+		height: 60px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+	}
+
+	.tui-avatar {
+		width: 56px;
+		height: 56px;
+		border-radius: 50%;
+	}
+
+	.tui-search-box {
+		height: 64upx;
+		margin: 0 28upx;
+		border-radius: 36px;
+		font-size: 36px;
+		padding: 0 24px;
+		box-sizing: border-box;
+		color: #bfbfbf;
+		display: flex;
+		align-items: center;
+		font-weight: 700;
+		color: #000000;
+	}
+
+	.select-topic-class {
+		height: 72upx;
+		margin: 20upx 20upx;
+		border-radius: 10px;
+		background-color: #f1f1f1;
+		padding: 0 24px;
+		box-sizing: border-box;
+		color: #bfbfbf;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.select-title {
+		color: #000000;
+		font-size: 34upx;
+		font-weight: 700;
+	}
+	.select-desc {
+		display: flex;
+		align-items: center;
+	}
+	.add-topic-text{
+		box-sizing: border-box;
+		width: 100%;
+		padding-top: 10upx;
+		padding-left: 45upx;
+	}
+	.add-topic-text textarea{
+		font-size: 32upx;
+		width: 100%;
+	}
+	.tui-bg-white {
+		background-color: #ffffff !important;
+	}
+
+	.tui-search-text {
+		padding-left: 10upx;
+	}
+
+	.tui-add-text {
+		color: #000000;
+		padding: 10upx 30upx;
+		font-size: 28upx;
+		box-sizing: border-box;
+		font-weight: 700;
+		border-radius: 40upx;
+		background-color: #FFE933;
+	}
+	.topic-tilte{
+		padding: 10upx 40upx;
+		box-sizing: border-box;
+		font-weight: 700;
+		color:#5677fc;
+	}
+	.tui-notice-box {
+		position: relative;
+		flex-shrink: 0;
+		font-size: 44upx;
+		color: #fff;
 	}
 </style>

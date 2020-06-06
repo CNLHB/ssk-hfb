@@ -8,7 +8,7 @@
 			</template>
 
 		</uni-swipe-action>
-
+		<no-thing v-if="list.length==0"></no-thing>
 		<load-more :loadtext="loadtext"></load-more>
 	</view>
 </template>
@@ -16,6 +16,7 @@
 <script>
 	import historyList from '../../components/history-list/history-list.vue'
 	import loadMore from "../../components/common/load-more.vue";
+			import noThing from "../../components/common/no-thing.vue";
 	import uniSwipeAction from '@/components/uni-swipe-action/uni-swipe-action.vue'
 	import uniSwipeActionItem from '@/components/uni-swipe-action-item/uni-swipe-action-item.vue'
 	import {getTopicCollect, deleteCollect} from '@/api/user-collect.js'
@@ -27,7 +28,8 @@
 			historyList,
 			loadMore,
 			uniSwipeAction,
-			uniSwipeActionItem
+			uniSwipeActionItem,
+			noThing
 		},
 		computed: {
 			...mapState(['userInfo'])

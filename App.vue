@@ -40,6 +40,7 @@
 			}
 			if(res && res.status==404){
 				uni.clearStorageSync('token')
+				this.setUserInfo({})
 			}else{
 				if(res.data&&res.data.token){
 					uni.setStorageSync('token',res.data.token)

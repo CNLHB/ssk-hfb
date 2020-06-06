@@ -3,23 +3,23 @@
 		<view class="tui-status-bar"></view>
 		<view class="tui-header">
 			<!-- <view>ThorUI组件库</view> -->
-			<tui-icon name="shut" :size="26" @click="back"></tui-icon>
+			<tui-icon name="shut" :size="52" @click="back"></tui-icon>
 		</view>
 		<view class="tui-page-title">注册</view>
 		<view class="tui-form">
 			<view class="tui-view-input">
 				<tui-list-cell :hover="false" :lineLeft="false" backgroundColor="transparent">
 					<view class="tui-cell-input">
-						<tui-icon name="mobile" color="#6d7a87" :size="20"></tui-icon>
+						<tui-icon name="mobile" color="#6d7a87" :size="40"></tui-icon>
 						<input :value="mobile" placeholder="请输入手机号" placeholder-class="tui-phcolor" type="number" maxlength="11" @input="inputMobile" />
 						<view class="tui-icon-close" v-show="mobile" @tap="clearInput(1)">
-							<tui-icon name="close-fill" :size="16" color="#bfbfbf"></tui-icon>
+							<tui-icon name="close-fill" :size="32" color="#bfbfbf"></tui-icon>
 						</view>
 					</view>
 				</tui-list-cell>
 				<tui-list-cell :hover="false" :lineLeft="false" backgroundColor="transparent">
 					<view class="tui-cell-input">
-						<tui-icon name="shield" color="#6d7a87" :size="20"></tui-icon>
+						<tui-icon name="shield" color="#6d7a87" :size="40"></tui-icon>
 						<input placeholder="请输入验证码" placeholder-class="tui-phcolor" type="text" maxlength="6" @input="inputCode" />
 						<view @tap="getCheckNum" class="tui-btn-send" :class="{ 'tui-gray': isSend }" :hover-class="isSend ? '' : 'tui-opcity'"
 						 :hover-stay-time="150">{{ btnSendText }}</view>
@@ -27,11 +27,11 @@
 				</tui-list-cell>
 				<tui-list-cell :hover="false" :lineLeft="false" backgroundColor="transparent">
 					<view class="tui-cell-input">
-						<tui-icon name="pwd" color="#6d7a87" :size="20"></tui-icon>
+						<tui-icon name="pwd" color="#6d7a87" :size="40"></tui-icon>
 						<input :value="password" placeholder="请输入密码" :password="true" placeholder-class="tui-phcolor" type="text"
 						 maxlength="40" @input="inputPwd" />
 						<view class="tui-icon-close" v-show="password" @tap="clearInput(2)">
-							<tui-icon name="close-fill" :size="16" color="#bfbfbf"></tui-icon>
+							<tui-icon name="close-fill" :size="32" color="#bfbfbf"></tui-icon>
 						</view>
 					</view>
 				</tui-list-cell>

@@ -105,6 +105,7 @@
 			}
 		},
 		mounted() {
+			console.log(88)
 			if(this.userInfo&&this.userInfo.id){
 				this.userpic = this.userInfo.authorUrl
 				this.username = this.userInfo.userName
@@ -113,6 +114,12 @@
 				this.birthday = this.userInfo.birthday
 				this.cityPickerValueDefault =  [0, 0, 1]
 				this.pickerText =  this.userInfo.address
+			}
+		},
+		watch:{
+			'userInfo.authorUrl':function(user){
+				console.log(user)
+				this.userpic = user
 			}
 		},
 		computed: {
@@ -144,12 +151,15 @@
 					sizeType:['compressed'],
 					success: (res) => {
 						this.caijian = res.tempFiles[0].path
-						this.userpic = res.tempFiles[0].path
-						this.authorFile = res.tempFiles[0]
+						// this.userpic = res.tempFiles[0].path
+						// this.authorFile = res.tempFiles[0]
 						// this.cropper = true
+						uni.navigateTo({
+							url:'../user-face/user-face?tempFilePath='+res.tempFiles[0].path
+						})
 					}
 				})
-				
+
 				
 			},
 			sucessCropper(e){
@@ -203,12 +213,17 @@
 				let res = await updateUserInfo(data)
 				if(res.code==0){
 					let data = await getUserInfo("user/info")
+					console.log(data)
 					if(data.code==0){
 						this.setUserInfo(data.data.userInfo)
 						uni.setStorageSync('token',data.data.token)
 						uni.setStorageSync('userInfo',JSON.stringify(data.data.userInfo))
+						uni.showToast({
+							title:"信息修改成功",
+							icon:'success'
+						})
+						
 					}
-					console.log(data)
 				}
 			},
 			getDate(type) {

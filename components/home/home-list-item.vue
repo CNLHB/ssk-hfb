@@ -23,20 +23,15 @@
 			clickevent(){
 				switch (this.item.clicktype){
 					case "navigateTo":
-					if (this.userInfo.id) {
 						if(this.item.url){ 
 							uni.navigateTo({ url:this.item.url}); 
 						}
-					} else {
-						uni.showToast({
-							title: "你还未登录呢",
-							icon: 'none'
-						})
-					}
 
 						break;
 					case "switchTab":
-					if(this.item.url){ uni.switchTab({url:this.item.url}) }
+						if(this.item.url){ 
+							uni.switchTab({url:this.item.url}) 
+						}
 					
 						break;
 					case "showImage":

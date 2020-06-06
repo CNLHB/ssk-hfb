@@ -1,6 +1,6 @@
 let lastEvent;
 ['click', 'touchstart', 'mousedown', 'keydown', 'mouseover'].forEach(eventType => {
-    document.addEventListener(eventType, (event) => {
+     window.document.addEventListener(eventType, (event) => {
         lastEvent = event;
     }, {
         capture: true,//捕获阶段

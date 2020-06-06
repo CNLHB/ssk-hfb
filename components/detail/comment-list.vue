@@ -5,7 +5,6 @@
 			<view class="uni-comment-body">
 				<view class="uni-comment-top">
 					<text>{{item.username}}</text>
-					
 					<text v-if="userInfo.id==item.uid" @tap="deleteCom(item)">删除</text>
 				</view>
 				<view class="uni-comment-content" @tap="comment(item)">{{item.content}}</view>
@@ -17,7 +16,8 @@
 		<template v-if="item.children&&item.children.length>0">
 		<view v-for="items in item.children" :key="items.id">
 			<view class="uni-comment-list u-comment-list-child" >
-				<view class="uni-comment-face"><image :src="items.userpic" mode="widthFix"></image></view>
+				<view class="uni-comment-face">
+					<image :src="items.userpic" mode="widthFix"></image></view>
 				<view class="uni-comment-body">
 					<view class="uni-comment-top">
 						<text>{{items.username}}</text>
@@ -48,9 +48,15 @@
 		},
 		methods:{
 			comment(item){
+				if(!this.userInfo.id){
+					this.$http.href('../../pages/login/login')
+					return 
+				}
 				if(this.item.uid==this.userInfo.id){
+					this.$http.toast("自己就不用评论了趴！")
 					return
 				}
+
 				this.$emit("comSubimt",item)
 			},
 			deleteCom(item){

@@ -1,34 +1,40 @@
 <template>
 	<view class="container"> 
 		<view class="item-list">
-			<view class="author-wrap">
-				<image class="anthor-pic" :src="item.userpic" lazy-load></image>
+			<view class="author-wrap" @tap="opendetail">
+				<image class="anthor-pic" :src="item.userpic" lazy-load mode="aspectFill"></image>
 				<text class="author-name">{{item.username}}</text>
 			</view>
-			<view style="color: #007AFF;">
+			<view style="color: #007AFF;" @tap="opendetail">
 				<template v-for="title in item.lable">
 					#{{title.title}}# 
 				</template>
 			</view>  
-			<view class="topic-text">
+			<view class="topic-text" @tap="opendetail">
 				{{item.title}}
 			</view>
 			<template v-if="item.urlType=='img'">
-				<view v-if="item.images&&item.images.length>1" class="image-view-n">
+				<view v-if="item.images&&item.images.length>2" class="image-view-n">
 						<block v-for="(items,index1) in item.images" :key="index1">
 							<image :src="items"
-							lazy-load></image>
+							lazy-load @tap="imgdetail(index1)"></image>
+						</block>
+				</view>
+				<view v-else-if="item.images.length==2" class="image-view-2">
+						<block v-for="(items,index1) in item.images" :key="index1">
+							<image :src="items"
+							lazy-load @tap="imgdetail(index1)"></image>
 						</block>
 				</view>
 				<view v-else-if="item.images.length==1" class="image-view-1">
 					<image :src="item.images[0]"
-					lazy-load mode="aspectFit"></image>
+					lazy-load mode="aspectFit" @tap="imgdetail(0)"></image>
 				</view>
 		</template>
 
 			
 			<view class="topic-active">
-				<view class="active-comm">
+				<view class="active-comm" @tap="share">
 					<tui-icon name="share" :size="size" unit="upx"></tui-icon>
 					<text class="active-text">分享</text>
 				</view>
@@ -37,10 +43,10 @@
 					<text class="active-text">{{item.commentNum==0?"评论": item.commentNum}}</text>
 				</view>
 				<view class="active-comm" @tap="giveLike">
-					<tui-icon :name="infoNum.index==1?'agree-fill': 'agree'" :color="infoNum.index==1?'red': ''" :size="size" unit="upx"></tui-icon>
+					<tui-icon :name="infoNum.index==1?'agree-fill': 'agree'" :color="infoNum.index==1?'#FFE933': ''" :size="size" unit="upx"></tui-icon>
 					<text class="active-text">
 						{{infoNum.likeNum==0?"点赞": infoNum.likeNum}}
-						</text>
+					</text>
 				</view>
 			</view>
 		</view>
@@ -67,7 +73,7 @@
 				isguanzhu: this.item.isguanzhu,
 				collect: this.item.collect,
 				infoNum:this.item.infoNum,
-				size: 24,
+				size: 48,
 				topicActive:{
 					uid:this.userInfo.id,
 					tid:this.item.id,
@@ -79,12 +85,17 @@
 		},
 		methods: {
 			async giveLike(){
+				if(!this.userInfo.id){
+					this.$http.href("../../pages/login/login")
+					return
+				}
 				if(this.infoNum.index){
 					this.infoNum.likeNum--
 					await this.$emit("likeOrTread",{
 							...this.topicActive,
 							tactive: 0
 						})
+					
 				}else{
 					this.infoNum.likeNum++
 					await this.$emit("likeOrTread",{
@@ -96,6 +107,15 @@
 			},
 			opendetail(){
 				this.$emit("opendDetail",this.item)
+			},
+			imgdetail(index){
+				uni.previewImage({
+					current:index,
+					urls:this.item.images
+				})
+			},
+			share(){
+				this.$emit("share")
 			}
 		}
 	}
@@ -168,7 +188,18 @@
 	/* margin-right: 10upx; */
 	margin-bottom: 10upx;
 }
-
+.image-view-2{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: start;
+}
+.image-view-2 >image{
+	width: 220upx;
+	height: 220upx;
+	border-radius: 10upx;
+	margin-right: 10upx;
+	margin-bottom: 10upx;
+}
 .image-view-1{
 	display: flex;
 	justify-content: flex-start;

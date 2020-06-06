@@ -70,7 +70,8 @@
 					{ name:"关注",id:"guanzhu",num:0 },
 					{ name:"粉丝",id:"fensi",num:0 },
 				],
-				
+				searchtext:'',
+				cache:[],
 				newslist:[
 					{
 						loadtext:"",
@@ -103,12 +104,39 @@
 			});
 			this.initData()
 		},
+		// 监听搜索框文本变化
+		onNavigationBarSearchInputChanged(e){
+			this.searchtext=e.text;
+		},
+		// 监听点击搜索按钮事件
+		onNavigationBarSearchInputConfirmed(e){
+			if(e.text){ 
+				this.cache = this.newslist[this.tabIndex].list
+				this.newslist[this.tabIndex].list = this.newslist[this.tabIndex].list.filter((item)=>{
+					if(this.strSimilarity2Percent(item.username, e.text)>0){
+						console.log(typeof this.strSimilarity2Percent(item.username, e.text))
+						return true
+					}else{
+						return false
+					}
+
+				})
+				}
+		},
 		// 监听导航按钮事件
 		onNavigationBarButtonTap(e) {
 			if(e.index==0){
 				uni.navigateBack({
 					delta: 1
 				});
+			}
+		},
+		watch:{
+			'searchtext':function(searchtext,old){
+				if(searchtext0==''){
+					this.newslist[this.tabIndex].list = this.cache 
+				}
+
 			}
 		},
 		methods:{
@@ -146,7 +174,42 @@
 				this.newslist[0].list = eachData
 				this.newslist[1].list = attData
 				this.newslist[2].list = fansData
-			}
+			},
+			strSimilarity2Number: function (s, t) {
+			     var n = s.length, m = t.length, d = [];
+			     var i, j, s_i, t_j, cost;
+			     if (n == 0) return m;
+			     if (m == 0) return n;
+			     for (i = 0; i <= n; i++) {
+			         d[i] = [];
+			         d[i][0] = i;
+			     }
+			     for (j = 0; j <= m; j++) {
+			         d[0][j] = j;
+			     }
+			     for (i = 1; i <= n; i++) {
+			         s_i = s.charAt(i - 1);
+			         for (j = 1; j <= m; j++) {
+			             t_j = t.charAt(j - 1);
+			             if (s_i == t_j) {
+			                 cost = 0;
+			             } else {
+			                 cost = 1;
+			             }
+			             d[i][j] = this.Minimum(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
+			         }
+			     }
+			     return d[n][m];
+			 },
+			//两个字符串的相似程度，并返回相似度百分比
+			 strSimilarity2Percent: function (s, t) {
+			     var l = s.length > t.length ? s.length : t.length;
+			     var d = this.strSimilarity2Number(s, t);
+			     return (1 - d / l).toFixed(4);
+			 },
+			 Minimum: function (a, b, c) {
+			     return a < b ? (a < c ? a : c) : (b < c ? b : c);
+			 },
 		}
 	}
 </script>

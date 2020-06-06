@@ -1,10 +1,11 @@
 <template>
 	<view class="topic-list u-f animated fadeIn fast" @tap="opendetail">
-		<image :src="item.titlePic" mode="widthFix" lazy-load></image>
+		<image :src="item.titlePic"  lazy-load></image>
 		<view>
 			<view>#{{item.title}}#</view>
 			<view>{{item.description}}</view>
-			<view>动态 {{item.total}} 今日 {{item.todaynum}}</view>
+			<view>动态 {{item.total}} </view>
+			<!-- 今日 {{item.todaynum}} -->
 		</view>
 	</view>
 </template>
@@ -21,6 +22,11 @@
 					url: '../../pages/topic-detail/topic-detail?id='+this.item.id,
 				});
 			}
+		},
+		watch:{
+			'item.total':function(){
+				console.log(88)
+			}
 		}
 	}
 </script>
@@ -30,7 +36,7 @@
 	padding: 20upx 0;
 	border-bottom: 1upx solid #EEEEEE;
 }
-.topic-list image{
+.topic-list >image{
 	width: 150upx!important;
 	height: 150upx!important;;
 	border-radius:10upx;

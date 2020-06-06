@@ -6,6 +6,6 @@ export const updateUserInfo = async (data) => {
 	return result
 }
 export const getUserInfo = async (data) => {
-	let result = await axios.put("user/info")
+	let result = await axios.get("user/info")
 	return result
 }
