@@ -270,7 +270,7 @@
 	
 
 	.all {
-		margin-top: 20rpx;
+		margin-top: 10rpx;
 		height: 100vh;
 		box-sizing: border-box;
 		overflow: hidden;
@@ -280,7 +280,7 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
-		margin: 30rpx 20rpx;
+		margin: 20rpx 20rpx;
 		padding: 10rpx;
 	}
 
@@ -373,9 +373,9 @@
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
+		line-height: 1.6;
 	}
 	.totalSign{
-
 		font-size: 100upx;
 		font-weight: 700;
 		text-align: center;

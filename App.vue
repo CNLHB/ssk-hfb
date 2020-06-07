@@ -28,14 +28,13 @@
 			
 			}
 
-
 			// 更新检测
 		},
 		async onShow () {
 			console.log('App Show')
 			let res ={};
 			if(uni.getStorageSync('token')){
-				res = await this.$http.post("auth/verify")
+				res = await this.$http.get("auth/verify")
 								console.log(res)
 			}
 			if(res && res.status==404){
