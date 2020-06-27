@@ -278,9 +278,7 @@
 			publish() {
 				console.log("publish")
 				// 打开发布页面
-				uni.navigateTo({
-					url: '../add-input/add-input',
-				})
+				this.$http.href("../add-input/add-input")
 			},
 			searchInfo() {
 				console.log("searchInfo")

@@ -133,7 +133,7 @@
 		},
 		watch:{
 			'searchtext':function(searchtext,old){
-				if(searchtext0==''){
+				if(searchtext==''){
 					this.newslist[this.tabIndex].list = this.cache 
 				}
 

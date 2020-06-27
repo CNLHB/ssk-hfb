@@ -24,6 +24,7 @@
 			<block v-for="(item,index) in list" :key="index">
 				<home-list-item :userInfo="userInfo" :item="item" :index="index"></home-list-item>
 			</block>
+			<!-- <image src="../../static/images/tabbar/code_gra" mode=""></image> -->
 		</view>
 
 

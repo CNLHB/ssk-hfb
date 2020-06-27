@@ -8,7 +8,7 @@
 				<view class="time">{{cardinfo.createTime}}</view>
 			</view>
 			<view class="content">
-				{{cardinfo.content}}....
+				{{cardinfo.content.slice(0,20)}}....
 				<view class="show" @tap="gotoTopicInfo">点击阅读详细</view>
 			</view>
 
