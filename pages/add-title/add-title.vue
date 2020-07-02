@@ -128,7 +128,7 @@
 					title: this.title,
 					description: this.text,
 					urlType:"img",
-					titlePic: this.imageData[0]?this.imageData[0]:''
+					titlePic: this.imageData[0]?(this.imageData[0].startsWith("http")?this.imageData.join(','):""):'',
 				})
 				if(data.code==0){
 					uni.showToast({

@@ -39,12 +39,12 @@
 				</swiper-item>
 				<!-- 关注 -->
 				<swiper-item>
-					<scroll-view scroll-y class="list" @scrolltolower="loadmore()">
-						<block v-for="(item,index) in guanzhu.list" :key="index">
+					<scroll-view scroll-y class="list" @scrolltolower="loadmore()" style="margin-top: 10upx;">
+						<view v-for="(item,index) in guanzhu.list" :key="index">
 							<index-list 
 								@opendDetail="opendDetail"
 								@likeOrTread="likeOrTread" :item="item" :userInfo="userInfo" :index="index"></index-list>
-						</block>
+						</view>
 						<no-thing v-if="guanzhu.list.length==0"></no-thing>
 						<!-- 上拉加载 -->
 						<load-more :loadtext="guanzhu.loadtext"></load-more>

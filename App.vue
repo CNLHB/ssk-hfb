@@ -40,7 +40,7 @@
 				res = await this.$http.get("auth/verify")
 				console.log(res)
 			}
-			if(res && res.status==404){
+			if(res && res.code==10004){
 				uni.clearStorageSync('token')
 				uni.clearStorageSync('chatList')
 				this.setChatList([])

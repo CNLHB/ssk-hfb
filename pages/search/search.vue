@@ -3,6 +3,9 @@
 			<template v-if="list.length>0">
 				<block v-for="(item,index) in list" :key="index">
 					<index-list 
+						@likeOrTread="likeOrTread"
+						@share="share"
+						@opendDetail="opendDetail"
 						:userInfo="userInfo"
 						:item="item" :index="index"></index-list>
 				</block>
@@ -19,6 +22,9 @@
 	import noThing from "../../components/common/no-thing.vue";
 	import loadMore from "../../components/common/load-more.vue";
 	import {searchTopicList} from '@/api/search.js'
+	import {
+		giveLike
+	} from '@/api/common.js'
 	import {mapState} from 'vuex'
 	export default {
 		components:{
@@ -68,24 +74,46 @@
 			async getdata(){
 				// 请求服务器 post keyword:this.searchtext
 				let data;
+				if(this.searchtext.length==0){
+					uni.showToast({
+						title:"搜索内容不能为空!",
+						icon:"none"
+					})
+					return
+				}
 				try{
 					data = await searchTopicList(this.page+1,this.searchtext)
 					if(data.items.length===0){
 						this.issearch=true;
+						this.list = []
 						this.loadtext="没有更多数据了";
 						return 
 					}else{
-						// this.page = data.page
-						data.items.forEach((item)=>{
-							item.images = item.images.split(",");
-						})
-						this.list=this.list = data.items
+						this.page = data.page
+						this.list = data.items
 					}
 				}catch(e){
 					console.log(e)
 					return 
 				}
 
+			},
+			async likeOrTread(data) {
+				giveLike(data)
+				if(data.tactive==1){
+					this.$http.toast("点赞成功!")
+				}else{
+					this.$http.toast("你已取消点赞!")
+					
+				}
+			},
+			share() {
+				this.$http.toast("敬请期待~")
+			},
+			opendDetail(item) {
+				uni.navigateTo({
+					url: '../../pages/detail/detail?id=' + item.id,
+				});
 			},
 			// 上拉加载
 			 loadmore(){
@@ -104,6 +132,7 @@
 
 	.search-view{
 		background-color: #F9F9F9;
+		height: 100vh;
 		padding-top: 2upx;
 	}
 </style>

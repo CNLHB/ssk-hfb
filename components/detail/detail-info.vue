@@ -191,6 +191,7 @@
 					return 
 				}
 				if(this.infoNum.index){
+					console.log(88)
 					this.infoNum.likeNum--
 					await this.$emit("likeOrTread",{
 							...this.topicActive,

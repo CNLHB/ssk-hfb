@@ -1,6 +1,8 @@
 <template>
 	<view class="detail">
-		<detail-info @goToUserInfo="goToUserInfo" :userInfo="userInfo" @comSubimt="comSubimt" :infoNum="infoNum" :item="detail"></detail-info>
+		<detail-info @goToUserInfo="goToUserInfo"
+			@likeOrTread="likeOrTread"
+		   :userInfo="userInfo" @comSubimt="comSubimt" :infoNum="infoNum" :item="detail"></detail-info>
 
 		<view class="u-comment-title" :maskState="maskState">最新评论 {{comment.count}}</view>
 		<view class="uni-comment u-comment">
@@ -38,7 +40,9 @@
 		addComment,
 		getCommentList
 	} from "@/api/detail.js";
-
+	import {
+		giveLike
+	} from '@/api/common.js'
 	import {
 		mapState,
 		mapMutations
@@ -217,6 +221,15 @@
 				uni.navigateTo({
 					url: '../../pages/user-space/user-space?uid=' + item.uid
 				})
+			},
+			async likeOrTread(data) {
+				giveLike(data)
+				if(data.tactive==1){
+					this.$http.toast("点赞成功!")
+				}else{
+					this.$http.toast("你已取消点赞!")
+					
+				}
 			},
 			// 获取评论
 			async getcomment() {

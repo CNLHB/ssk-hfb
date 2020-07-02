@@ -63,21 +63,17 @@ class SendTracker {
 		});
 		// console.log(body)
 		axios.setLoading(false)
-		axios.post("monitor", log)
+		let count = parseInt(uni.getStorageSync("monitor"))?parseInt(uni.getStorageSync("monitor")):1
+		if(count<5){
+			axios.post("monitor", log)
+			uni.setStorageSync("monitor",count+1)
+		}else{
+			
+		}
+		
+		
 		axios.setLoading(true)
-		// uni.request({
-		// 	url:baseUrl+"monitor",
-		// 	data:log,
-		// 	method:"POST",
-		// 	header:{
-		// 		"Content-Type":'application/json',
-		// 		"x-log-apiversion":'0.6.0',
-		// 		"x-log-bodyrawsize":body.length,
 
-		// 	},
-		// 	success(res) {
-		// 	}
-		// })
 	}
 }
 export default new SendTracker();

@@ -276,7 +276,6 @@
 				}
 			},
 			publish() {
-				console.log("publish")
 				// 打开发布页面
 				this.$http.href("../add-input/add-input")
 			},
@@ -293,12 +292,14 @@
 				this.popupShow = !this.popupShow
 				this.$http.toast("敬请期待~")
 			},
-			onrefresh() {
+			async onrefresh() {
 				if (this.refreshing) return;
 				this.refreshing = true;
+				await this.requestData()
 				setTimeout(() => {
 					this.refreshing = false;
-				}, 3000)
+					this.$http.toast("已为你更新最新内容~")
+				}, 300)
 			},
 			loadmore(index) {
 				if (this.newslist[index].loadtext != "上拉加载更多") {

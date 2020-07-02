@@ -83,6 +83,10 @@
 	margin-left: 70upx;
 	width: auto;
 }
+.uni-comment-face image{
+	width: 70upx;
+	height: 70upx!important;
+}
 .uni-comment-top{
 	display: flex;
 }
