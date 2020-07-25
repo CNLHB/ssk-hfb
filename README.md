@@ -12,13 +12,13 @@
 ---持续更新---
 
 
-![image-20200529194137021](C:\Users\TR\AppData\Roaming\Typora\typora-user-images\image-20200529194137021.png)
+![image-20200529194137021](./static/common/topic.png)
 
-![image-20200529194218570](C:\Users\TR\AppData\Roaming\Typora\typora-user-images\image-20200529194218570.png)
+![image-20200529194218570](./static/common/topic1.png)
 
-![image-20200529194235415](C:\Users\TR\AppData\Roaming\Typora\typora-user-images\image-20200529194235415.png)
+![image-20200529194235415](./static/common/message.png)
 
-![image-20200529194307247](C:\Users\TR\AppData\Roaming\Typora\typora-user-images\image-20200529194307247.png)
+![image-20200529194307247](./static/common/home.png)
 
 
 
