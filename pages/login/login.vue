@@ -21,7 +21,7 @@
 						</view>
 					</view>
 				</tui-list-cell>
-				<tui-list-cell :hover="false" :lineLeft="false" backgroundColor="transparent">
+				<tui-list-cell v-if="!status" :hover="false" :lineLeft="false" backgroundColor="transparent">
 					<view class="tui-cell-input">
 						<tui-icon name="pwd" color="#6d7a87" :size="20"></tui-icon>
 						<input :adjust-position="false" :value="password" placeholder="请输入密码" :password="true" placeholder-class="tui-phcolor"
@@ -31,6 +31,19 @@
 						</view>
 					</view>
 				</tui-list-cell>
+				<!-- s -->
+				<tui-list-cell v-if="status" :hover="false" :lineLeft="false" backgroundColor="transparent">
+					<view class="tui-cell-input">
+						<tui-icon name="shield" color="#6d7a87" :size="20"></tui-icon>
+						<input placeholder="请输入验证码" placeholder-class="tui-phcolor" type="text" maxlength="6" @input="inputCode" />
+						<view @tap="getCheckNum" class="tui-btn-send" :class="{ 'tui-gray': isSend }" :hover-class="isSend ? '' : 'tui-opcity'"
+						 :hover-stay-time="150">{{ btnSendText }}</view>
+					</view>
+				</tui-list-cell>
+				<view  @tap="toggLogin"
+				style="padding-top: 10rpx;"
+				 :class="{ 'tui-gray': true }"
+				 :hover-stay-time="150">{{status==false?"验证码登录":"密码登录"}}</view>
 			</view>
 			<view class="tui-cell-text">
 				<view class="tui-color-primary" hover-class="tui-opcity" :hover-stay-time="150" @tap="href(1)">忘记密码？</view>
@@ -74,7 +87,8 @@
 	} from 'vuex'
 	import {
 		sendLoginCode,
-		userLogin
+		userLogin,
+		userLoginCode
 	} from '@/api/login.js'
 	export default {
 		computed: {
@@ -83,15 +97,21 @@
 				if (this.mobile && this.password) {
 					bool = false;
 				}
+				if (this.mobile &&this.code) {
+					bool = false;
+				}
 				return bool;
 			}
 		},
 		data() {
 			return {
 				status: false, //false代表账号密码登录，true代表手机验证码登录
-				mobile: '15812942054',
-				password: '123456',
-				popupShow: false
+				mobile: '',
+				password: '',
+				popupShow: false,
+				code: '',
+				isSend: false,
+				btnSendText: '获取验证码' //倒计时格式：(60秒)
 			};
 		},
 		onLoad(options) {
@@ -101,8 +121,21 @@
 		},
 		methods: {
 			...mapMutations(['setUserInfo']),
+			// 验证手机号码
+			isPhone(phone) {
+				let mPattern = /^1[34578]\d{9}$/;
+				return mPattern.test(phone);
+			},
 			back() {
-				uni.navigateBack();
+				uni.switchTab({
+					url: '/pages/home/home'
+				});
+			},
+			toggLogin(){
+				this.status=!this.status
+			},
+			inputCode(e) {
+				this.code = e.detail.value;
 			},
 			inputMobile: function(e) {
 				this.mobile = e.detail.value;
@@ -116,6 +149,34 @@
 				} else {
 					this.password = '';
 				}
+			},
+			async getCheckNum() {
+				if (this.btnSendText > 0) {
+					return;
+				}
+				// 验证手机号合法性
+				if (!this.isPhone(this.mobile)) {
+					this.$http.toast("请输入正确的手机号码");
+					return;
+				}
+				// 请求服务器，发送验证码
+				let {
+					code
+				} = await sendLoginCode(this.mobile)
+				if(code){
+					this.$http.toast("验证码已发送");
+				}
+				this.isSend = true,
+				// 发送成功，开启倒计时
+				this.btnSendText = 60;
+				let timer = setInterval(() => {
+					this.btnSendText--;
+					if (this.btnSendText < 1) {
+						clearInterval(timer);
+						this.btnSendText = '获取验证码';
+						this.isSend = true
+					}
+				}, 1000);
 			},
 			href(type) {
 				let url = '../forgetPwd/forgetPwd';
@@ -134,33 +195,42 @@
 			},
 			// 提交登录
 			async submit() {
+				// 验证手机号合法性
+				if (!this.isPhone(this.mobile)) {
+					this.$http.toast("请输入正确的手机号码");
+					return;
+				}
 				// 账号密码登录
+				let data = {}
 				if (!this.status) {
-					let data = await userLogin({
+					 data = await userLogin({
 						phoneNumber: this.mobile,
 						password: this.password
 					})
-					if (data.status == 404) {
-						uni.showToast({
-							title: '账号或密码错误！',
-							icon: 'none'
 
-						})
-						return
-					}
-					try {
-						uni.setStorageSync('userInfo', JSON.stringify(data.data.userInfo));
-						uni.setStorageSync('token', data.data.token);
-					} catch (e) {
-
-					}
-					this.setUserInfo(data.data.userInfo);
-					uni.switchTab({
-						url: '/pages/home/home'
-					});
-					return;
+				}else{
+					 data = await userLoginCode({
+						phone: this.mobile,
+						code: this.code
+					})
 				}
+				if (data.status == 404) {
+					this.$http.toast("账号或密码错误");
+					return
+				}
+				try {
+					uni.setStorageSync('userInfo', JSON.stringify(data.data.userInfo));
+					uni.setStorageSync('token', data.data.token);
+				} catch (e) {
+				
+				}
+				this.setUserInfo(data.data.userInfo);
+				uni.switchTab({
+					url: '/pages/home/home'
+				});
+				return;
 			}
+
 			}
 		}
 </script>
@@ -210,7 +280,17 @@
 						flex: 1;
 						padding-left: $uni-spacing-row-base;
 					}
+					.tui-btn-send {
+						width: 156rpx;
+						text-align: right;
+						flex-shrink: 0;
+						font-size: $uni-font-size-base;
+						color: $uni-color-primary;
+					}
 
+					.tui-gray {
+						color: $uni-text-color-placeholder;
+					}
 					.tui-icon-close {
 						margin-left: auto;
 					}

@@ -7,38 +7,6 @@
 					"scrollIndicator": "none", //隐藏滚动条
 					"bounce": "none", //关闭反弹效果
 					"titleNView": false//禁用原生导航栏
-					// "titleNView": {
-					// 	// 搜索框配置
-					// 	"searchInput": {
-					// 		"align": "center",
-					// 		"backgroundColor": "#F7F7F7",
-					// 		"borderRadius": "8upx",
-					// 		"placeholder": "韩府帮",
-					// 		"placeholderColor": "#CCCCCC",
-					// 		"disabled": true
-					// 	},
-					// 	//配置按钮
-					// 	"buttons": [
-					// 		// 左边
-					// 		{
-					// 			"color": "#FF9619",
-					// 			"colorPressed": "#BBBBBB",
-					// 			"float": "left",
-					// 			"fontSize": "44upx",
-					// 			"fontSrc": "/static/font/icon.ttf",
-					// 			"text": "\ue609"
-					// 		},
-					// 		// 右边
-					// 		{
-					// 			"color": "#000000",
-					// 			"colorPressed": "#BBBBBB",
-					// 			"float": "right",
-					// 			"fontSize": "44upx",
-					// 			"fontSrc": "/static/font/icon.ttf",
-					// 			"text": "\ue653"
-					// 		}
-					// 	]
-					// }
 				}
 			}
 		}, {
@@ -296,6 +264,7 @@
 		}, {
 			"path": "pages/login/login",
 			"style": {
+				"navigationBarTitleText": "登录",
 				"app-plus": {
 					"titleNView": false,
 					"bounce": "none",
@@ -319,7 +288,7 @@
 		}, {
 			"path": "pages/register/register",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "注册",
 				"navigationStyle": "custom",
 				"app-plus": {
 					"titleNView": false,

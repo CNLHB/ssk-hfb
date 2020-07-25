@@ -54,10 +54,9 @@
 ```bash
 $ git clone https://github.com/CNLHB/ssk-hfb.git
 # Choose [HFB]
-
-$ cd <your-project-name>
-$ npm install || yarn
-$ npm start   || yarn start      # visit http://localhost:3000
+$ 导入目录到HBulider X
+$ 运行到浏览器
+- Local:   http://localhost:8080/ 
 ```
 
 更多信息请参考 [使用文档]https://github.com/CNLHB/ssk-hfb)。

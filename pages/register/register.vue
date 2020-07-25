@@ -118,6 +118,9 @@
 				let {
 					code
 				} = await getCode(this.mobile)
+				if(code){
+					this.$http.toast("验证码已发送");
+				}
 				this.isSend = true,
 				// 发送成功，开启倒计时
 				this.btnSendText = 60;
@@ -132,10 +135,7 @@
 			},
 			async toLogin() {
 				if (!this.isPhone(this.mobile)) {
-					uni.showToast({
-						title: "请输入正确的手机号",
-						icon: "none"
-					});
+					this.$http.toast("请输入正确的手机号");
 					return
 				}
 				let data = await userRegisterPhone({
@@ -145,10 +145,9 @@
 				})
 				if (!data || (data && data.code == 10004)) {
 					let msg = data.message
-					uni.showToast({
-						title: msg,
-						icon: "none"
-					});
+					if(msg){
+						this.$http.toast(msg);
+					}
 					return
 				}
 				uni.redirectTo({

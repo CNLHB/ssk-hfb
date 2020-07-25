@@ -171,7 +171,6 @@
 			},
 			comSubimt(item) {
 				this.currentComm = item
-				console.log(item)
 				this.placeText = `回复  ${item.username}:`
 				this.maskState = true
 			},
