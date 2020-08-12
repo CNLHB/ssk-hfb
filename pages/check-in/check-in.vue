@@ -373,7 +373,7 @@
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
-		line-height: 1.6;
+		
 	}
 	.totalSign{
 		font-size: 100upx;

@@ -9,9 +9,3 @@ export const reSetPassword = async (data) => {
 	return result
 }
 
-export const getEmailCode = async (email) => {
-	let result = await axios.post('user/email',{
-					email: email
-				},headerForm)
-	return result
-}

@@ -127,9 +127,10 @@
 					cid:this.category.id?this.category.id:0,
 					title:this.text,
 					urlType:"img",
-					images: this.imageData.join(','),
+					images: this.imageData.join(',').startsWith("http")?this.imageData.join(','):"",
 					ids:ids
 				})
+				console.log(data)
 				if(data.code==0){
 					this.resetSelTitle()
 					uni.showToast({
@@ -139,23 +140,18 @@
 						success:()=>{
 							this.text = '',
 							this.imageData.length=0
-							uni.navigateBack({
-								delta:10
+							uni.switchTab({
+								url:"../index/index"
 							})
 						}
 					});
 				}else{
 					uni.showToast({
-						title: '发表成功',
-						icon:"success",
+						title: '发表失败,请重试！',
+						icon:"none",
 						duration: 200,
 						success:()=>{
-							this.text = '',
-							this.imageData.length=0
-							this.text=''
-							uni.navigateBack({
-								delta:10
-							})
+
 						}
 					});
 				}

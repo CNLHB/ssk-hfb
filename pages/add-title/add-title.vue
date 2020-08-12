@@ -117,8 +117,12 @@
 			},		// 发布
 			async submit(){
 				console.log("发布")
-				if(this.text==''&&this.imageData.length==0){
-					this.$http.toast("内容为空！")
+				if(this.text==''||this.imageData.length==0){
+					if(this.imageData.length==0){
+						this.$http.toast("请上传图片！")
+					}else{
+						this.$http.toast("内容为空！")
+					}
 					return
 				}
 

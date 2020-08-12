@@ -60,7 +60,9 @@ export function timing() {
                 domInteractive,
                 domContentLoadedEventStart,
                 domContentLoadedEventEnd,
-                loadEventStart
+                loadEventStart,
+				domainLookupEnd,
+				domainLookupStart
             } = performance.timing;
             tracker.send({
                 kind: 'experience',//用户体验指标
@@ -71,7 +73,9 @@ export function timing() {
                 parseDomTime: loadEventStart - domLoading,//DOM解析的时间
                 domContentLoadedTime: domContentLoadedEventEnd - domContentLoadedEventStart,
                 timeToInteractive: domInteractive - fetchStart,//首次可交互时间
-                loadTime: loadEventStart - fetchStart //完整的加载时间
+                loadTime: loadEventStart - fetchStart ,//完整的加载时间，
+				dnsTime :domainLookupEnd - domainLookupStart
+				
             });
 
 

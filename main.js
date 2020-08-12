@@ -3,7 +3,7 @@ import App from './App'
 import store from './store/store.js'
 Vue.config.productionTip = false
 //#ifdef H5 
-import './monitor/index.js'
+// import './monitor/index.js'
 //#endif
 // 挂载全局方法
 import $http from './config/requestConfig.js';

@@ -5,7 +5,7 @@ export const  getUserAccess =async () => {
 	return data
 }
 
-export const  giveLike = async (data) => {
-	let result = await axios.post('topic/active',data);
-	return result
-}
+// export const  giveLike = async (data) => {
+// 	let result = await axios.post('topic/active',data);
+// 	return result
+// }
