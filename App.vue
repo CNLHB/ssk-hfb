@@ -1,5 +1,5 @@
 <script>
-    import {mapMutations} from 'vuex'
+    import {mapMutations,mapActions} from 'vuex'
 	export default {
 		async onLaunch() {
 			// 网路监听（用户目前断网，切换wifi）
@@ -34,6 +34,7 @@
 				if(res.data&&res.data.token){
 					uni.setStorageSync('token',res.data.token)
 					this.setUserInfo(res.data.userInfo)
+					this.$store.dispatch('setSocketV',res.data.userInfo.id)
 				}
 								
 			}
@@ -44,6 +45,7 @@
 		},
 		methods:{
 			...mapMutations(['setUserInfo','setChatList'])
+					
 		}
 	}
 </script>

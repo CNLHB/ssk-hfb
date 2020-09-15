@@ -43,7 +43,7 @@
 						this.$emit("signIn")
 					break;
 					case 2:
-						this.$http.href("../../pages/search/search")
+						this.$http.href("../../pages/search/search",false)
 					break;
 					case 3:
 						this.$http.href("../../pages/add-input/add-input")

@@ -172,7 +172,6 @@
 			},
 
 			goToUserInfo(item){
-				console.log(item)
 				uni.navigateTo({
 					url:'../../pages/user-space/user-space?uid='+item.uid
 				})

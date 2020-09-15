@@ -105,7 +105,6 @@
 			}
 		},
 		mounted() {
-			console.log(88)
 			if(this.userInfo&&this.userInfo.id){
 				this.userpic = this.userInfo.authorUrl
 				this.username = this.userInfo.userName

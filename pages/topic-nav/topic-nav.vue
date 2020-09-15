@@ -112,10 +112,11 @@
 
 				
 			},
-			async requestTopicTitle(index, page=1, cid=''){
-				let {items, page:newPage} = await getTopicTitleList(page,cid)
+			async requestTopicTitle(index, oldPage=1, cid=''){
+				this.newslist[index].loadtext="加载中...";
+				let {items, page:newPage} = await getTopicTitleList(oldPage,cid)
 				if(items.length == 0){
-					this.tabBars[index].page = newPage
+					this.tabBars[index].page =  newPage
 					this.newslist[index].loadtext="没有更多数据了";
 					return
 				}
@@ -131,9 +132,7 @@
 			loadmore(index){
 				if(this.newslist[index].loadtext!="上拉加载更多"){ return; }
 				// 修改状态
-				this.newslist[index].loadtext="加载中...";
 				// 获取数据
-				
 				this.requestTopicTitle(index,this.tabBars[index].page+1,this.tabBars[index].id);
 				// this.newslist[index].loadtext="没有更多数据了";
 			},
@@ -148,7 +147,6 @@
 				this.tabIndex=e.detail.current;
 				let index = this.tabIndex
 				this.requestTopicTitle(index,this.tabBars[index].page,this.tabBars[index].id);
-				console.log(this.tabBars[index])
 			}
 		}
 	}

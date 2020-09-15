@@ -19,7 +19,6 @@
 			}
 		},
 		created() {
-			console.log(11)
 			this.getLoginAuth();
 		},
 		onReady() {

@@ -106,8 +106,8 @@
 		data() {
 			return {
 				status: false, //false代表账号密码登录，true代表手机验证码登录
-				mobile: '',
-				password: '',
+				mobile: '15812942054',
+				password: 'lhb659431',
 				popupShow: false,
 				code: '',
 				isSend: false,

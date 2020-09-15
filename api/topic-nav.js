@@ -13,7 +13,7 @@ export const getTopicTitleClass = async () => {
 	return result
 }
 export const getTopicTitleList = async (page=1,cid='') => {
-	let result = await axios.get(`topic/title?page=${1}&rows=10&cid=${cid}`)
+	let result = await axios.get(`topic/title?page=${page}&rows=10&cid=${cid}`)
 	return result
 }
 

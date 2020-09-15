@@ -17,14 +17,17 @@
 			<swiper class="swiper-box" :style="{height:swiperheight+'px'}"
 			 :current="tabIndex" @change="tabChange">
 				<swiper-item v-for="(items,index) in newslist" :key="index">
-					<scroll-view scroll-y class="list" refresher-enabled :refresher-triggered="refreshing" refresher-background="#fafafa"
+					<scroll-view 
+					@scroll="handleScroll"
+					 scroll-y class="list" refresher-enabled :refresher-triggered="refreshing" refresher-background="#fafafa"
 					 enable-back-to-top :refresher-threshold="100" @refresherrefresh="onrefresh" @scrolltolower="loadmore(index)">
 						<!-- 图文列表 -->
 						<template v-if="items.list.length>0">
 							<block v-for="(item,index1) in items.list" :key="index1">
-								<index-list @likeOrTread="likeOrTread" @opendDetail="opendDetail" @share="share" :item="item" :userInfo="userInfo"
+								<index-list 
+								@likeOrTread="likeOrTread" @opendDetail="opendDetail" @share="share" :item="item" :userInfo="userInfo"
 								 :index="index1"></index-list>
-							</block>
+							</block> 
 							<load-more :loadtext="items.loadtext"></load-more>
 						</template>
 						<template v-if="shoNo">
@@ -107,6 +110,12 @@
 			return {
 				swiperheight: 500,
 				tabIndex: 1,
+				start:0,
+				remain:3,
+				end: 5,
+				size: 400,
+				// list 偏移量
+				offset: 0,
 				refreshing: false,
 				shoNo: false,
 				popupShow: false,
@@ -247,7 +256,27 @@
 			// this.requestData()
 		},
 		computed: {
-			...mapState(['userInfo'])
+			...mapState(['userInfo']),
+			// 预留项
+			preCount() {
+				return this.newslist.map(item=>{
+					return Math.min(this.start, this.remain);
+				})
+			},
+			nextCount() {
+				return this.newslist.map(item=>{
+					return Math.min(item.list.length - this.end, this.remain);
+				})
+			},
+			newsVlist(){
+				return this.newslist.map((item,index)=>{
+					const start = this.start - this.preCount[index];
+					const end = this.end + this.nextCount[index];
+					console.log(start, end)
+					item.list =  item.list.slice(start, end);
+					return item
+				})
+			}
 		},
 		methods: {
 			async requestData(GoPage, Gotype) {
@@ -273,6 +302,8 @@
 				this.newslist[this.tabIndex].list = this.newslist[this.tabIndex].list.concat(items)
 				if (items && items.length < 5) {
 					this.newslist[this.tabIndex].loadtext = "没有更多数据了";
+				}else{
+					this.newslist[this.tabIndex].loadtext = "上拉加载更多";
 				}
 			},
 			publish() {
@@ -281,9 +312,9 @@
 			},
 			searchInfo() {
 				console.log("searchInfo")
-				uni.navigateTo({
-					url: '../search/search',
-				});
+				// uni.navigateTo({
+				// 	url: '../search/search',
+				// });
 			},
 			share() {
 				this.popupShow = !this.popupShow
@@ -307,10 +338,32 @@
 				}
 				// 修改状态
 				this.newslist[index].loadtext = "加载中...";
+				// const scrollTop = ev.detail.scrollTop;
+				// // 开始位置
+				// const start = Math.floor(scrollTop / this.size)
+				// this.start = start < 0 ? 0 : start;
+				// // 结束位置
+				// this.end = this.start + this.remain;
+				// // 计算偏移
+				// const offset = scrollTop - (scrollTop % this.size) - this.preCount * this.size
+				// this.offset = offset < 0 ? 0 : offset;
 				// 获取数据
 				this.requestData(this.tabBars[this.tabIndex].page + 1)
 
 
+			},
+			handleScroll(ev) {
+				const scrollTop = ev.detail.scrollTop;
+				console.log(scrollTop)
+				console.log(this.newslist[this.tabIndex])
+				// 开始位置
+				const start = Math.floor(scrollTop / this.size)
+				this.start = start < 0 ? 0 : start;
+				// 结束位置
+				this.end = this.start + this.remain;
+				// 计算偏移
+				const offset = scrollTop - (scrollTop % this.size) - this.preCount[this.tabIndex] * this.size
+				this.offset = offset < 0 ? 0 : offset;
 			},
 			// tabbar点击事件
 			tabtap(index) {
@@ -349,7 +402,6 @@
 				this.$http.href("../../pages/check-in/check-in")
 			}
 		},
-
 
 	}
 </script>

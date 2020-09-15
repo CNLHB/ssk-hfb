@@ -31,7 +31,9 @@
 	import {
 		mapMutations,
 		mapState,
-		mapGetters
+		mapGetters,
+		mapActions
+		
 	} from 'vuex'
 	import {
 		getChatList,
@@ -116,6 +118,7 @@
 		},
 		beforeDestroy() {
 			this.closeSocket();
+		
 		},
 		methods: {
 			...mapMutations([
@@ -128,6 +131,7 @@
 				'addChatMessage',
 				'addNoreadMessage'
 			]),
+			...mapActions(['setSocketV','addChatListMessage']),
 			async initData() {
 				let chatList = await getChatList(this.userInfo)
 				this.setChatList(chatList);
@@ -147,48 +151,49 @@
 				}
 				// 创建一个this.socketTask对象【发送、接收、关闭socket都由这个对象操作】
 				if (uid) {
-					this.socketTask = await createSocket(uid)
-					this.socketTask.onOpen((res) => {
-						console.log("WebSocket连接正常打开中...！");
-						this.$is_open_socket = true;
-						if (this.$is_open_socket) {
-							this.socketTask.onMessage(async (res) => {
-								if (res.data === "连接成功") {
-									console.log("连接成功")
-									return
-								}
-								console.log("收到消息并追加")
-								let data = {}
-								try {
-									data = JSON.parse(res.data);
-								} catch (e) {
+					// this.socketTask = await createSocket(uid)
+					 this.$store.dispatch('setSocketV',uid)
+					// this.socketTask.onOpen((res) => {
+					// 	console.log("WebSocket连接正常打开中...！");
+					// 	this.$is_open_socket = true;
+					// 	if (this.$is_open_socket) {
+					// 		this.socketTask.onMessage(async (res) => {
+					// 			if (res.data === "连接成功") {
+					// 				console.log("连接成功")
+					// 				return
+					// 			}
+					// 			console.log("收到消息并追加")
+					// 			let data = {}
+					// 			try {
+					// 				data = JSON.parse(res.data);
+					// 			} catch (e) {
 					
-								}
-								let index = -1;
-								for (let i = 0; i < this.chatList.length; i++) {
-									if (this.chatList[i].toId == data.fromId) {
-										index = i
-										break
-									}
-								}
-								if (index != -1 && this.msgIndex == index) {
-									updateChat(data.id)
-								}
-								this.initData()
+					// 			}
+					// 			let index = -1;
+					// 			for (let i = 0; i < this.chatList.length; i++) {
+					// 				if (this.chatList[i].toId == data.fromId) {
+					// 					index = i
+					// 					break
+					// 				}
+					// 			}
+					// 			if (index != -1 && this.msgIndex == index) {
+					// 				updateChat(data.id)
+					// 			}
+					// 			this.initData()
 					
-							});
-						}
-					})
-					// 这里仅是事件监听【如果socket关闭了会执行】
-					this.socketTask.onClose(() => {
-						this.$is_open_socket = false
-						console.log("已经被关闭了")
-					})
-					this.socketTask.onError((e) => {
-						console.log("失败了")
-						this.$is_open_socket = false
-						console.log(e)
-					})
+					// 		});
+					// 	}
+					// })
+					// // 这里仅是事件监听【如果socket关闭了会执行】
+					// this.socketTask.onClose(() => {
+					// 	this.$is_open_socket = false
+					// 	console.log("已经被关闭了")
+					// })
+					// this.socketTask.onError((e) => {
+					// 	console.log("失败了")
+					// 	this.$is_open_socket = false
+					// 	console.log(e)
+					// })
 				}
 			},
 			// 关闭websocket【离开这个页面的时候执行关闭】
