@@ -5,6 +5,7 @@
 韩府帮社交APP模板。
 - 预览：http://mobile.hfb.xquery.cn
 - 首页：http://mobile.hfb.xquery.cn
+- 后台代码仓库： https://github.com/CNLHB/hfb-java-server
 - 使用文档：https://github.com/CNLHB/ssk-hfb
 - 更新日志: https://github.com/CNLHB/ssk-hfb
 - 常见问题：https://github.com/CNLHB/ssk-hfb/issues
@@ -73,6 +74,5 @@ $ 运行到浏览器
 
 我们非常欢迎你的贡献，你可以通过以下方式和我们一起共建 :smiley:：
 
-- 在你的公司或个人项目中使用 。
 - 通过 [Issue](https://github.com/CNLHB/ssk-hfb/issues) 报告 bug 或进行咨询。
 - 提交 [Pull Request](https://github.com/CNLHB/ssk-hfb/pulls) 改进 代码。

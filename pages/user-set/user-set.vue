@@ -45,7 +45,8 @@
 				this.showActionSheet = true
 			},
 			toggleAction(index){
-				if(index){
+				console.log(	index)
+				if(index==0){
 					this.setUserInfo({});
 					uni.clearStorageSync('userInfo')
 					this.setChatList([])

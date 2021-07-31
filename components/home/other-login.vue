@@ -105,9 +105,10 @@
 									 authorUrl: infoRes.userInfo.cover_image_phone, 
 								  }
 							  }
-							  
-							  
+							  // console.log(obj)
 							  let data = await this.$http.post('user/auth/login',obj)
+							  
+							  console.error(data)
 							  if(data.status>=400){
 							  	uni.showToast({
 							  		title: data.massage,
