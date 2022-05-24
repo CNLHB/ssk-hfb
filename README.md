@@ -2,6 +2,8 @@
 
 <h1 align="center">HFB APP</h1>
 
+## 因项目长时间没维护，uniapp组件跟谷歌等浏览未适配，页面在打开时空白，目前已知用微信浏览器打开正常。。
+
 韩府帮社交APP模板。
 - 预览：http://mobile.hfb.xquery.cn
 - 首页：http://mobile.hfb.xquery.cn
