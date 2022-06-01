@@ -5,7 +5,7 @@
 		<news-nav-bar :tabBars="tabBars" :tabIndex="tabIndex" @change-tab="changeTab">
 		</news-nav-bar>
 		<tui-fab bgColor="#FFE933" :width="98" :height="98" :bottom="150" :right="50" @click="publish"></tui-fab>
-		<view class="uni-tab-bar">
+		<view class="uni-tab-bar" :style="{height:swiperheight+'px'}">
 			<swiper class="swiper-box" :style="{height:swiperheight+'px'}" :current="tabIndex" @change="tabChange">
 				<!-- 话题 -->
 				<swiper-item>

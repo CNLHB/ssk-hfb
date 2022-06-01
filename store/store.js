@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import createLogger from 'vuex/dist/logger'
+// import createLogger from 'vuex/dist/logger'
 import time from '../common/time.js'
 import {
 	createSocket,

@@ -13,7 +13,7 @@
 		<tui-fab bgColor="#FFE933" :width="98" :height="98" :bottom="150" :right="50" @click="publish"></tui-fab>
 		<swiper-tab-head :tabBars="tabBars" :tabIndex="tabIndex" @tabtap="tabtap">
 		</swiper-tab-head>
-		<view class="uni-tab-bar">
+		<view class="uni-tab-bar"  :style="{height:swiperheight+'px'}">
 			<swiper class="swiper-box" :style="{height:swiperheight+'px'}"
 			 :current="tabIndex" @change="tabChange">
 				<swiper-item v-for="(items,index) in newslist" :key="index">
